@@ -1,0 +1,15 @@
+Package: zarr
+Title: The Zarr file format in R
+Version: 0.0.0.00000
+Authors@R: c(
+    person("Guido", "Kraemer",
+           email = "gkraemer@bgc-jena.mpg.de",
+           role = c("aut", "cre"))
+    )
+Description: Some description here
+SystemRequirements: C++14
+License: GPL-3 | file LICENSE
+Depends: R (>= 3.0.0)
+Imports: Rcpp
+LinkingTo: Rcpp, xtensor
+RoxygenNote: 6.1.1

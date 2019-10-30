@@ -1,0 +1,7 @@
+// this file contains all the includes necessary for RcppExports.cpp
+
+#include <xtensor-r/rarray.hpp>
+#include <z5/attributes.hxx>
+#include <z5/dataset_factory.hxx>
+#include <z5/file.hxx>
+#include <z5/multiarray/xtensor_access.hxx>
