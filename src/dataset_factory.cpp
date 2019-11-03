@@ -10,7 +10,7 @@ Rcpp::XPtr<z5::Dataset> openDataset(const std::string & path,
   const auto mode = rfilemode_to_filemode(file_mode);
   auto d = z5::openDataset(path, mode);
 
-  Rcpp::XPtr<z5::Dataset> ptr(d.get());
+  Rcpp::XPtr<z5::Dataset> ptr(d.release());
 
   return ptr;
 }
