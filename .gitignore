@@ -2,3 +2,9 @@
 .vscode
 /.dir-locals.el
 /.Rhistory
+/zarr.Rcheck
+
+*.o
+*.so
+
+test_array
