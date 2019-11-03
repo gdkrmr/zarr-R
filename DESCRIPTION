@@ -13,3 +13,7 @@ Depends: R (>= 3.0.0)
 Imports: Rcpp
 LinkingTo: Rcpp, xtensor
 RoxygenNote: 6.1.1
+Collate: 
+    'RcppExports.R'
+    'helpers.R'
+    'zarr.R'
