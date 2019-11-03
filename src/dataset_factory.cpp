@@ -1,4 +1,4 @@
-#include "helpers.hxx"
+#include "helpers.h"
 #include <Rcpp.h>
 #include <string>
 #include <z5/dataset_factory.hxx>

@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include "helpers.hxx"
+#include "helpers.h"
 
 #include <nlohmann/json.hpp>
 #include <z5/attributes.hxx>

@@ -1,6 +1,6 @@
 #include <experimental/filesystem>
 
-#include "helpers.hxx"
+#include "helpers.h"
 #include <Rcpp.h>
 #include <string>
 #include <z5/file.hxx>

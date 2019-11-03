@@ -3,7 +3,7 @@
 // [[Rcpp::plugins(cpp14)]]
 // [[Rcpp::depends(xtensor)]]
 
-#include "helpers.hxx"
+#include "helpers.h"
 #include <Rcpp.h>
 #include <xtensor-r/rarray.hpp>
 #include <xtensor/xexpression.hpp>
