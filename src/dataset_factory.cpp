@@ -1,4 +1,5 @@
 #include "helpers.h"
+#include "z5/dataset.hxx"
 #include <Rcpp.h>
 #include <string>
 #include <z5/dataset_factory.hxx>
@@ -23,9 +24,8 @@ Rcpp::XPtr<z5::Dataset> openDataset(const std::string & path,
 // }
 
 
-// TODO: this causes a compile error!
 // [[Rcpp::export]]
-Rcpp::XPtr<z5::Dataset> createDateset(const std::string & path,
+Rcpp::XPtr<z5::Dataset> createDataset(const std::string & path,
                                       const std::string & dtype,
                                       const Rcpp::IntegerVector & shape,
                                       const Rcpp::IntegerVector & chunkShape,
