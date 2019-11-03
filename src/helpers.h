@@ -78,7 +78,7 @@ inline void write_json_to_disk(fs::path & path, nlohmann::json & j) {
 // array value_t::array
 // discarded value_t::discarded
 
-inline Rcpp::List json_to_rlist(const nlohmann::json &j) {
+inline Rcpp::List json_to_rlist(const nlohmann::json& j) {
   Rcpp::List l(0);
 
   for(auto& it : j.items()){

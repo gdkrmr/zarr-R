@@ -1,6 +1,7 @@
 context("Zarr")
 
 test_that("Zarr", {
+
 ### File
   file <- zarr::create_file("test_array", "a")
   expect_s3_class(file, "zarr_file")
@@ -23,6 +24,5 @@ test_that("Zarr", {
 ### cleanup
   unlink("test_array", recursive = TRUE)
   expect_false(dir.exists("test_array"))
+
 })
-
-
