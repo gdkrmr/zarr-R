@@ -52,9 +52,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// createDateset
-Rcpp::XPtr<z5::Dataset> createDateset(const std::string& path, const std::string& dtype, const Rcpp::IntegerVector& shape, const Rcpp::IntegerVector& chunkShape, const bool createAsZarr, const std::string& compressor, const Rcpp::List& compressionOptions, const double fillValue, const std::string file_mode);
-RcppExport SEXP _zarr_createDateset(SEXP pathSEXP, SEXP dtypeSEXP, SEXP shapeSEXP, SEXP chunkShapeSEXP, SEXP createAsZarrSEXP, SEXP compressorSEXP, SEXP compressionOptionsSEXP, SEXP fillValueSEXP, SEXP file_modeSEXP) {
+// createDataset
+Rcpp::XPtr<z5::Dataset> createDataset(const std::string& path, const std::string& dtype, const Rcpp::IntegerVector& shape, const Rcpp::IntegerVector& chunkShape, const bool createAsZarr, const std::string& compressor, const Rcpp::List& compressionOptions, const double fillValue, const std::string file_mode);
+RcppExport SEXP _zarr_createDataset(SEXP pathSEXP, SEXP dtypeSEXP, SEXP shapeSEXP, SEXP chunkShapeSEXP, SEXP createAsZarrSEXP, SEXP compressorSEXP, SEXP compressionOptionsSEXP, SEXP fillValueSEXP, SEXP file_modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -67,7 +67,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::List& >::type compressionOptions(compressionOptionsSEXP);
     Rcpp::traits::input_parameter< const double >::type fillValue(fillValueSEXP);
     Rcpp::traits::input_parameter< const std::string >::type file_mode(file_modeSEXP);
-    rcpp_result_gen = Rcpp::wrap(createDateset(path, dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue, file_mode));
+    rcpp_result_gen = Rcpp::wrap(createDataset(path, dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue, file_mode));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -115,7 +115,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_zarr_readAttributes", (DL_FUNC) &_zarr_readAttributes, 1},
     {"_zarr_writeAttributes", (DL_FUNC) &_zarr_writeAttributes, 2},
     {"_zarr_openDataset", (DL_FUNC) &_zarr_openDataset, 2},
-    {"_zarr_createDateset", (DL_FUNC) &_zarr_createDateset, 9},
+    {"_zarr_createDataset", (DL_FUNC) &_zarr_createDataset, 9},
     {"_zarr_createFile", (DL_FUNC) &_zarr_createFile, 2},
     {"_zarr_readSubarray", (DL_FUNC) &_zarr_readSubarray, 3},
     {"_zarr_writeSubarray", (DL_FUNC) &_zarr_writeSubarray, 3},
