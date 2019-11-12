@@ -68,15 +68,13 @@ create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
 #' @export
 `[.zarr_dataset` <- function (x, ..., drop = FALSE) {
   os <- range_to_offset_shape(...)
+
   res <- readSubarray(x, os$offset, os$shape)
+
   if (drop) {
-    dim_res <- dim(res)[dim(res) != 1]
-    if (length(dim_res) == 0) {
-      dim(res) <- NULL
-    } else {
-      dim(res) <- dim_res
-    }
+    res <- drop_dim(res)
   }
+
   return(res)
 }
 
@@ -92,6 +90,7 @@ create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
   if (!all.equal(dim(value), os$shape)) {
     stop("Shape does not match")
   }
+
   writeSubarray(x, value, os$offset)
   return(x)
 }
