@@ -71,18 +71,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// createFile
-Rcpp::XPtr<z5::handle::File> createFile(const std::string& path, const std::string& file_mode);
-RcppExport SEXP _zarr_createFile(SEXP pathSEXP, SEXP file_modeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type file_mode(file_modeSEXP);
-    rcpp_result_gen = Rcpp::wrap(createFile(path, file_mode));
-    return rcpp_result_gen;
-END_RCPP
-}
 // readSubarray
 xt::rarray<double> readSubarray(const Rcpp::XPtr<z5::Dataset> ds, const Rcpp::IntegerVector& offset, const Rcpp::IntegerVector& shape);
 RcppExport SEXP _zarr_readSubarray(SEXP dsSEXP, SEXP offsetSEXP, SEXP shapeSEXP) {
@@ -115,7 +103,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_zarr_writeAttributes", (DL_FUNC) &_zarr_writeAttributes, 2},
     {"_zarr_openDataset", (DL_FUNC) &_zarr_openDataset, 2},
     {"_zarr_createDataset", (DL_FUNC) &_zarr_createDataset, 9},
-    {"_zarr_createFile", (DL_FUNC) &_zarr_createFile, 2},
     {"_zarr_readSubarray", (DL_FUNC) &_zarr_readSubarray, 3},
     {"_zarr_writeSubarray", (DL_FUNC) &_zarr_writeSubarray, 3},
     {NULL, NULL, 0}

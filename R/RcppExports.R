@@ -21,10 +21,6 @@ createDataset <- function(path, dtype, shape, chunkShape, createAsZarr, compress
     .Call('_zarr_createDataset', PACKAGE = 'zarr', path, dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue, file_mode)
 }
 
-createFile <- function(path, file_mode) {
-    .Call('_zarr_createFile', PACKAGE = 'zarr', path, file_mode)
-}
-
 readSubarray <- function(ds, offset, shape) {
     .Call('_zarr_readSubarray', PACKAGE = 'zarr', ds, offset, shape)
 }

@@ -8,29 +8,27 @@ test_that("Zarr", {
 
   path <- "test_array"
 
-### File
-  file <- zarr::create_file(path, "a")
-  expect_s3_class(file, "zarr_file")
+### DataSet
+  data_set <- zarr::create_dataset(path, c(9, 9, 9), c(3, 3, 3))
+  expect_s3_class(data_set, "zarr_dataset")
   expect_true(dir.exists(path))
 
-### DataSet
-  unlink("test_array3", recursive = TRUE)
-  data_set <- zarr::create_dataset("test_array3", c(9, 9, 9), c(3, 3, 3))
-  data_set <- zarr::open_zarr("test_array3", "a")
+  data_set_2 <- zarr::open_zarr(path)
+  expect_s3_class(data_set_2, "zarr_dataset")
 
 ### Properties
-  zarr::read_attributes(path)
-
+  ## zarr::read_attributes(path)
 
 ### write
   val1 <- 5
   data_set[1, 1, 1] <- val1
 
-  val2 <- array(1:8, c(2, 2, 2))
+  val2 <- array(c(1, 2, 3, 4, 5, 6, 7, 8), c(2, 2, 2))
   data_set[2:3, 2:3, 2:3] <- val2
 
 ### read
-  expect_equal(data_set[1, 1, 1], val1)
+  expect_equal(data_set[1, 1, 1, drop = TRUE], val1)
+  expect_equal(data_set[1, 1, 1], array(val1, c(1, 1, 1)))
   expect_equal(data_set[2:3, 2:3, 2:3], val2)
 
 ### cleanup

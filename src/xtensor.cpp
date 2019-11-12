@@ -25,8 +25,8 @@ xt::rarray<double> readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
 
 // [[Rcpp::export]]
 void writeSubarray(const Rcpp::XPtr<z5::Dataset> ds,
-                                 const xt::rarray<double> data,
-                                 const Rcpp::IntegerVector & offset) {
+                   const xt::rarray<double> data,
+                   const Rcpp::IntegerVector & offset) {
   auto offset_ = intvec_to_shapetype(offset);
   z5::multiarray::writeSubarray<double>(*ds, data, offset_.begin());
 }

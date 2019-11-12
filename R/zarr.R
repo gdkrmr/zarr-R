@@ -33,8 +33,8 @@ write_attributes <- function(path, attributes) {
 }
 
 #' @export
-open_zarr <- function (path, mode) {
-  ds <- openDataset(path, mode)
+open_zarr <- function (path, file_mode = "a") {
+  ds <- openDataset(path, file_mode)
   class(ds) <- "zarr_dataset"
   return(ds)
 }
@@ -48,13 +48,6 @@ open_zarr <- function (path, mode) {
 #' // x: can read and write, file must not exist (same as w- ?!, so omitted here)
 #' // a: can read and write
 
-
-#' @export
-create_file <- function (path, mode) {
-  res <- createFile(path, mode)
-  class(res) <- "zarr_file"
-  return(res)
-}
 
 #' @export
 create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
@@ -73,24 +66,29 @@ create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
 }
 
 #' @export
-`[.zarr_dataset` <- function (x, ...) {
+`[.zarr_dataset` <- function (x, ..., drop = FALSE) {
   os <- range_to_offset_shape(...)
-  readSubarray(x, os$offset, os$shape)
+  res <- readSubarray(x, os$offset, os$shape)
+  if (drop) {
+    dim_res <- dim(res)[dim(res) != 1]
+    if (length(dim_res) == 0) {
+      dim(res) <- NULL
+    } else {
+      dim(res) <- dim_res
+    }
+  }
+  return(res)
 }
 
 #' @export
 `[<-.zarr_dataset` <- function (x, ..., value) {
 
   os <- range_to_offset_shape(...)
-  print(os)
 
   if (is.null(dim(value))) {
     dim(value) <- rep(1, length(os$shape))
   }
 
-  print(os)
-  print(dim(value))
-  print(os$shape)
   if (!all.equal(dim(value), os$shape)) {
     stop("Shape does not match")
   }
