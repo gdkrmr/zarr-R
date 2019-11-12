@@ -1,6 +1,11 @@
 language: r
 sudo: false
 
+addons:
+  apt:
+    packages:
+      - libboost-dev
+
 r:
   - oldrel
   - release
