@@ -8,3 +8,4 @@
 *.so
 
 test_array*
+/compile_flags.txt

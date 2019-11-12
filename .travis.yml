@@ -6,6 +6,9 @@ addons:
     packages:
       - libboost-dev
 
+cache:
+  packages: true
+
 r:
   - oldrel
   - release

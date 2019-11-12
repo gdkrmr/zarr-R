@@ -1,5 +1,0 @@
--std=c++14
--I/usr/share/R/include/
--I/home/gkraemer/R/x86_64-pc-linux-gnu-library/3.4/xtensor/include/
--I/home/gkraemer/R/x86_64-pc-linux-gnu-library/3.4/Rcpp/include/
--I/home/gkraemer/progs/R/zarr/inst/include/
