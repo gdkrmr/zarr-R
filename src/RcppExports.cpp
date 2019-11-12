@@ -97,16 +97,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // writeSubarray
-xt::rarray<double> writeSubarray(const Rcpp::XPtr<z5::Dataset> ds, const xt::rarray<double> data, const Rcpp::IntegerVector& offset);
+void writeSubarray(const Rcpp::XPtr<z5::Dataset> ds, const xt::rarray<double> data, const Rcpp::IntegerVector& offset);
 RcppExport SEXP _zarr_writeSubarray(SEXP dsSEXP, SEXP dataSEXP, SEXP offsetSEXP) {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::Dataset> >::type ds(dsSEXP);
     Rcpp::traits::input_parameter< const xt::rarray<double> >::type data(dataSEXP);
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type offset(offsetSEXP);
-    rcpp_result_gen = Rcpp::wrap(writeSubarray(ds, data, offset));
-    return rcpp_result_gen;
+    writeSubarray(ds, data, offset);
+    return R_NilValue;
 END_RCPP
 }
 

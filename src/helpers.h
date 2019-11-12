@@ -102,7 +102,26 @@ inline Rcpp::List json_to_rlist(const nlohmann::json& j) {
   return l;
 }
 
-inline nlohmann::json rlist_to_json(const Rcpp::List & l) {
+inline nlohmann::json rlist_unnamed_to_json(const Rcpp::List& l) {
+  nlohmann::json j;
+
+  for (int i = 0; i < l.length(); i++) {
+      SEXP new_val = l[i];
+
+      switch ((TYPEOF)(new_val)) {
+      case NILSXP: {nlohmann::json jnull; j.push_back(jnull);};
+      case LGLSXP:  j.push_back(Rcpp::as<bool>(new_val));
+      case INTSXP:  j.push_back(Rcpp::as<int>(new_val));
+      case REALSXP: j.push_back(Rcpp::as<double>(new_val));
+      case STRSXP:  j.push_back(Rcpp::as<std::string>(new_val));
+      default:      Rf_error("wrong type");
+      }
+  }
+
+  return j;
+}
+
+inline nlohmann::json rlist_named_to_json(const Rcpp::List& l) {
   nlohmann::json j;
 
   Rcpp::CharacterVector l_names(l.names());
@@ -111,19 +130,27 @@ inline nlohmann::json rlist_to_json(const Rcpp::List & l) {
     std::string new_name = Rcpp::as<std::string>(l_names[i]);
     SEXP new_val = l[i];
 
-    switch((TYPEOF)(new_val)) {
-    case NILSXP:  {nlohmann::json jnull; j += {new_name, jnull}; };
+    switch ((TYPEOF)(new_val)) {
+    case NILSXP: { nlohmann::json jnull; j += {new_name, jnull}; };
     case LGLSXP:  j += {new_name, Rcpp::as<bool>(new_val)};
     case INTSXP:  j += {new_name, Rcpp::as<int>(new_val)};
     case REALSXP: j += {new_name, Rcpp::as<double>(new_val)};
     case STRSXP:  j += {new_name, Rcpp::as<std::string>(new_val)};
-    default: Rf_error("wrong type");
+    default:      Rf_error("wrong type");
     }
-
   }
 
   return j;
 }
+inline nlohmann::json rlist_to_json(const Rcpp::List & l) {
+
+  if ((TYPEOF)(l.names()) != NILSXP) {
+    return rlist_named_to_json(l);
+  } else {
+    return rlist_unnamed_to_json(l);
+  }
+}
+
 
 /////////////////////////////////////////////////////////////////////////
 

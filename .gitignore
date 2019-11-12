@@ -7,4 +7,4 @@
 *.o
 *.so
 
-test_array
+test_array*

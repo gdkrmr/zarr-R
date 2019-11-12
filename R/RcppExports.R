@@ -30,6 +30,6 @@ readSubarray <- function(ds, offset, shape) {
 }
 
 writeSubarray <- function(ds, data, offset) {
-    .Call('_zarr_writeSubarray', PACKAGE = 'zarr', ds, data, offset)
+    invisible(.Call('_zarr_writeSubarray', PACKAGE = 'zarr', ds, data, offset))
 }
 

@@ -49,8 +49,6 @@ open_zarr <- function (path, mode) {
 #' // a: can read and write
 
 
-
-
 #' @export
 create_file <- function (path, mode) {
   res <- createFile(path, mode)
@@ -76,13 +74,26 @@ create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
 
 #' @export
 `[.zarr_dataset` <- function (x, ...) {
-  readSubarray(x, range_to_offset_shape(...))
+  os <- range_to_offset_shape(...)
+  readSubarray(x, os$offset, os$shape)
 }
 
 #' @export
 `[<-.zarr_dataset` <- function (x, ..., value) {
-  os <- range_to_offset_shape(dim(value))
-  if(!all.equal(dim(value), os$shape))
+
+  os <- range_to_offset_shape(...)
+  print(os)
+
+  if (is.null(dim(value))) {
+    dim(value) <- rep(1, length(os$shape))
+  }
+
+  print(os)
+  print(dim(value))
+  print(os$shape)
+  if (!all.equal(dim(value), os$shape)) {
     stop("Shape does not match")
+  }
   writeSubarray(x, value, os$offset)
+  return(x)
 }
