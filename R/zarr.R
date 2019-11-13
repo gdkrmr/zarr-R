@@ -67,6 +67,17 @@ create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
 
 #' @export
 `[.zarr_dataset` <- function (x, ..., drop = FALSE) {
+
+  # handles weird cases, such as x[,,1]
+  ellipsis_args <- as.list(match.call())
+  ellipsis_args <- ellipsis_args[3:(length(ellipsis_args))]
+  ellipsis_args$drop  <- NULL
+  ellipsis_missing <- sapply(ellipsis_args, is.symbol)
+
+  ellipsis_args[ellipsis_missing] <- "was missing"
+  str(ellipsis_args)
+
+
   os <- range_to_offset_shape(...)
 
   res <- readSubarray(x, os$offset, os$shape)
@@ -81,11 +92,14 @@ create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
 #' @export
 `[<-.zarr_dataset` <- function (x, ..., value) {
 
+  str(list(...))
+
   os <- range_to_offset_shape(...)
 
   if (is.null(dim(value))) {
     dim(value) <- rep(1, length(os$shape))
   }
+  print(dim(value))
 
   if (!all.equal(dim(value), os$shape)) {
     stop("Shape does not match")
