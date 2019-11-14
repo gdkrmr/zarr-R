@@ -3,7 +3,6 @@
 \docType{package}
 \name{zarr}
 \alias{zarr}
-\alias{zarr-package}
 \title{zarr: A package for Zarr arrays}
 \description{
 This package wraps C++ Code for Zarr Arrays

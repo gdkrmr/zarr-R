@@ -7,6 +7,7 @@
 #include <Rcpp.h>
 #include <xtensor-r/rarray.hpp>
 #include <z5/multiarray/xtensor_access.hxx>
+#include <iostream>
 
 void check_bounds(const Rcpp::IntegerVector& offset,
                          const Rcpp::IntegerVector& subarray_shape,

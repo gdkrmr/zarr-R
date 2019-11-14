@@ -10,9 +10,17 @@
 // x: can read and write, file must not exist (same as w- ?!, so omitted here)
 // a: can read and write}
 \usage{
-create_dataset(path, shape, chunk_shape, data_type = "float64",
-  fill_value = NULL, file_mode = "a", compressor = "raw",
-  compression_options = list(), as_zarr = TRUE)
+create_dataset(
+  path,
+  shape,
+  chunk_shape,
+  data_type = "float64",
+  fill_value = NULL,
+  file_mode = "a",
+  compressor = "raw",
+  compression_options = list(),
+  as_zarr = TRUE
+)
 }
 \description{
 // the (python / h5py) I/O modes:

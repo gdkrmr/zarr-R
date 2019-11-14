@@ -40,6 +40,17 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// getPath
+std::string getPath(const Rcpp::XPtr<z5::Dataset> ds);
+RcppExport SEXP _zarr_getPath(SEXP dsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::Dataset> >::type ds(dsSEXP);
+    rcpp_result_gen = Rcpp::wrap(getPath(ds));
+    return rcpp_result_gen;
+END_RCPP
+}
 // openDataset
 Rcpp::XPtr<z5::Dataset> openDataset(const std::string& path, const std::string& file_mode);
 RcppExport SEXP _zarr_openDataset(SEXP pathSEXP, SEXP file_modeSEXP) {
@@ -101,6 +112,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_zarr_readAttributesSubset", (DL_FUNC) &_zarr_readAttributesSubset, 2},
     {"_zarr_readAttributes", (DL_FUNC) &_zarr_readAttributes, 1},
     {"_zarr_writeAttributes", (DL_FUNC) &_zarr_writeAttributes, 2},
+    {"_zarr_getPath", (DL_FUNC) &_zarr_getPath, 1},
     {"_zarr_openDataset", (DL_FUNC) &_zarr_openDataset, 2},
     {"_zarr_createDataset", (DL_FUNC) &_zarr_createDataset, 9},
     {"_zarr_readSubarray", (DL_FUNC) &_zarr_readSubarray, 3},

@@ -30,10 +30,16 @@ Rcpp::List readAttributes(const std::string & path) {
 
 
 // [[Rcpp::export]]
-void writeAttributes (const std::string & path, const Rcpp::List & l) {
+void writeAttributes(const std::string & path, const Rcpp::List & l) {
   fs::path attributes_path(path);
 
   nlohmann::json j = rlist_to_json(l);
 
   z5::attrs_detail::readAttributes(attributes_path, j);
+}
+
+// [[Rcpp::export]]
+std::string getPath(const Rcpp::XPtr<z5::Dataset> ds) {
+  std::string s(ds->handle().path());
+  return s;
 }

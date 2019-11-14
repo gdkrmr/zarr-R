@@ -20,6 +20,7 @@ NULL
 
 ### interface
 
+#' TODO: read_attributes.zarr_dataset
 #' @export
 read_attributes <- function(path) {
   att <- readAttributes(path)
@@ -65,26 +66,59 @@ create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
   return(res)
 }
 
+#' TODO: better function for this? S3 method?
+#' @export
+get_path <- function (x) {
+  if (inherits(x, "zarr_dataset")) return(getPath(x))
+  else stop("x must be of type `zarr_dataset`")
+}
+
+#' @export
+dim.zarr_attributes <- function (x) {
+  return(as.numeric(x$shape))
+}
+
+#' @export
+dim.zarr_dataset <- function (x) {
+  attribs <- read_attributes(paste0(get_path(x), "/.zarray"))
+  return(dim(attribs))
+}
+
+#' @export
+`dim<-.zarr_dataset` <- function(x) {
+  stop("you cannot change the dimensions of a `zarr_dataset` object after creation.")
+}
+
 #' @export
 `[.zarr_dataset` <- function (x, ..., drop = FALSE) {
 
-  # handles weird cases, such as x[,,1]
-  ellipsis_args <- as.list(match.call())
-  ellipsis_args <- ellipsis_args[3:(length(ellipsis_args))]
-  ellipsis_args$drop  <- NULL
-  ellipsis_missing <- sapply(ellipsis_args, is.symbol)
+  ## handle weird cases, such as x[,,1]
+  ## first element is the function name, then the arguments
 
-  ellipsis_args[ellipsis_missing] <- "was missing"
-  str(ellipsis_args)
+  ## The following can also not be put into its own function, because the empty
+  ## symbol get "lost" when passed to another function via ...
 
+  ## thanks to Roland
+  ## https://stackoverflow.com/questions/58856063/r-function-calls-and-missing-values/58857798#58857798
 
-  os <- range_to_offset_shape(...)
+  ellipsis_args <- as.list(match.call())[-1:-2]
+  ellipsis_args$drop <- NULL
+  dim_x <- dim(x)
 
-  res <- readSubarray(x, os$offset, os$shape)
-
-  if (drop) {
-    res <- drop_dim(res)
+  for (i in seq_along(ellipsis_args)) {
+    e_i <- ellipsis_args[[i]]
+    if      (missing(e_i))   {ellipsis_args[[i]] <- c(1, dim_x[i])}
+    else if (is_range(e_i))  {ellipsis_args[[i]] <- c(e_i[[2]], e_i[[3]])}
+    else if (is.symbol(e_i)) {ellipsis_args[[i]] <- eval(e_i, envir = parent.frame(1))}
+    else if (is.atomic(e_i) && length(e_i) == 1) {}
+    else stop("The dimensions must be specified as empty arguments, single digits, or ranges")
   }
+
+  ## quote = TRUE prevents 1:i from expanding
+  os <- do.call(range_to_offset_shape, ellipsis_args)
+  str(os)
+  res <- readSubarray(x, os$offset, os$shape)
+  if (drop) {res <- drop_dim(res)}
 
   return(res)
 }
@@ -92,14 +126,24 @@ create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
 #' @export
 `[<-.zarr_dataset` <- function (x, ..., value) {
 
-  str(list(...))
+  ellipsis_args <- as.list(match.call())[-1:-2]
+  ellipsis_args$value <- NULL
+  dim_x <- dim(x)
 
-  os <- range_to_offset_shape(...)
+  for (i in seq_along(ellipsis_args)) {
+    e_i <- ellipsis_args[[i]]
+    if      (missing(e_i))   {ellipsis_args[[i]] <- c(1, dim_x[i])}
+    else if (is_range(e_i))  {ellipsis_args[[i]] <- c(e_i[[2]], e_i[[3]])}
+    else if (is.symbol(e_i)) {}
+    else if (is.atomic(e_i) && length(e_i) == 1) {}
+    else stop("The dimensions must be specified as empty arguments, single digits, or ranges")
+  }
+
+  os <- do.call(range_to_offset_shape, ellipsis_args)
 
   if (is.null(dim(value))) {
     dim(value) <- rep(1, length(os$shape))
   }
-  print(dim(value))
 
   if (!all.equal(dim(value), os$shape)) {
     stop("Shape does not match")

@@ -13,6 +13,10 @@ writeAttributes <- function(path, l) {
     invisible(.Call('_zarr_writeAttributes', PACKAGE = 'zarr', path, l))
 }
 
+getPath <- function(ds) {
+    .Call('_zarr_getPath', PACKAGE = 'zarr', ds)
+}
+
 openDataset <- function(path, file_mode) {
     .Call('_zarr_openDataset', PACKAGE = 'zarr', path, file_mode)
 }

@@ -2,7 +2,9 @@
 
 S3method("[",zarr_dataset)
 S3method("[<-",zarr_dataset)
+S3method(dim,zarr_dataset)
 export(create_dataset)
+export(get_path)
 export(open_zarr)
 export(read_attributes)
 export(write_attributes)
