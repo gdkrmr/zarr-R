@@ -86,7 +86,7 @@ dim.zarr_dataset <- function(x) {
 }
 
 #' @export
-`dim<-.zarr_dataset` <- function(x) {
+`dim<-.zarr_dataset` <- function(x, value) {
   stop("you cannot change the dimensions of a `zarr_dataset` object after creation.")
 }
 
