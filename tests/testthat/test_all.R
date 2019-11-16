@@ -113,8 +113,6 @@ test_that("writing a bigger array", {
   expect_equal(data_set[2:3, 2:3, k2, drop = TRUE], val)
 })
 
-data_set[, , ]
-
 test_that("writing and reading of mixed indices", {
   val <- rnorm(9)
   dim(val) <- c(1, 1, 9)
@@ -139,7 +137,64 @@ test_that("writing and reading of mixed indices", {
 
 ## TODO:
 ## data_set[1, 1, ] <- val1
+test_that("writing and reading empty indices", {
+  val <- rnorm(9)
+  i <- 9
+  j <- 9
+  data_set[9, 9, ] <- val
+  expect_equal(data_set[9, 9, ], array(val, c(1, 1, 9)))
+  expect_equal(data_set[9, 9, , drop = TRUE], val)
+  expect_equal(data_set[i, 9, , drop = TRUE], val)
+  expect_equal(data_set[9, j, , drop = TRUE], val)
+  data_set[9, , 9] <- val
+  expect_equal(data_set[9, , 9], array(val, c(1, 9, 1)))
+  expect_equal(data_set[9, , 9, drop = TRUE], val)
+  expect_equal(data_set[i, , 9, drop = TRUE], val)
+  expect_equal(data_set[9, , j, drop = TRUE], val)
+  data_set[, 9, 9] <- val
+  expect_equal(data_set[, 9, 9], array(val, c(9, 1, 1)))
+  expect_equal(data_set[, 9, 9, drop = TRUE], zarr:::drop_dim(val))
+  expect_equal(data_set[, i, 9, drop = TRUE], val)
+  expect_equal(data_set[, 9, j, drop = TRUE], val)
+})
 
+test_that("writing and reading empty indices value dims", {
+  val <- rnorm(9)
+  i <- 9
+  j <- 9
+  data_set[9, 9, ] <- array(val, c(1, 1, 9))
+  expect_equal(data_set[9, 9, ], array(val, c(1, 1, 9)))
+  expect_equal(data_set[9, 9, , drop = TRUE], val)
+  expect_equal(data_set[i, 9, , drop = TRUE], val)
+  expect_equal(data_set[9, j, , drop = TRUE], val)
+  data_set[9, , 9] <- array(val, c(1, 9, 1))
+  expect_equal(data_set[9, , 9], array(val, c(1, 9, 1)))
+  expect_equal(data_set[9, , 9, drop = TRUE], val)
+  expect_equal(data_set[i, , 9, drop = TRUE], val)
+  expect_equal(data_set[9, , j, drop = TRUE], val)
+  data_set[, 9, 9] <- array(val, c(9, 1, 1))
+  expect_equal(data_set[, 9, 9], array(val, c(9, 1, 1)))
+  expect_equal(data_set[, 9, 9, drop = TRUE], val)
+  expect_equal(data_set[, i, 9, drop = TRUE], val)
+  expect_equal(data_set[, 9, j, drop = TRUE], val)
+})
+
+test_that("writing and reading empty indices matrix", {
+  val <- matrix(rnorm(81), nrow = 9, ncol = 9)
+  i <- 9
+  data_set[9, , ] <- val
+  expect_equal(data_set[9, , ], array(val, c(1, 9, 9)))
+  expect_equal(data_set[9, , , drop = TRUE], val)
+  expect_equal(data_set[i, , , drop = TRUE], val)
+  data_set[, 9, ] <- val
+  expect_equal(data_set[, 9, ], array(val, c(9, 1, 9)))
+  expect_equal(data_set[, 9, , drop = TRUE], val)
+  expect_equal(data_set[, i, , drop = TRUE], val)
+  data_set[, , 9] <- val
+  expect_equal(data_set[, , 9], array(val, c(9, 9, 1)))
+  expect_equal(data_set[, , 9, drop = TRUE], val)
+  expect_equal(data_set[, , i, drop = TRUE], val)
+})
 
 test_that("cleanup", {
   ## TODO:
@@ -157,4 +212,15 @@ test_that("range_to_offset_shape", {
                list(offset = c(1, 1, 1), shape = c(3, 3, 3)))
   expect_equal(zarr:::range_to_offset_shape(1, 2:5, 1),
                list(offset = c(0, 1, 0), shape = c(1, 4, 1)))
+})
+
+test_that("match_shape", {
+  expect_equal(zarr:::match_shape(c(9, 9, 9), c(9, 9, 9)), c(9, 9, 9))
+  expect_equal(zarr:::match_shape(9, c(1, 1, 9)), c(1, 1, 9))
+  expect_equal(zarr:::match_shape(9, c(1, 9, 1)), c(1, 9, 1))
+  expect_equal(zarr:::match_shape(9, c(9, 1, 1)), c(9, 1, 1))
+  expect_equal(zarr:::match_shape(1, c(1, 1, 1)), c(1, 1, 1))
+  expect_equal(zarr:::match_shape(c(2, 3), c(1, 2, 3)), c(1, 2, 3))
+  expect_equal(zarr:::match_shape(c(2, 3), c(2, 3, 1)), c(2, 3, 1)
+  expect_error(zarr:::match_shape(9, c(9, 9)))
 })

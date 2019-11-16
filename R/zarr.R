@@ -136,18 +136,19 @@ dim.zarr_dataset <- function(x) {
     else if (is_range(e_i))  { ellipsis_args[[i]] <- c(e_i[[2]], e_i[[3]]) }
     else if (is.symbol(e_i)) {  }
     else if (is.atomic(e_i) && length(e_i) == 1) {  }
-    else stop("The dimensions must be specified as empty arguments, single digits, or ranges")
+    else stop("The dimensions must be specified as ",
+              "empty arguments, single digits, or ranges")
   }
 
   os <- do.call(range_to_offset_shape, ellipsis_args)
 
-  if (is.null(dim(value))) {
+  if(length(value) == 1) {
     dim(value) <- rep(1, length(os$shape))
+  } else if (is.null(dim(value))) {
+    dim(value) <- length(value)
   }
 
-  if (!all.equal(dim(value), os$shape)) {
-    stop("Shape does not match")
-  }
+  dim(value) <- match_shape(dim(value), os$shape)
 
   writeSubarray(x, value, os$offset)
   return(x)
