@@ -221,6 +221,6 @@ test_that("match_shape", {
   expect_equal(zarr:::match_shape(9, c(9, 1, 1)), c(9, 1, 1))
   expect_equal(zarr:::match_shape(1, c(1, 1, 1)), c(1, 1, 1))
   expect_equal(zarr:::match_shape(c(2, 3), c(1, 2, 3)), c(1, 2, 3))
-  expect_equal(zarr:::match_shape(c(2, 3), c(2, 3, 1)), c(2, 3, 1)
+  expect_equal(zarr:::match_shape(c(2, 3), c(2, 3, 1)), c(2, 3, 1))
   expect_error(zarr:::match_shape(9, c(9, 9)))
 })
