@@ -15,7 +15,7 @@ R CMD build --compact-vignettes .
 pkgversion=$(cat DESCRIPTION | grep Version | sed 's|Version: \(.*\)|\1|')
 
 echo "== INSTALLING version $pkgversion ===================="
-# R CMD INSTALL zarr_$pkgversion.tar.gz
+R CMD INSTALL zarr_$pkgversion.tar.gz
 
 echo "== CHECKING version $pkgversion ===================="
-# R CMD check zarr_$pkgversion.tar.gz
+R CMD check zarr_$pkgversion.tar.gz

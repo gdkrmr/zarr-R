@@ -34,7 +34,7 @@ write_attributes <- function(path, attributes) {
 }
 
 #' @export
-open_zarr <- function (path, file_mode = "a") {
+open_zarr <- function(path, file_mode = "a") {
   ds <- openDataset(path, file_mode)
   class(ds) <- "zarr_dataset"
   return(ds)
@@ -68,7 +68,7 @@ create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
 
 #' TODO: better function for this? S3 method?
 #' @export
-get_path <- function (x) {
+get_path <- function(x) {
   if (inherits(x, "zarr_dataset")) return(getPath(x))
   else stop("x must be of type `zarr_dataset`")
 }
@@ -79,7 +79,7 @@ dim.zarr_attributes <- function (x) {
 }
 
 #' @export
-dim.zarr_dataset <- function (x) {
+dim.zarr_dataset <- function(x) {
   attribs <- read_attributes(paste0(get_path(x), "/.zarray"))
   return(dim(attribs))
 }
@@ -90,7 +90,7 @@ dim.zarr_dataset <- function (x) {
 }
 
 #' @export
-`[.zarr_dataset` <- function (x, ..., drop = FALSE) {
+`[.zarr_dataset` <- function(x, ..., drop = FALSE) {
 
   ## handle weird cases, such as x[,,1]
   ## first element is the function name, then the arguments
@@ -107,16 +107,15 @@ dim.zarr_dataset <- function (x) {
 
   for (i in seq_along(ellipsis_args)) {
     e_i <- ellipsis_args[[i]]
-    if      (missing(e_i))   {ellipsis_args[[i]] <- c(1, dim_x[i])}
-    else if (is_range(e_i))  {ellipsis_args[[i]] <- c(e_i[[2]], e_i[[3]])}
-    else if (is.symbol(e_i)) {ellipsis_args[[i]] <- eval(e_i, envir = parent.frame(1))}
-    else if (is.atomic(e_i) && length(e_i) == 1) {}
+    if      (missing(e_i))      { ellipsis_args[[i]] <- c(1, dim_x[i]) }
+    else if (is_range(e_i))     { ellipsis_args[[i]] <- c(e_i[[2]], e_i[[3]]) }
+    else if (is.symbol(e_i))    { ellipsis_args[[i]] <- eval(e_i, envir = parent.frame(1)) }
+    else if (is_singleton(e_i)) {  }
     else stop("The dimensions must be specified as empty arguments, single digits, or ranges")
   }
 
   ## quote = TRUE prevents 1:i from expanding
   os <- do.call(range_to_offset_shape, ellipsis_args)
-  str(os)
   res <- readSubarray(x, os$offset, os$shape)
   if (drop) {res <- drop_dim(res)}
 
@@ -124,7 +123,7 @@ dim.zarr_dataset <- function (x) {
 }
 
 #' @export
-`[<-.zarr_dataset` <- function (x, ..., value) {
+`[<-.zarr_dataset` <- function(x, ..., value) {
 
   ellipsis_args <- as.list(match.call())[-1:-2]
   ellipsis_args$value <- NULL
@@ -132,10 +131,10 @@ dim.zarr_dataset <- function (x) {
 
   for (i in seq_along(ellipsis_args)) {
     e_i <- ellipsis_args[[i]]
-    if      (missing(e_i))   {ellipsis_args[[i]] <- c(1, dim_x[i])}
-    else if (is_range(e_i))  {ellipsis_args[[i]] <- c(e_i[[2]], e_i[[3]])}
-    else if (is.symbol(e_i)) {}
-    else if (is.atomic(e_i) && length(e_i) == 1) {}
+    if      (missing(e_i))   { ellipsis_args[[i]] <- c(1, dim_x[i]) }
+    else if (is_range(e_i))  { ellipsis_args[[i]] <- c(e_i[[2]], e_i[[3]]) }
+    else if (is.symbol(e_i)) {  }
+    else if (is.atomic(e_i) && length(e_i) == 1) {  }
     else stop("The dimensions must be specified as empty arguments, single digits, or ranges")
   }
 

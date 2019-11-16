@@ -2,6 +2,7 @@
 ## https://stackoverflow.com/questions/58856063/r-function-calls-and-missing-values/58857798#58857798
 is_empty_symbol <- function(x) is.symbol(x) && identical("", as.character(x))
 is_range <- function(x) is.language(x) && !is.symbol(x) && identical(":", as.character(x[[1]]))
+is_singleton <- function(x) is.atomic(x) && length(x) == 1
 
 range_to_offset_shape <- function(...) {
   idxs <- list(...)

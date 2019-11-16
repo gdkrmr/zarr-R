@@ -13,10 +13,6 @@ void check_bounds(const Rcpp::IntegerVector& offset,
                          const Rcpp::IntegerVector& subarray_shape,
                          const z5::Dataset& dataset) {
 
-  std::cout << "offset: " << offset.size() <<
-    "subarray_shape: " << subarray_shape.size() <<
-    "dataset_shape: " << dataset.shape().size() << std::endl;
-
   if (offset.size() != subarray_shape.size() ||
       offset.size() != dataset.shape().size()) {
     Rf_error("iterators must be of the same length");
@@ -67,7 +63,6 @@ xt::rarray<double> readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
 void writeSubarray(const Rcpp::XPtr<z5::Dataset> ds,
                    const xt::rarray<double> data,
                    const Rcpp::IntegerVector & offset) {
-  std::cout << "data.size: " << data.size() << std::endl;
 
   // NOTE: not checking bounds may lead to memory leaks
   check_bounds(offset, data , *ds);
