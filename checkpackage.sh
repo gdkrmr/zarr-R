@@ -18,4 +18,4 @@ echo "== INSTALLING version $pkgversion ===================="
 R CMD INSTALL zarr_$pkgversion.tar.gz
 
 echo "== CHECKING version $pkgversion ===================="
-R CMD check zarr_$pkgversion.tar.gz
+R CMD check zarr_$pkgversion.tar.gz --as-cran --timings
