@@ -131,26 +131,26 @@ test_that("writing and reading of mixed indices", {
   expect_equal(data_set[9, j, 1:9], val)
   expect_equal(data_set[9, 9, k],  val)
   expect_equal(data_set[9, 9, k2], val)
-  expect_equal(data_set[i, 9, 1:9, drop = TRUE], zarr::drop_dim(val))
-  expect_equal(data_set[9, j, 1:9, drop = TRUE], zarr::drop_dim(val))
-  expect_equal(data_set[9, 9, k,   drop = TRUE], zarr::drop_dim(val))
-  expect_equal(data_set[9, 9, k2,  drop = TRUE], zarr::drop_dim(val))
+  expect_equal(data_set[i, 9, 1:9, drop = TRUE], zarr:::drop_dim(val))
+  expect_equal(data_set[9, j, 1:9, drop = TRUE], zarr:::drop_dim(val))
+  expect_equal(data_set[9, 9, k,   drop = TRUE], zarr:::drop_dim(val))
+  expect_equal(data_set[9, 9, k2,  drop = TRUE], zarr:::drop_dim(val))
 })
 
 ## TODO:
 ## data_set[1, 1, ] <- val1
 
 
-## TODO:
-## unlink(data_set)
-unlink(path, recursive = TRUE)
 test_that("cleanup", {
+  ## TODO:
+  ## unlink(data_set)
+  unlink(path, recursive = TRUE)
   expect_false(dir.exists(path))
 })
 
 context("Helpers")
 
-test_that("Helpers", {
+test_that("range_to_offset_shape", {
   expect_equal(zarr:::range_to_offset_shape(1:3, 1:3, 1:3),
                list(offset = c(0, 0, 0), shape = c(3, 3, 3)))
   expect_equal(zarr:::range_to_offset_shape(2:4, 2:4, 2:4),

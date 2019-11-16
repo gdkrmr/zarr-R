@@ -7,6 +7,7 @@
 #' @name zarr
 NULL
 
+#' @importFrom Rcpp evalCpp
 #' @useDynLib zarr
 NULL
 
