@@ -66,6 +66,13 @@ test_that("`[` with vectors fails",
           expect_error(data_set[c(1, 3), ,]))
 test_that("`[` with the wrong number of parameters fails",
           expect_error(data_set[,]))
+test_that("`[` lower bounds are checked", {
+  i <- 0
+  expect_error(data_set[i, 0, 0])
+  expect_error(data_set[0, i, 0])
+  expect_error(data_set[0, 0, i])
+  expect_error(data_set[i, i, i])
+})
 
 context("reading and writing")
 
