@@ -51,6 +51,11 @@ open_zarr <- function(path, file_mode = "a") {
 #' // a: can read and write
 
 
+#' possible values for data_type:
+#' "int8", "int16", "int32", "int64",
+#' "uint8", "uint16", "uint32", "uint64",
+#' "float32", "float64",
+
 #' @export
 create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
                            fill_value = NULL, file_mode = "a",
@@ -112,13 +117,14 @@ dim.zarr_dataset <- function(x) {
     else if (is_range(e_i))     { ellipsis_args[[i]] <- c(e_i[[2]], e_i[[3]]) }
     else if (is.symbol(e_i))    { ellipsis_args[[i]] <- eval(e_i, envir = parent.frame(1)) }
     else if (is_singleton(e_i)) {  }
-    else stop("The dimensions must be specified as empty arguments, single digits, or ranges")
+    else stop("The dimensions must be specified as ",
+              "empty arguments, single digits, or ranges")
   }
 
   ## quote = TRUE prevents 1:i from expanding
   os <- do.call(range_to_offset_shape, ellipsis_args)
   res <- readSubarray(x, os$offset, os$shape)
-  if (drop) {res <- drop_dim(res)}
+  if (drop) { res <- drop_dim(res) }
 
   return(res)
 }
@@ -134,15 +140,15 @@ dim.zarr_dataset <- function(x) {
     e_i <- ellipsis_args[[i]]
     if      (missing(e_i))   { ellipsis_args[[i]] <- c(1, dim_x[i]) }
     else if (is_range(e_i))  { ellipsis_args[[i]] <- c(e_i[[2]], e_i[[3]]) }
-    else if (is.symbol(e_i)) {  }
-    else if (is.atomic(e_i) && length(e_i) == 1) {  }
+    else if (is.symbol(e_i)) { ellipsis_args[[i]] <- eval(e_i, envir = parent.frame(1))  }
+    else if (is_singleton(e_i)) {  }
     else stop("The dimensions must be specified as ",
               "empty arguments, single digits, or ranges")
   }
 
   os <- do.call(range_to_offset_shape, ellipsis_args)
 
-  if(length(value) == 1) {
+  if (length(value) == 1) {
     dim(value) <- rep(1, length(os$shape))
   } else if (is.null(dim(value))) {
     dim(value) <- length(value)
