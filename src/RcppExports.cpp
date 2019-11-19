@@ -83,7 +83,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // readSubarray
-xt::rarray<double> readSubarray(const Rcpp::XPtr<z5::Dataset> ds, const Rcpp::IntegerVector& offset, const Rcpp::IntegerVector& shape);
+SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds, const Rcpp::IntegerVector& offset, const Rcpp::IntegerVector& shape);
 RcppExport SEXP _zarr_readSubarray(SEXP dsSEXP, SEXP offsetSEXP, SEXP shapeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

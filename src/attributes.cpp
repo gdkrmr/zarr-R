@@ -1,14 +1,15 @@
-#include <Rcpp.h>
 #include "helpers.h"
+#include "json.h"
 
+#include <Rcpp.h>
 #include <nlohmann/json.hpp>
-#include <z5/attributes.hxx>
 #include <string>
 #include <vector>
-
+#include <z5/attributes.hxx>
 
 // [[Rcpp::export]]
-Rcpp::List readAttributesSubset(const std::string & path, const std::vector<std::string> & keys) {
+Rcpp::List readAttributesSubset(const std::string & path,
+                                const std::vector<std::string> & keys) {
   nlohmann::json j;
   fs::path attributes_path(path);
 
@@ -41,5 +42,6 @@ void writeAttributes(const std::string & path, const Rcpp::List & l) {
 // [[Rcpp::export]]
 std::string getPath(const Rcpp::XPtr<z5::Dataset> ds) {
   std::string s(ds->handle().path());
+
   return s;
 }

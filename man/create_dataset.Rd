@@ -8,7 +8,11 @@
 // w: can read and write, if file exists, will be overwritten
 // w-: can read and write, file must not exist
 // x: can read and write, file must not exist (same as w- ?!, so omitted here)
-// a: can read and write}
+// a: can read and write
+possible values for data_type:
+"int8", "int16", "int32", "int64",
+"uint8", "uint16", "uint32", "uint64",
+"float32", "float64",}
 \usage{
 create_dataset(
   path,
@@ -30,4 +34,8 @@ create_dataset(
 // w-: can read and write, file must not exist
 // x: can read and write, file must not exist (same as w- ?!, so omitted here)
 // a: can read and write
+possible values for data_type:
+"int8", "int16", "int32", "int64",
+"uint8", "uint16", "uint32", "uint64",
+"float32", "float64",
 }
