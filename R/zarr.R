@@ -21,17 +21,41 @@ NULL
 
 ### interface
 
-#' TODO: read_attributes.zarr_dataset
 #' @export
-read_attributes <- function(path) {
-  att <- readAttributes(path)
-  class(att) <- "zarr_attributes"
-  return(att)
+read_attributes <- function(x, ...) {
+  UseMethod("read_attributes", x)
 }
 
 #' @export
-write_attributes <- function(path, attributes) {
+read_attributes.character <- function(path) {
+  if (!dir.exists(path) && file.exists(path)) {
+    att <- readAttributes(path)
+    class(att) <- "zarr_attributes"
+    return(att)
+  } else {
+    stop("path does not exist")
+  }
+}
+
+#' @export
+read_attributes.zarr_dataset <- function(dataset) {
+  read_attributes(paste(get_path(dataset), ".zarray", sep = "/"))
+}
+
+#' @export
+write_attributes <- function(x, ...) {
+  UseMethod("write_attributes", x)
+}
+
+#' @export
+write_attributes.character <- function(path, attributes) {
   writeAttributes(path, attributes)
+}
+
+#' @export
+write_attributes.zarr_dataset <- function(dataset, attributes, ...) {
+  write_attributes(paste(get_path(dataset), ".zarray", sep = "/"),
+                   attributes)
 }
 
 #' @export
@@ -44,7 +68,7 @@ open_zarr <- function(path, file_mode = "a") {
 
 #' // the (python / h5py) I/O modes:
 #' // r: can only read, file must exist
-#' // r+: can read and write, file must exist
+#' // r+: can read and write, file must existinline nlohmann::json rlist_to_json(const Rcpp::List & l)
 #' // w: can read and write, if file exists, will be overwritten
 #' // w-: can read and write, file must not exist
 #' // x: can read and write, file must not exist (same as w- ?!, so omitted here)
@@ -56,31 +80,57 @@ open_zarr <- function(path, file_mode = "a") {
 #' "uint8", "uint16", "uint32", "uint64",
 #' "float32", "float64",
 
+#' missing_value can be c("auto") or any number, should probably not be NA
+
 #' @export
-create_dataset <- function(path, shape, chunk_shape, data_type = "float64",
-                           fill_value = NULL, file_mode = "a",
+create_dataset <- function(path,
+                           shape, chunk_shape,
+                           data_type = "float64",
+                           fill_value = "auto", missing_value = "auto",
+                           file_mode = "a",
                            compressor = "raw", compression_options = list(),
                            as_zarr = TRUE) {
-  if (is.null(fill_value)) {
-    if (data_type == "float64") { fill_value <- 0 }
+  if (fill_value == "auto") {
+    if      (data_type == "int8")    { fill_value <- 0L         }
+    else if (data_type == "int16")   { fill_value <- 0L         }
+    else if (data_type == "int32")   { fill_value <- NA_integer }
+    else if (data_type == "int64")   { fill_value <- 0L         }
+    else if (data_type == "uint8")   { fill_value <- NA         }
+    else if (data_type == "uint16")  { fill_value <- 0L         }
+    else if (data_type == "uint32")  { fill_value <- 0L         }
+    else if (data_type == "uint64")  { fill_value <- 0L         }
+    else if (data_type == "float32") { fill_value <- 0          }
+    else if (data_type == "float64") { fill_value <- NA_real_   }
     else stop("unknown data_type")
   }
+
+  if (missing_value == "auto") { missing_value <- fill_value }
+
   res <- createDataset(path, data_type, shape, chunk_shape,
                        as_zarr, compressor, compression_options,
                        fill_value, file_mode)
   class(res) <- "zarr_dataset"
+
+  res_attr <- read_attributes(res)
+  res_attr$missing_value <- missing_value
+  write_attributes(res, res_attr)
+
   return(res)
 }
 
 #' TODO: better function for this? S3 method?
 #' @export
-get_path <- function(x) {
-  if (inherits(x, "zarr_dataset")) return(getPath(x))
-  else stop("x must be of type `zarr_dataset`")
+get_path <- function(x, ...) {
+  UseMethod("get_path", x)
 }
 
 #' @export
-dim.zarr_attributes <- function (x) {
+get_path.zarr_dataset <- function(x, ...) {
+  return(getPath(x))
+}
+
+#' @export
+dim.zarr_attributes <- function(x) {
   return(as.numeric(x$shape))
 }
 

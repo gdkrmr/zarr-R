@@ -1,5 +1,7 @@
 #define STRICT_R_HEADERS // otherwise a PI macro is defined in R
 
+// TODO: handle missing values correctly
+
 // [[Rcpp::plugins(cpp14)]]
 // [[Rcpp::depends(xtensor)]]
 
@@ -10,37 +12,6 @@
 #include <z5/multiarray/xtensor_access.hxx>
 #include <z5/types/types.hxx>
 
-void check_bounds(const Rcpp::IntegerVector& offset,
-                  const Rcpp::IntegerVector& subarray_shape,
-                  const z5::Dataset& dataset) {
-
-  if (offset.size() != subarray_shape.size() ||
-      offset.size() != dataset.shape().size()) {
-    Rf_error("iterators must be of the same length");
-  }
-
-  for (size_t i = 0; i < offset.size(); i++) {
-    if (offset[i] + subarray_shape[i] > dataset.shape()[i] || offset[i] < 0) {
-      Rf_error("out of bounds error");
-    }
-  }
-
-}
-
-void check_bounds(const Rcpp::IntegerVector& offset,
-                         const xt::rarray<double>& subarray,
-                         const z5::Dataset& dataset) {
-  if (offset.size() != subarray.dimension() ||
-      offset.size() != dataset.shape().size()) {
-    Rf_error("iterators must be of the same length");
-  }
-
-  for (size_t i = 0; i < offset.size(); i++) {
-    if (offset[i] + subarray.shape()[i] > dataset.shape()[i] || offset[i] < 0) {
-      Rf_error("out of bounds error");
-    }
-  }
-}
 
 // [[Rcpp::export]]
 SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
@@ -59,9 +30,15 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
     xt::xarray<int8_t> middle_array(shape_);
     xt::rarray<int32_t> out_array(shape_);
 
+    // NOTE: This is how to get the fill value.
+    // int8_t* fillValue;
+    // ds->getFillValue(fillValue);
+    // int8_t fillValue_ = *fillValue;
+
     z5::multiarray::readSubarray<int8_t>(*ds, middle_array, offset_.begin());
     std::transform(middle_array.begin(), middle_array.end(), out_array.begin(),
                    [](const int8_t x) { return static_cast<int32_t>(x); });
+
     res = wrap(out_array);
   };
   case z5::types::int16: {
@@ -144,38 +121,6 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
   return res;
 }
 
-template <typename T> T             const na();
-template <>           double        const na() { return NA_REAL; };
-template <>           int           const na() { return NA_INTEGER; };
-template <>           unsigned char const na() { return NA_LOGICAL; };
-
-template <typename FROM, typename TO>
-auto cast_l = [](const FROM x) { return static_cast<TO>(x); };
-
-template <typename FROM, typename TO>
-auto cast_na_l =
-  [](const FROM x) { return R_IsNA(x) ? na<TO>() : static_cast<TO>(x); };
-
-template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
-inline void write_subarray_transform(z5::Dataset &out_data,
-                                     xt::rarray<FROM_T> &in_data,
-                                     z5::types::ShapeType &offset) {
-  xt::xarray<TO_T> middle_data(in_data.dimension());
-  std::transform(in_data.begin(),in_data.end(),
-                 middle_data.begin(),
-                 cast_l<INNER_FROM_T, TO_T>);
-  z5::multiarray::writeSubarray<int8_t>(out_data, middle_data, offset.begin());
-}
-
-template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
-inline void write_subarray_transform_na(z5::Dataset &out_data,
-                                        xt::rarray<FROM_T> &in_data,
-                                        z5::types::ShapeType &offset) {
-  xt::xarray<TO_T> middle_data(in_data.dimension());
-  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
-                 cast_na_l<INNER_FROM_T, TO_T>);
-  z5::multiarray::writeSubarray<int8_t>(out_data, middle_data, offset.begin());
-}
 
 // [[Rcpp::export]]
 void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
@@ -255,9 +200,7 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     check_bounds(offset, data_, *ds);
 
     switch (target_type) {
-    case z5::types::int8: {
-      z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin());
-    };
+    // case z5::types::int8:  { z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin()); };
     // case z5::types::int8:    {write_subarray_transform<int8_t, int8_t>(*ds, data_, offset_);};
     // case z5::types::int16:   {write_subarray_transform<int16_t, int16_t>(*ds, data_, offset_);};
     // case z5::types::int32:   {write_subarray_transform<int32_t, int32_t>(*ds, data_, offset_);};

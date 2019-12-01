@@ -4,7 +4,7 @@
 \alias{get_path}
 \title{TODO: better function for this? S3 method?}
 \usage{
-get_path(x)
+get_path(x, ...)
 }
 \description{
 TODO: better function for this? S3 method?

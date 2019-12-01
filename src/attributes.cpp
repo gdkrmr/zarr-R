@@ -36,7 +36,7 @@ void writeAttributes(const std::string & path, const Rcpp::List & l) {
 
   nlohmann::json j = rlist_to_json(l);
 
-  z5::attrs_detail::readAttributes(attributes_path, j);
+  z5::attrs_detail::writeAttributes(attributes_path, j);
 }
 
 // [[Rcpp::export]]

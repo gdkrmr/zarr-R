@@ -1,8 +1,12 @@
-#pragma once
+#ifndef INCLUDE_ZARR_HELPER_HEADER
+#define INCLUDE_ZARR_HELPER_HEADER
+
+#define STRICT_R_HEADERS // otherwise a PI macro is defined in R
 
 #include <Rcpp.h>
 #include <z5/attributes.hxx>
 #include <z5/dataset_factory.hxx>
+#include <xtensor-r/rarray.hpp>
 
 #ifdef WITH_BOOST_FS
   #ifndef BOOST_FILESYSTEM_NO_DEPERECATED
@@ -62,3 +66,87 @@ inline z5::types::ShapeType intvec_to_shapetype(const Rcpp::IntegerVector & int_
   auto sizet_vec = Rcpp::as<std::vector<size_t> >(int_vec);
   return z5::types::ShapeType(sizet_vec);
 }
+
+/////////////////////////////////////////////////////////////////////////
+// bounds checking
+/////////////////////////////////////////////////////////////////////////
+
+inline void check_bounds(const Rcpp::IntegerVector& offset,
+                         const Rcpp::IntegerVector& subarray_shape,
+                         const z5::Dataset& dataset) {
+
+  // TODO: Not sure but I think this is really slow, because it has to be read
+  // from disk every time.
+  if (offset.size() != subarray_shape.size() ||
+      offset.size() != dataset.shape().size()) {
+    Rf_error("iterators must be of the same length");
+  }
+
+  for (size_t i = 0; i < offset.size(); i++) {
+    if (offset[i] + subarray_shape[i] > dataset.shape()[i] || offset[i] < 0) {
+      Rf_error("out of bounds error");
+    }
+  }
+
+}
+
+inline void check_bounds(const Rcpp::IntegerVector& offset,
+                         const xt::rarray<double>& subarray,
+                         const z5::Dataset& dataset) {
+
+  // TODO: Not sure but I think this is really slow, because it has to be read
+  // from disk every time.
+  if (offset.size() != subarray.dimension() ||
+      offset.size() != dataset.shape().size()) {
+    Rf_error("iterators must be of the same length");
+  }
+
+  for (size_t i = 0; i < offset.size(); i++) {
+    if (offset[i] + subarray.shape()[i] > dataset.shape()[i] || offset[i] < 0) {
+      Rf_error("out of bounds error");
+    }
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////
+// conversions
+/////////////////////////////////////////////////////////////////////////
+
+template <typename T> inline T             const na();
+template <>           inline double        const na() { return NA_REAL; };
+template <>           inline int           const na() { return NA_INTEGER; };
+template <>           inline unsigned char const na() { return NA_LOGICAL; };
+
+template <typename FROM, typename TO>
+auto cast_l = [](const FROM x) { return static_cast<TO>(x); };
+
+template <typename FROM, typename TO>
+auto cast_na_l =
+  [](const FROM x) { return R_IsNA(x) ? na<TO>() : static_cast<TO>(x); };
+
+template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
+inline void subarray_transform(z5::Dataset &out_data,
+                               xt::rarray<FROM_T> &in_data,
+                               z5::types::ShapeType &offset) {
+  xt::xarray<TO_T> middle_data(in_data.dimension());
+  std::transform(in_data.begin(),in_data.end(),
+                 middle_data.begin(),
+                 cast_l<INNER_FROM_T, TO_T>);
+  /* z5::multiarray::writeSubarray<int8_t>(out_data, middle_data, offset.begin()); */
+}
+
+template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
+inline void subarray_transform_na(z5::Dataset &out_data,
+                                        xt::rarray<FROM_T> &in_data,
+                                        z5::types::ShapeType &offset) {
+  xt::xarray<TO_T> middle_data(in_data.dimension());
+  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
+                 cast_na_l<INNER_FROM_T, TO_T>);
+  /* z5::multiarray::writeSubarray<int8_t>(out_data, middle_data, offset.begin()); */
+}
+
+#endif // INCLUDE_ZARR_HELPER_HEADER
+
+/* Local Variables: */
+/* mode: c++ */
+/* End: */

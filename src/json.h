@@ -1,7 +1,11 @@
-#pragma once
+#ifndef INCLUDE_JSON_HELPER_HEADER
+#define INCLUDE_JSON_HELPER_HEADER
+
+#define STRICT_R_HEADERS // otherwise a PI macro is defined in R
 
 // TODO: for some reason this file must be included *after* helpers.h
 
+#include "Rinternals.h"
 #include <Rcpp.h>
 #include <nlohmann/json.hpp>
 
@@ -113,20 +117,44 @@ inline Rcpp::List json_to_rlist(const nlohmann::json& j) {
   }
 }
 
-inline nlohmann::json rlist_unnamed_to_json(const Rcpp::List& l) {
+inline nlohmann::json rlist_to_json(const Rcpp::List &l);
+
+inline nlohmann::json rlist_unnamed_to_json(const Rcpp::List &l) {
   nlohmann::json j;
 
   for (int i = 0; i < l.length(); i++) {
       SEXP new_val = l[i];
 
       switch ((TYPEOF)(new_val)) {
-      case NILSXP: {nlohmann::json jnull; j.push_back(jnull);};
-      case LGLSXP:  j.push_back(Rcpp::as<bool>(new_val));
-      case INTSXP:  j.push_back(Rcpp::as<int>(new_val));
-      case REALSXP: j.push_back(Rcpp::as<double>(new_val));
-      case STRSXP:  j.push_back(Rcpp::as<std::string>(new_val));
-      default:      Rf_error("wrong type");
+      case NILSXP: {
+        nlohmann::json jnull;
+        j.push_back(jnull);
+        break;
       }
+      case LGLSXP: {
+        j.push_back(Rcpp::as<bool>(new_val));
+        break;
+      }
+      case INTSXP: {
+        j.push_back(Rcpp::as<int>(new_val));
+        break;
+      }
+      case REALSXP: {
+        j.push_back(Rcpp::as<double>(new_val));
+        break;
+      }
+      case STRSXP: {
+        j.push_back(Rcpp::as<std::string>(new_val));
+        break;
+      }
+      case VECSXP: {
+        j.push_back(rlist_to_json(new_val));
+        break;
+      }
+      default: {
+        Rf_error("wrong type");
+      }
+      };
   }
 
   return j;
@@ -142,12 +170,39 @@ inline nlohmann::json rlist_named_to_json(const Rcpp::List& l) {
     SEXP new_val = l[i];
 
     switch ((TYPEOF)(new_val)) {
-    case NILSXP: { nlohmann::json jnull; j += {new_name, jnull}; };
-    case LGLSXP:  j += {new_name, Rcpp::as<bool>(new_val)};
-    case INTSXP:  j += {new_name, Rcpp::as<int>(new_val)};
-    case REALSXP: j += {new_name, Rcpp::as<double>(new_val)};
-    case STRSXP:  j += {new_name, Rcpp::as<std::string>(new_val)};
-    default:      Rf_error("wrong type");
+    case NILSXP: {
+      nlohmann::json jnull;
+      j += nlohmann::json::object_t::value_type(new_name, jnull);
+      break;
+    }
+    case LGLSXP: {
+      j += nlohmann::json::object_t::value_type(new_name,
+                                                Rcpp::as<bool>(new_val));
+      break;
+    }
+    case INTSXP: {
+      j += nlohmann::json::object_t::value_type(new_name,
+                                                Rcpp::as<int>(new_val));
+      break;
+    }
+    case REALSXP: {
+      j += nlohmann::json::object_t::value_type(new_name,
+                                                Rcpp::as<double>(new_val));
+      break;
+    }
+    case STRSXP: {
+      j += nlohmann::json::object_t::value_type(new_name,
+                                                Rcpp::as<std::string>(new_val));
+      break;
+    }
+    case VECSXP: {
+      j += nlohmann::json::object_t::value_type(new_name,
+                                                rlist_to_json(new_val));
+      break;
+    }
+    default: {
+      Rf_error("wrong type");
+    }
     }
   }
 
@@ -162,3 +217,9 @@ inline nlohmann::json rlist_to_json(const Rcpp::List & l) {
     return rlist_unnamed_to_json(l);
   }
 }
+
+#endif // INCLUDE_JSON_HELPER_HEADER
+
+/* Local Variables: */
+/* mode: c++ */
+/* End: */
