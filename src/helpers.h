@@ -7,6 +7,7 @@
 #include <z5/attributes.hxx>
 #include <z5/dataset_factory.hxx>
 #include <xtensor-r/rarray.hpp>
+#include <z5/multiarray/xtensor_access.hxx>
 
 #ifdef WITH_BOOST_FS
   #ifndef BOOST_FILESYSTEM_NO_DEPERECATED
@@ -117,33 +118,32 @@ template <>           inline double        const na() { return NA_REAL; };
 template <>           inline int           const na() { return NA_INTEGER; };
 template <>           inline unsigned char const na() { return NA_LOGICAL; };
 
-template <typename FROM, typename TO>
-auto cast_l = [](const FROM x) { return static_cast<TO>(x); };
+// template <typename FROM, typename TO>
+// auto cast_l = [](const FROM x) { return static_cast<TO>(x); };
 
-template <typename FROM, typename TO>
-auto cast_na_l =
-  [](const FROM x) { return R_IsNA(x) ? na<TO>() : static_cast<TO>(x); };
+// template <typename FROM, typename TO>
+// auto cast_na_l =
+//   [](const FROM x) { return R_IsNA(x) ? na<TO>() : static_cast<TO>(x); };
 
 template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
 inline void subarray_transform(z5::Dataset &out_data,
                                xt::rarray<FROM_T> &in_data,
                                z5::types::ShapeType &offset) {
   xt::xarray<TO_T> middle_data(in_data.dimension());
-  std::transform(in_data.begin(),in_data.end(),
-                 middle_data.begin(),
-                 cast_l<INNER_FROM_T, TO_T>);
-  /* z5::multiarray::writeSubarray<int8_t>(out_data, middle_data, offset.begin()); */
+  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
+                 [](const INNER_FROM_T x) { return static_cast<TO_T>(x); });
+  z5::multiarray::writeSubarray<TO_T>(out_data, middle_data, offset.begin());
 }
 
-template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
-inline void subarray_transform_na(z5::Dataset &out_data,
-                                        xt::rarray<FROM_T> &in_data,
-                                        z5::types::ShapeType &offset) {
-  xt::xarray<TO_T> middle_data(in_data.dimension());
-  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
-                 cast_na_l<INNER_FROM_T, TO_T>);
-  /* z5::multiarray::writeSubarray<int8_t>(out_data, middle_data, offset.begin()); */
-}
+// template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
+// inline void subarray_transform_na(z5::Dataset &out_data,
+//                                         xt::rarray<FROM_T> &in_data,
+//                                         z5::types::ShapeType &offset) {
+//   xt::xarray<TO_T> middle_data(in_data.dimension());
+//   std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
+//                  cast_na_l<INNER_FROM_T, TO_T>);
+//   /* z5::multiarray::writeSubarray<int8_t>(out_data, middle_data, offset.begin()); */
+// }
 
 #endif // INCLUDE_ZARR_HELPER_HEADER
 

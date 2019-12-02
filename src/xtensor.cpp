@@ -26,6 +26,7 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
   SEXP res;
 
   switch (dtype) {
+
   case z5::types::int8: {
     xt::xarray<int8_t> middle_array(shape_);
     xt::rarray<int32_t> out_array(shape_);
@@ -40,7 +41,9 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
                    [](const int8_t x) { return static_cast<int32_t>(x); });
 
     res = wrap(out_array);
+    break;
   };
+
   case z5::types::int16: {
     xt::xarray<int16_t> middle_array(shape_);
     xt::rarray<int32_t> out_array(shape_);
@@ -49,13 +52,17 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
     std::transform(middle_array.begin(), middle_array.end(), out_array.begin(),
                    [](const int16_t x) { return static_cast<int32_t>(x); });
     res = wrap(out_array);
+    break;
   };
+
   case z5::types::int32: {
     xt::rarray<int32_t> out_array(shape_);
 
     z5::multiarray::readSubarray<int32_t>(*ds, out_array, offset_.begin());
     res = wrap(out_array);
+    break;
   };
+
   case z5::types::int64: {
     Rf_warning("WARNING: reading 64 bit integers, R cannot deal with this data "
                "type and you may loose information!");
@@ -66,12 +73,16 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
     std::transform(middle_array.begin(), middle_array.end(), out_array.begin(),
                    [](const int64_t x) { return static_cast<double>(x); });
     res = wrap(out_array);
+    break;
   };
+
   case z5::types::uint8: {
     xt::rarray<uint8_t> array(shape_);
     z5::multiarray::readSubarray<uint8_t>(*ds, array, offset_.begin());
     res = wrap(array);
+    break;
   };
+
   case z5::types::uint16: {
     xt::xarray<uint16_t> middle_array(shape_);
     xt::rarray<int32_t> out_array(shape_);
@@ -80,7 +91,9 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
     std::transform(middle_array.begin(), middle_array.end(), out_array.begin(),
                    [](const uint16_t x) { return static_cast<int32_t>(x); });
     res = wrap(out_array);
+    break;
   };
+
   case z5::types::uint32: {
     xt::xarray<uint32_t> middle_array(shape_);
     xt::rarray<double> out_array(shape_);
@@ -89,7 +102,9 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
     std::transform(middle_array.begin(), middle_array.end(), out_array.begin(),
                    [](const uint32_t x) { return static_cast<double>(x); });
     res = wrap(out_array);
+    break;
   };
+
   case z5::types::uint64: {
     Rf_warning("WARNING: reading 64 bit unsigned integers, R cannot deal with "
                "this data type and you may loose information!");
@@ -100,7 +115,9 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
     std::transform(middle_array.begin(), middle_array.end(), out_array.begin(),
                    [](const uint64_t x) { return static_cast<double>(x); });
     res = wrap(out_array);
+    break;
   };
+
   case z5::types::float32: {
     xt::xarray<float> middle_array(shape_);
     xt::rarray<double> out_array(shape_);
@@ -110,12 +127,17 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
                    [](const float x) { return static_cast<double>(x); });
 
     res = wrap(out_array);
+    break;
   };
+
   case z5::types::float64: {
     xt::rarray<double> array(shape_);
     z5::multiarray::readSubarray<double>(*ds, array, offset_.begin());
     res = wrap(array);
+    break;
   };
+
+  default: { Rf_error("Wrong data type."); }
   }
 
   return res;
@@ -133,7 +155,6 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
 
   switch (source_type) {
   case LGLSXP: {
-
     // NOTE: not checking bounds may lead to memory leaks
     xt::rarray<rlogical> data_(data);
     check_bounds(offset, data_, *ds);
@@ -144,7 +165,10 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     // case z5::types::int16:   { write_subarray_transform<int16_t, int16_t>   (*ds, data_, offset_); };
     // case z5::types::int32:   { write_subarray_transform_na<int32_t, int32_t>(*ds, data_, offset_); };
     // case z5::types::int64:   { write_subarray_transform<int64_t, int64_t>   (*ds, data_, offset_); };
-    case z5::types::uint8:   { z5::multiarray::writeSubarray<uint8_t>       (*ds, data_, offset_.begin()); };
+    case z5::types::uint8: {
+      z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin());
+      break;
+    };
     // case z5::types::uint16:  { write_subarray_transform<uint16_t, uint16_t> (*ds, data_, offset_); };
     // case z5::types::uint32:  { write_subarray_transform<uint32_t, uint32_t> (*ds, data_, offset_); };
     // case z5::types::uint64:  { write_subarray_transform<uint64_t, uint64_t> (*ds, data_, offset_); };
@@ -152,9 +176,10 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     // case z5::types::float64: { write_subarray_transform_na<double, double>  (*ds, data_, offset_); };
     default: { Rf_error("Error: Type of R array and zarr array do not match."); }
     }
+    break;
   };
-  case INTSXP: {
 
+  case INTSXP: {
     // NOTE: not checking bounds may lead to memory leaks
     xt::rarray<int32_t> data_(data);
     check_bounds(offset, data_, *ds);
@@ -162,7 +187,10 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     switch (target_type) {
     // case z5::types::int8:    { write_subarray_transform<int8_t, int8_t>     (*ds, data_, offset_); };
     // case z5::types::int16:   { write_subarray_transform<int16_t, int16_t>   (*ds, data_, offset_); };
-    case z5::types::int32:   { z5::multiarray::writeSubarray<int32_t>       (*ds, data_, offset_.begin()); };
+    case z5::types::int32: {
+      z5::multiarray::writeSubarray<int32_t>(*ds, data_, offset_.begin());
+      break;
+    };
     // case z5::types::int64:   { write_subarray_transform<int64_t, int64_t>   (*ds, data_, offset_); };
     // case z5::types::uint8:   { write_subarray_transform<uint8_t, uint8_t>   (*ds, data_, offset_); };
     // case z5::types::uint16:  { write_subarray_transform<uint16_t, uint16_t> (*ds, data_, offset_); };
@@ -172,9 +200,10 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     // case z5::types::float64: { write_subarray_transform_na<double, double>  (*ds, data_, offset_); };
     default: { Rf_error("Error: Type of R array and zarr array do not match."); }
     }
+    break;
   };
-  case REALSXP: {
 
+  case REALSXP: {
     // NOTE: not checking bounds may lead to memory leaks
     xt::rarray<double> data_(data);
     check_bounds(offset, data_, *ds);
@@ -188,13 +217,20 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     // case z5::types::uint16:  { write_subarray_transform<uint16_t, uint16_t> (*ds, data_, offset_); };
     // case z5::types::uint32:  { write_subarray_transform<uint32_t, uint32_t> (*ds, data_, offset_); };
     // case z5::types::uint64:  { write_subarray_transform<uint64_t, uint64_t> (*ds, data_, offset_); };
-    // case z5::types::float32: { write_subarray_transform<float, float>       (*ds, data_, offset_); };
-    case z5::types::float64: { z5::multiarray::writeSubarray<double>        (*ds, data_, offset_.begin()); };
+    case z5::types::float32: {
+      subarray_transform<float, float>(*ds, data_, offset_);
+      break;
+    };
+    case z5::types::float64: {
+      z5::multiarray::writeSubarray<double>(*ds, data_, offset_.begin());
+      break;
+    };
     default: { Rf_error("Error: Type of R array and zarr array do not match."); }
     }
+    break;
   };
-  case RAWSXP: {
 
+  case RAWSXP: {
     // NOTE: not checking bounds may lead to memory leaks
     xt::rarray<uint8_t> data_(data);
     check_bounds(offset, data_, *ds);
@@ -205,7 +241,10 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     // case z5::types::int16:   {write_subarray_transform<int16_t, int16_t>(*ds, data_, offset_);};
     // case z5::types::int32:   {write_subarray_transform<int32_t, int32_t>(*ds, data_, offset_);};
     // case z5::types::int64:   { write_subarray_transform<int64_t, int64_t>(*ds, data_, offset_); };
-    case z5::types::uint8: { z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin()); };
+    case z5::types::uint8: {
+      z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin());
+      break;
+    };
     // case z5::types::uint16:  { write_subarray_transform<uint16_t, uint16_t> (*ds, data_, offset_); };
     // case z5::types::uint32:  {write_subarray_transform<uint32_t, uint32_t> (*ds, data_, offset_); };
     // case z5::types::uint64:  { write_subarray_transform<uint64_t, uint64_t> (*ds, data_, offset_); };
@@ -213,7 +252,11 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     // case z5::types::float64: { write_subarray_transform_na<double, double>(*ds, data_, offset_); };
     default: { Rf_error("Error: Type of R array and zarr array do not match."); }
     }
+    break;
   };
-  default: { Rf_error("Value must be Logical, Integer, Real, or Raw."); };
+
+  default: {
+    Rf_error("Value must be Logical, Integer, Real, or Raw.");
+  };
   }
 }

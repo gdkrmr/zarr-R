@@ -65,6 +65,21 @@ open_zarr <- function(path, file_mode = "a") {
   return(ds)
 }
 
+#' @export
+data_type <- function(x, ...) {
+  UseMethod("data_type", x)
+}
+
+#' @export
+data_type.zarr_dataset <- function(x, ...) {
+  data_type(read_attributes(x))
+}
+
+#' @export
+data_type.zarr_attributes <- function(x, ...) {
+  zarrdt_to_dt[[x$dtype]]
+}
+
 
 #' // the (python / h5py) I/O modes:
 #' // r: can only read, file must exist
@@ -80,6 +95,17 @@ open_zarr <- function(path, file_mode = "a") {
 #' "uint8", "uint16", "uint32", "uint64",
 #' "float32", "float64",
 
+#' {int8 , "|i1"},
+#' {int16, "<i2"},
+#' {int32, "<i4"},
+#' {int64, "<i8"},
+#' {uint8 , "|u1"},
+#' {uint16, "<u2"},
+#' {uint32, "<u4"},
+#' {uint64,"<u8"},
+#' {float32, "<f4"},
+#' {float64,"<f8"}}});
+
 #' missing_value can be c("auto") or any number, should probably not be NA
 
 #' @export
@@ -91,16 +117,16 @@ create_dataset <- function(path,
                            compressor = "raw", compression_options = list(),
                            as_zarr = TRUE) {
   if (fill_value == "auto") {
-    if      (data_type == "int8")    { fill_value <- 0L         }
-    else if (data_type == "int16")   { fill_value <- 0L         }
-    else if (data_type == "int32")   { fill_value <- NA_integer }
-    else if (data_type == "int64")   { fill_value <- 0L         }
-    else if (data_type == "uint8")   { fill_value <- NA         }
-    else if (data_type == "uint16")  { fill_value <- 0L         }
-    else if (data_type == "uint32")  { fill_value <- 0L         }
-    else if (data_type == "uint64")  { fill_value <- 0L         }
-    else if (data_type == "float32") { fill_value <- 0          }
-    else if (data_type == "float64") { fill_value <- NA_real_   }
+    if      (data_type == "int8")    { fill_value <- 0L          }
+    else if (data_type == "int16")   { fill_value <- 0L          }
+    else if (data_type == "int32")   { fill_value <- NA_integer_ }
+    else if (data_type == "int64")   { fill_value <- 0L          }
+    else if (data_type == "uint8")   { fill_value <- NA          }
+    else if (data_type == "uint16")  { fill_value <- 0L          }
+    else if (data_type == "uint32")  { fill_value <- 0L          }
+    else if (data_type == "uint64")  { fill_value <- 0L          }
+    else if (data_type == "float32") { fill_value <- 0           }
+    else if (data_type == "float64") { fill_value <- NA_real_    }
     else stop("unknown data_type")
   }
 
@@ -173,7 +199,10 @@ dim.zarr_dataset <- function(x) {
 
   ## quote = TRUE prevents 1:i from expanding
   os <- do.call(range_to_offset_shape, ellipsis_args)
+  cat("herereereere\n")
+  cat(data_type(x), "\n")
   res <- readSubarray(x, os$offset, os$shape)
+  cat("hhhhhherereereere\n")
   if (drop) { res <- drop_dim(res) }
 
   return(res)

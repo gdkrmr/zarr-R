@@ -10,3 +10,4 @@
 test_array*
 /compile_flags.txt
 \.Rhistory
+/tests/testthat/.RData
