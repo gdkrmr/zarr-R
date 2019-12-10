@@ -194,10 +194,7 @@ dim.zarr_dataset <- function(x) {
 
   ## quote = TRUE prevents 1:i from expanding
   os <- do.call(range_to_offset_shape, ellipsis_args)
-  cat("herereereere\n")
-  cat(data_type(x), "\n")
   res <- readSubarray(x, os$offset, os$shape)
-  cat("hhhhhherereereere\n")
   if (drop) { res <- drop_dim(res) }
 
   return(res)
