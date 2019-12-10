@@ -82,13 +82,12 @@ data_type.zarr_attributes <- function(x, ...) {
 #' // w-: can read and write, file must not exist
 #' // x: can read and write, file must not exist (same as w- ?!, so omitted here)
 #' // a: can read and write
-
-
+#'
 #' possible values for data_type:
 #' "int8", "int16", "int32", "int64",
 #' "uint8", "uint16", "uint32", "uint64",
 #' "float32", "float64",
-
+#'
 #' {int8 , "|i1"},
 #' {int16, "<i2"},
 #' {int32, "<i4"},
@@ -99,8 +98,10 @@ data_type.zarr_attributes <- function(x, ...) {
 #' {uint64,"<u8"},
 #' {float32, "<f4"},
 #' {float64,"<f8"}}});
-
+#'
 #' missing_value can be c("auto") or any number, should probably not be NA
+NULL
+
 
 #' @export
 create_dataset <- function(path,
