@@ -10,6 +10,8 @@ chunk_shape <- c(3, 3, 3)
 fill_value <- 0
 data_types <- c("float64", "float32")
 
+tolerance <- 1e-6
+
 for(data_type in data_types) {
   context(data_type)
 
@@ -77,12 +79,7 @@ for(data_type in data_types) {
   )
   test_that(
     "the fill value is correct",
-    {
-      cat("aaaaaFill value is correct\n")
-      cat("data_set: ", data_set[1, 1, 1, drop = TRUE], "\n")
-      cat("fill_value: ", fill_value, "\n")
-      expect_equal(data_set[1, 1, 1, drop = TRUE], fill_value)
-    }
+    expect_equal(data_set[1, 1, 1, drop = TRUE], fill_value, tolerance = tolerance)
   )
 
   context("Bounds checking")
@@ -127,22 +124,22 @@ for(data_type in data_types) {
     dim(val) <- c(1, 1, 1)
     i <- 1
     data_set[1, 1, 1] <- val
-    expect_equal(data_set[1, 1, 1], val)
-    expect_equal(data_set[i, 1, 1], val)
-    expect_equal(data_set[1, i, 1], val)
-    expect_equal(data_set[1, 1, i], val)
-    expect_equal(data_set[i, i, i], val)
+    expect_equal(data_set[1, 1, 1], val, tolerance = tolerance)
+    expect_equal(data_set[i, 1, 1], val, tolerance = tolerance)
+    expect_equal(data_set[1, i, 1], val, tolerance = tolerance)
+    expect_equal(data_set[1, 1, i], val, tolerance = tolerance)
+    expect_equal(data_set[i, i, i], val, tolerance = tolerance)
   })
   test_that("writing an scalar", {
     val <- rnorm(1)
     i <- 1
     data_set[1, 1, 1] <- val
-    expect_equal(data_set[1, 1, 1, drop = TRUE], val)
-    expect_equal(data_set[1, 1, 1, drop = TRUE], val)
-    expect_equal(data_set[i, 1, 1, drop = TRUE], val)
-    expect_equal(data_set[1, i, 1, drop = TRUE], val)
-    expect_equal(data_set[1, 1, i, drop = TRUE], val)
-    expect_equal(data_set[i, i, i, drop = TRUE], val)
+    expect_equal(data_set[1, 1, 1, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[1, 1, 1, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[i, 1, 1, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[1, i, 1, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[1, 1, i, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[i, i, i, drop = TRUE], val, tolerance = tolerance)
   })
   test_that("writing a bigger array", {
     val <- rnorm(2^3)
@@ -154,16 +151,16 @@ for(data_type in data_types) {
     k2 <- i2:j2
     dim(val) <- c(2, 2, 2)
     data_set[2:3, 2:3, 1:2] <- val
-    expect_equal(data_set[2:3, 2:3, 1:2], val)
-    expect_equal(data_set[2:3, 2:3, 1:2, drop = TRUE], val)
-    expect_equal(data_set[i, 2:3, 1:2], val)
-    expect_equal(data_set[2:3, j, 1:2], val)
-    expect_equal(data_set[2:3, 2:3, k], val)
-    expect_equal(data_set[2:3, 2:3, k2], val)
-    expect_equal(data_set[i, 2:3, 1:2, drop = TRUE], val)
-    expect_equal(data_set[2:3, j, 1:2, drop = TRUE], val)
-    expect_equal(data_set[2:3, 2:3, k, drop = TRUE], val)
-    expect_equal(data_set[2:3, 2:3, k2, drop = TRUE], val)
+    expect_equal(data_set[2:3, 2:3, 1:2], val, tolerance = tolerance)
+    expect_equal(data_set[2:3, 2:3, 1:2, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[i, 2:3, 1:2], val, tolerance = tolerance)
+    expect_equal(data_set[2:3, j, 1:2], val, tolerance = tolerance)
+    expect_equal(data_set[2:3, 2:3, k], val, tolerance = tolerance)
+    expect_equal(data_set[2:3, 2:3, k2], val, tolerance = tolerance)
+    expect_equal(data_set[i, 2:3, 1:2, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[2:3, j, 1:2, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[2:3, 2:3, k, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[2:3, 2:3, k2, drop = TRUE], val, tolerance = tolerance)
   })
 
   test_that("writing and reading of mixed indices", {
@@ -176,16 +173,16 @@ for(data_type in data_types) {
     j2 <- 9
     k2 <- i2:j2
     data_set[9, 9, 1:9] <- val
-    expect_equal(data_set[9, 9, 1:9], val)
-    expect_equal(data_set[9, 9, 1:9, drop = TRUE], zarr:::drop_dim(val))
-    expect_equal(data_set[i, 9, 1:9], val)
-    expect_equal(data_set[9, j, 1:9], val)
-    expect_equal(data_set[9, 9, k], val)
-    expect_equal(data_set[9, 9, k2], val)
-    expect_equal(data_set[i, 9, 1:9, drop = TRUE], zarr:::drop_dim(val))
-    expect_equal(data_set[9, j, 1:9, drop = TRUE], zarr:::drop_dim(val))
-    expect_equal(data_set[9, 9, k, drop = TRUE], zarr:::drop_dim(val))
-    expect_equal(data_set[9, 9, k2, drop = TRUE], zarr:::drop_dim(val))
+    expect_equal(data_set[9, 9, 1:9], val, tolerance = tolerance)
+    expect_equal(data_set[9, 9, 1:9, drop = TRUE], zarr:::drop_dim(val), tolerance = tolerance)
+    expect_equal(data_set[i, 9, 1:9], val, tolerance = tolerance)
+    expect_equal(data_set[9, j, 1:9], val, tolerance = tolerance)
+    expect_equal(data_set[9, 9, k], val, tolerance = tolerance)
+    expect_equal(data_set[9, 9, k2], val, tolerance = tolerance)
+    expect_equal(data_set[i, 9, 1:9, drop = TRUE], zarr:::drop_dim(val), tolerance = tolerance)
+    expect_equal(data_set[9, j, 1:9, drop = TRUE], zarr:::drop_dim(val), tolerance = tolerance)
+    expect_equal(data_set[9, 9, k, drop = TRUE], zarr:::drop_dim(val), tolerance = tolerance)
+    expect_equal(data_set[9, 9, k2, drop = TRUE], zarr:::drop_dim(val), tolerance = tolerance)
   })
 
   ## TODO:
@@ -195,20 +192,20 @@ for(data_type in data_types) {
     i <- 9
     j <- 9
     data_set[9, 9, ] <- val
-    expect_equal(data_set[9, 9, ], array(val, c(1, 1, 9)))
-    expect_equal(data_set[9, 9, , drop = TRUE], val)
-    expect_equal(data_set[i, 9, , drop = TRUE], val)
-    expect_equal(data_set[9, j, , drop = TRUE], val)
+    expect_equal(data_set[9, 9, ], array(val, c(1, 1, 9)), tolerance = tolerance)
+    expect_equal(data_set[9, 9, , drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[i, 9, , drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[9, j, , drop = TRUE], val, tolerance = tolerance)
     data_set[9, , 9] <- val
-    expect_equal(data_set[9, , 9], array(val, c(1, 9, 1)))
-    expect_equal(data_set[9, , 9, drop = TRUE], val)
-    expect_equal(data_set[i, , 9, drop = TRUE], val)
-    expect_equal(data_set[9, , j, drop = TRUE], val)
+    expect_equal(data_set[9, , 9], array(val, c(1, 9, 1)), tolerance = tolerance)
+    expect_equal(data_set[9, , 9, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[i, , 9, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[9, , j, drop = TRUE], val, tolerance = tolerance)
     data_set[, 9, 9] <- val
-    expect_equal(data_set[, 9, 9], array(val, c(9, 1, 1)))
-    expect_equal(data_set[, 9, 9, drop = TRUE], zarr:::drop_dim(val))
-    expect_equal(data_set[, i, 9, drop = TRUE], val)
-    expect_equal(data_set[, 9, j, drop = TRUE], val)
+    expect_equal(data_set[, 9, 9], array(val, c(9, 1, 1)), tolerance = tolerance)
+    expect_equal(data_set[, 9, 9, drop = TRUE], zarr:::drop_dim(val), tolerance = tolerance)
+    expect_equal(data_set[, i, 9, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[, 9, j, drop = TRUE], val, tolerance = tolerance)
   })
 
   test_that("writing and reading empty indices value dims", {
@@ -216,37 +213,37 @@ for(data_type in data_types) {
     i <- 9
     j <- 9
     data_set[9, 9, ] <- array(val, c(1, 1, 9))
-    expect_equal(data_set[9, 9, ], array(val, c(1, 1, 9)))
-    expect_equal(data_set[9, 9, , drop = TRUE], val)
-    expect_equal(data_set[i, 9, , drop = TRUE], val)
-    expect_equal(data_set[9, j, , drop = TRUE], val)
+    expect_equal(data_set[9, 9, ], array(val, c(1, 1, 9)), tolerance = tolerance)
+    expect_equal(data_set[9, 9, , drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[i, 9, , drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[9, j, , drop = TRUE], val, tolerance = tolerance)
     data_set[9, , 9] <- array(val, c(1, 9, 1))
-    expect_equal(data_set[9, , 9], array(val, c(1, 9, 1)))
-    expect_equal(data_set[9, , 9, drop = TRUE], val)
-    expect_equal(data_set[i, , 9, drop = TRUE], val)
-    expect_equal(data_set[9, , j, drop = TRUE], val)
+    expect_equal(data_set[9, , 9], array(val, c(1, 9, 1)), tolerance = tolerance)
+    expect_equal(data_set[9, , 9, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[i, , 9, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[9, , j, drop = TRUE], val, tolerance = tolerance)
     data_set[, 9, 9] <- array(val, c(9, 1, 1))
-    expect_equal(data_set[, 9, 9], array(val, c(9, 1, 1)))
-    expect_equal(data_set[, 9, 9, drop = TRUE], val)
-    expect_equal(data_set[, i, 9, drop = TRUE], val)
-    expect_equal(data_set[, 9, j, drop = TRUE], val)
+    expect_equal(data_set[, 9, 9], array(val, c(9, 1, 1)), tolerance = tolerance)
+    expect_equal(data_set[, 9, 9, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[, i, 9, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[, 9, j, drop = TRUE], val, tolerance = tolerance)
   })
 
   test_that("writing and reading empty indices matrix", {
     val <- matrix(rnorm(81), nrow = 9, ncol = 9)
     i <- 9
     data_set[9, , ] <- val
-    expect_equal(data_set[9, , ], array(val, c(1, 9, 9)))
-    expect_equal(data_set[9, , , drop = TRUE], val)
-    expect_equal(data_set[i, , , drop = TRUE], val)
+    expect_equal(data_set[9, , ], array(val, c(1, 9, 9)), tolerance = tolerance)
+    expect_equal(data_set[9, , , drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[i, , , drop = TRUE], val, tolerance = tolerance)
     data_set[, 9, ] <- val
-    expect_equal(data_set[, 9, ], array(val, c(9, 1, 9)))
-    expect_equal(data_set[, 9, , drop = TRUE], val)
-    expect_equal(data_set[, i, , drop = TRUE], val)
+    expect_equal(data_set[, 9, ], array(val, c(9, 1, 9)), tolerance = tolerance)
+    expect_equal(data_set[, 9, , drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[, i, , drop = TRUE], val, tolerance = tolerance)
     data_set[, , 9] <- val
-    expect_equal(data_set[, , 9], array(val, c(9, 9, 1)))
-    expect_equal(data_set[, , 9, drop = TRUE], val)
-    expect_equal(data_set[, , i, drop = TRUE], val)
+    expect_equal(data_set[, , 9], array(val, c(9, 9, 1)), tolerance = tolerance)
+    expect_equal(data_set[, , 9, drop = TRUE], val, tolerance = tolerance)
+    expect_equal(data_set[, , i, drop = TRUE], val, tolerance = tolerance)
   })
 
   test_that("cleanup", {
