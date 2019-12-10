@@ -129,7 +129,11 @@ template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
 inline void subarray_transform(z5::Dataset &out_data,
                                xt::rarray<FROM_T> &in_data,
                                z5::types::ShapeType &offset) {
-  xt::xarray<TO_T> middle_data(in_data.dimension());
+  std::vector<std::size_t> in_shape;
+  for (auto& s : in_data.shape()) {
+    in_shape.push_back(s);
+  }
+  xt::xarray<TO_T> middle_data(in_shape);
   std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
                  [](const INNER_FROM_T x) { return static_cast<TO_T>(x); });
   z5::multiarray::writeSubarray<TO_T>(out_data, middle_data, offset.begin());
