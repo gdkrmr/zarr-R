@@ -14,12 +14,6 @@ NULL
 #' @include RcppExports.R
 #' @include helpers.R
 
-.onUnload <- function (libpath) {
-  library.dynam.unload("zarr", libpath)
-}
-
-
-### interface
 
 #' @export
 read_attributes <- function(x, ...) {

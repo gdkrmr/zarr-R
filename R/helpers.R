@@ -71,3 +71,7 @@ zarrdt_to_dt <- list(
   `<f4` = "float32",
   `<f8` = "float64"
 )
+
+.onUnload <- function(libpath) {
+  library.dynam.unload("zarr", libpath)
+}
