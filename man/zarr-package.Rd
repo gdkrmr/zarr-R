@@ -4,7 +4,7 @@
 \name{zarr-package}
 \alias{zarr}
 \alias{zarr-package}
-\title{zarr: The Zarr file format in R}
+\title{zarr: The Zarr File Format in R}
 \description{
 Wrapping the z5 headers for R.
 }
