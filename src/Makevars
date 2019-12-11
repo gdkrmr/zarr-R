@@ -1,3 +1,9 @@
 CXX_STD=CXX14
 PKG_CPPFLAGS=-I"../inst/include"
 PKG_LIBS=-lstdc++fs
+
+##### this reduces the size of the executable down to 1.3 Mb:
+# strippedLib: $(SHLIB)
+# 	if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" ]] ; \
+#         then /usr/bin/strip --strip-debug $(SHLIB); fi
+# .phony: strippedLib
