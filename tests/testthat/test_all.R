@@ -1,6 +1,6 @@
-library(testthat)
+## library(testthat)
 ## library(zarr)
-devtools::load_all("/home/gkraemer/progs/R/zarr")
+## devtools::load_all("/home/gkraemer/progs/R/zarr")
 ## devtools::load_all("/home/gkraemer/progs/R/zarr", recompile = TRUE)
 
 
