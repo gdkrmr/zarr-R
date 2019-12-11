@@ -1,29 +1,28 @@
-#' zarr: A package for Zarr arrays
-#'
-#' This package wraps C++ Code for Zarr Arrays
-#'
-#'
-#' @docType package
-#' @name zarr
+#' @include RcppExports.R zarr-package.R helpers.R
 NULL
 
-#' @importFrom Rcpp evalCpp
-#' @useDynLib zarr
-NULL
-
-#' @include RcppExports.R
-#' @include helpers.R
-
-
+#' Read attributes
+#'
+#' @description
+#'
+#' Read the attributes of an object or path
+#'
+#' @details
+#'
+#' This is an S3 generic to read the attributes of zarr arrays.
+#'
+#' @param x The object
+#' @param ... currently unused
+#'
 #' @export
 read_attributes <- function(x, ...) {
   UseMethod("read_attributes", x)
 }
 
 #' @export
-read_attributes.character <- function(path) {
-  if (!dir.exists(path) && file.exists(path)) {
-    att <- readAttributes(path)
+read_attributes.character <- function(x, ...) {
+  if (!dir.exists(x) && file.exists(x)) {
+    att <- readAttributes(x)
     class(att) <- "zarr_attributes"
     return(att)
   } else {
@@ -32,26 +31,39 @@ read_attributes.character <- function(path) {
 }
 
 #' @export
-read_attributes.zarr_dataset <- function(dataset) {
-  read_attributes(paste(get_path(dataset), ".zarray", sep = "/"))
+read_attributes.zarr_dataset <- function(x, ...) {
+  read_attributes(paste(get_path(x), ".zarray", sep = "/"))
 }
 
+#' Write attributes
+#'
+#' Write the attributes of an object or path
+#'
+#' @param x The object
+#' @param attributes A list of attributes
+#' @param ... Currently unused
 #' @export
-write_attributes <- function(x, ...) {
+write_attributes <- function(x, attributes, ...) {
   UseMethod("write_attributes", x)
 }
 
 #' @export
-write_attributes.character <- function(path, attributes) {
-  writeAttributes(path, attributes)
+write_attributes.character <- function(x, attributes, ...) {
+  writeAttributes(x, attributes)
 }
 
 #' @export
-write_attributes.zarr_dataset <- function(dataset, attributes, ...) {
-  write_attributes(paste(get_path(dataset), ".zarray", sep = "/"),
+write_attributes.zarr_dataset <- function(x, attributes, ...) {
+  write_attributes(paste(get_path(x), ".zarray", sep = "/"),
                    attributes)
 }
 
+#' Open a zarr object.
+#'
+#' Opens a zarr array saved on disk.
+#'
+#' @param path The path on disk
+#' @param file_mode File mode to open the object
 #' @export
 open_zarr <- function(path, file_mode = "a") {
   ds <- openDataset(path, file_mode)
@@ -59,6 +71,12 @@ open_zarr <- function(path, file_mode = "a") {
   return(ds)
 }
 
+#' Data type
+#'
+#' Get the data type of an object.
+#'
+#' @param x The object
+#' @param ... Unused
 #' @export
 data_type <- function(x, ...) {
   UseMethod("data_type", x)
@@ -75,34 +93,47 @@ data_type.zarr_attributes <- function(x, ...) {
 }
 
 
-#' // the (python / h5py) I/O modes:
-#' // r: can only read, file must exist
-#' // r+: can read and write, file must existinline nlohmann::json rlist_to_json(const Rcpp::List & l)
-#' // w: can read and write, if file exists, will be overwritten
-#' // w-: can read and write, file must not exist
-#' // x: can read and write, file must not exist (same as w- ?!, so omitted here)
-#' // a: can read and write
-#'
-#' possible values for data_type:
-#' "int8", "int16", "int32", "int64",
-#' "uint8", "uint16", "uint32", "uint64",
-#' "float32", "float64",
-#'
-#' {int8 , "|i1"},
-#' {int16, "<i2"},
-#' {int32, "<i4"},
-#' {int64, "<i8"},
-#' {uint8 , "|u1"},
-#' {uint16, "<u2"},
-#' {uint32, "<u4"},
-#' {uint64,"<u8"},
-#' {float32, "<f4"},
-#' {float64,"<f8"}}});
-#'
-#' missing_value can be c("auto") or any number, should probably not be NA
-NULL
+# // the (python / h5py) I/O modes:
+# // r: can only read, file must exist
+# // r+: can read and write, file must existinline nlohmann::json rlist_to_json(const Rcpp::List & l)
+# // w: can read and write, if file exists, will be overwritten
+# // w-: can read and write, file must not exist
+# // x: can read and write, file must not exist (same as w- ?!, so omitted here)
+# // a: can read and write
+#
+# possible values for data_type:
+# "int8", "int16", "int32", "int64",
+# "uint8", "uint16", "uint32", "uint64",
+# "float32", "float64",
+#
+# {int8 , "|i1"},
+# {int16, "<i2"},
+# {int32, "<i4"},
+# {int64, "<i8"},
+# {uint8 , "|u1"},
+# {uint16, "<u2"},
+# {uint32, "<u4"},
+# {uint64,"<u8"},
+# {float32, "<f4"},
+# {float64,"<f8"}}});
+#
+# missing_value can be c("auto") or any number, should probably not be NA
 
 
+#' Create a zarr dataset
+#'
+#' Creat a dataset in zarr format on disk
+#'
+#' @param path The path on disk
+#' @param shape The size of the data set
+#' @param chunk_shape The size of the chunks
+#' @param data_type The data type to store the data
+#' @param fill_value The default value of data
+#' @param missing_value The value to be interpreted as NA
+#' @param file_mode How to open the file
+#' @param compressor The compression to be used
+#' @param compression_options The options for compression
+#' @param as_zarr Save as zarr?
 #' @export
 create_dataset <- function(path,
                            shape, chunk_shape,
@@ -139,7 +170,13 @@ create_dataset <- function(path,
   return(res)
 }
 
-#' TODO: better function for this? S3 method?
+#' Get the path of an object.
+#'
+#' Gets the path of an object stored on disk.
+#'
+#' @param x The object
+#' @param ... Currently unused
+#'
 #' @export
 get_path <- function(x, ...) {
   UseMethod("get_path", x)
