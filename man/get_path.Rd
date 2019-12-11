@@ -2,10 +2,15 @@
 % Please edit documentation in R/zarr.R
 \name{get_path}
 \alias{get_path}
-\title{TODO: better function for this? S3 method?}
+\title{Get the path of an object.}
 \usage{
 get_path(x, ...)
 }
+\arguments{
+\item{x}{The object}
+
+\item{...}{Currently unused}
+}
 \description{
-TODO: better function for this? S3 method?
+Gets the path of an object stored on disk.
 }

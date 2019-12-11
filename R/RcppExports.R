@@ -2,34 +2,34 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 readAttributesSubset <- function(path, keys) {
-    .Call('_zarr_readAttributesSubset', PACKAGE = 'zarr', path, keys)
+    .Call(`_zarr_readAttributesSubset`, path, keys)
 }
 
 readAttributes <- function(path) {
-    .Call('_zarr_readAttributes', PACKAGE = 'zarr', path)
+    .Call(`_zarr_readAttributes`, path)
 }
 
 writeAttributes <- function(path, l) {
-    invisible(.Call('_zarr_writeAttributes', PACKAGE = 'zarr', path, l))
+    invisible(.Call(`_zarr_writeAttributes`, path, l))
 }
 
 getPath <- function(ds) {
-    .Call('_zarr_getPath', PACKAGE = 'zarr', ds)
+    .Call(`_zarr_getPath`, ds)
 }
 
 openDataset <- function(path, file_mode) {
-    .Call('_zarr_openDataset', PACKAGE = 'zarr', path, file_mode)
+    .Call(`_zarr_openDataset`, path, file_mode)
 }
 
 createDataset <- function(path, dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue, file_mode) {
-    .Call('_zarr_createDataset', PACKAGE = 'zarr', path, dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue, file_mode)
+    .Call(`_zarr_createDataset`, path, dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue, file_mode)
 }
 
 readSubarray <- function(ds, offset, shape) {
-    .Call('_zarr_readSubarray', PACKAGE = 'zarr', ds, offset, shape)
+    .Call(`_zarr_readSubarray`, ds, offset, shape)
 }
 
 writeSubarray <- function(ds, data, offset) {
-    invisible(.Call('_zarr_writeSubarray', PACKAGE = 'zarr', ds, data, offset))
+    invisible(.Call(`_zarr_writeSubarray`, ds, data, offset))
 }
 
