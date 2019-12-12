@@ -28,6 +28,31 @@ unlink(path, recursive = TRUE)
 
 if (FALSE) {
 
+  path
+
+  for (i in 1:dim(data_set)[1]){
+    for (j in 1:dim(data_set)[2]){
+      data_set[i, j] <- 1
+    }
+  }
+
+  data_set[1:3, 1:3] <- test_data[1:3, 1:3]
+
+  data_set[1:3, 1:3] <- matrix(1:9, 3)
+
+  data_set[1:9,1] <- 11:19
+
+  data_set[1, 1:9] <- 11:19
+
+
+  data_set[,] <- test_data
+
+  data_set[,]
+
+  test_data
+
+  data_set[,]
+
 data_set[1, 1] <- -2L
 
 data_set[1, 1]

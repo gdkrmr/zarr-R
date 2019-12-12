@@ -114,7 +114,7 @@ inline void check_bounds(const Rcpp::IntegerVector& offset,
 /////////////////////////////////////////////////////////////////////////
 
 template <typename T> inline T             const na();
-template <>           inline double        const na() { return NA_REAL; };
+template <>           inline double        const na() { return NA_REAL;    };
 template <>           inline int           const na() { return NA_INTEGER; };
 template <>           inline unsigned char const na() { return NA_LOGICAL; };
 
@@ -145,6 +145,17 @@ inline void transform_write(z5::Dataset &out_data, xt::rarray<FROM_T> &in_data,
 //                  cast_na_l<INNER_FROM_T, TO_T>);
 //   /* z5::multiarray::writeSubarray<int8_t>(out_data, middle_data, offset.begin()); */
 // }
+
+/////////////////////////////////////////////////////////////////////////
+// fill value
+/////////////////////////////////////////////////////////////////////////
+
+template <typename T> inline T get_fill_value(z5::Dataset &ds) {
+  T *fp;
+  ds.getFillValue(fp);
+  T fw = *fp;
+  return fw;
+}
 
 #endif // INCLUDE_ZARR_HELPER_HEADER
 
