@@ -126,9 +126,8 @@ template <>           inline unsigned char const na() { return NA_LOGICAL; };
 //   [](const FROM x) { return R_IsNA(x) ? na<TO>() : static_cast<TO>(x); };
 
 template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
-inline void subarray_transform(z5::Dataset &out_data,
-                               xt::rarray<FROM_T> &in_data,
-                               z5::types::ShapeType &offset) {
+inline void transform_write(z5::Dataset &out_data, xt::rarray<FROM_T> &in_data,
+                            z5::types::ShapeType &offset) {
   std::vector<std::size_t> in_shape;
   for (auto& s : in_data.shape()) { in_shape.push_back(s); }
   xt::xarray<TO_T> middle_data(in_shape);
