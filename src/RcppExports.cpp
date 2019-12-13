@@ -6,70 +6,268 @@
 
 using namespace Rcpp;
 
-// readAttributesSubset
-Rcpp::List readAttributesSubset(const std::string& path, const std::vector<std::string>& keys);
-RcppExport SEXP _zarr_readAttributesSubset(SEXP pathSEXP, SEXP keysSEXP) {
+// readAttributesGroup
+Rcpp::List readAttributesGroup(const Rcpp::XPtr <z5::filesystem::handle::Group> g);
+RcppExport SEXP _zarr_readAttributesGroup(SEXP gSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    Rcpp::traits::input_parameter< const std::vector<std::string>& >::type keys(keysSEXP);
-    rcpp_result_gen = Rcpp::wrap(readAttributesSubset(path, keys));
+    Rcpp::traits::input_parameter< const Rcpp::XPtr <z5::filesystem::handle::Group> >::type g(gSEXP);
+    rcpp_result_gen = Rcpp::wrap(readAttributesGroup(g));
     return rcpp_result_gen;
 END_RCPP
 }
-// readAttributes
-Rcpp::List readAttributes(const std::string& path);
-RcppExport SEXP _zarr_readAttributes(SEXP pathSEXP) {
+// readAttributesDataset
+Rcpp::List readAttributesDataset(const Rcpp::XPtr<z5::filesystem::handle::Dataset> d);
+RcppExport SEXP _zarr_readAttributesDataset(SEXP dSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    rcpp_result_gen = Rcpp::wrap(readAttributes(path));
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::filesystem::handle::Dataset> >::type d(dSEXP);
+    rcpp_result_gen = Rcpp::wrap(readAttributesDataset(d));
     return rcpp_result_gen;
 END_RCPP
 }
-// writeAttributes
-void writeAttributes(const std::string& path, const Rcpp::List& l);
-RcppExport SEXP _zarr_writeAttributes(SEXP pathSEXP, SEXP lSEXP) {
+// writeAttributesFile
+void writeAttributesFile(const Rcpp::XPtr<z5::filesystem::handle::File> f, const Rcpp::List& l);
+RcppExport SEXP _zarr_writeAttributesFile(SEXP fSEXP, SEXP lSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type l(lSEXP);
-    writeAttributes(path, l);
+    writeAttributesFile(f, l);
     return R_NilValue;
 END_RCPP
 }
-// getPath
-std::string getPath(const Rcpp::XPtr<z5::Dataset> ds);
-RcppExport SEXP _zarr_getPath(SEXP dsSEXP) {
+// writeAttributesGroup
+void writeAttributesGroup(const Rcpp::XPtr<z5::filesystem::handle::Group> g, const Rcpp::List& l);
+RcppExport SEXP _zarr_writeAttributesGroup(SEXP gSEXP, SEXP lSEXP) {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::Dataset> >::type ds(dsSEXP);
-    rcpp_result_gen = Rcpp::wrap(getPath(ds));
-    return rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::filesystem::handle::Group> >::type g(gSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type l(lSEXP);
+    writeAttributesGroup(g, l);
+    return R_NilValue;
 END_RCPP
 }
-// openDataset
-Rcpp::XPtr<z5::Dataset> openDataset(const std::string& path, const std::string& file_mode);
-RcppExport SEXP _zarr_openDataset(SEXP pathSEXP, SEXP file_modeSEXP) {
+// writeAttributesDataset
+void writeAttributesDataset(const Rcpp::XPtr<z5::filesystem::handle::Dataset> ds, const Rcpp::List& l);
+RcppExport SEXP _zarr_writeAttributesDataset(SEXP dsSEXP, SEXP lSEXP) {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
-    Rcpp::traits::input_parameter< const std::string& >::type file_mode(file_modeSEXP);
-    rcpp_result_gen = Rcpp::wrap(openDataset(path, file_mode));
-    return rcpp_result_gen;
+    Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::filesystem::handle::Dataset> >::type ds(dsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type l(lSEXP);
+    writeAttributesDataset(ds, l);
+    return R_NilValue;
+END_RCPP
+}
+// createFile
+void createFile(Rcpp::XPtr<z5::filesystem::handle::File> f);
+RcppExport SEXP _zarr_createFile(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    createFile(f);
+    return R_NilValue;
+END_RCPP
+}
+// createGroup
+void createGroup(Rcpp::XPtr<z5::filesystem::handle::Group> g);
+RcppExport SEXP _zarr_createGroup(SEXP gSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::Group> >::type g(gSEXP);
+    createGroup(g);
+    return R_NilValue;
 END_RCPP
 }
 // createDataset
-Rcpp::XPtr<z5::Dataset> createDataset(const std::string& path, const std::string& dtype, const Rcpp::IntegerVector& shape, const Rcpp::IntegerVector& chunkShape, const bool createAsZarr, const std::string& compressor, const Rcpp::List& compressionOptions, const double fillValue, const std::string file_mode);
-RcppExport SEXP _zarr_createDataset(SEXP pathSEXP, SEXP dtypeSEXP, SEXP shapeSEXP, SEXP chunkShapeSEXP, SEXP createAsZarrSEXP, SEXP compressorSEXP, SEXP compressionOptionsSEXP, SEXP fillValueSEXP, SEXP file_modeSEXP) {
+void createDataset(Rcpp::XPtr<z5::filesystem::handle::Dataset> d, Rcpp::XPtr<z5::DatasetMetadata> m);
+RcppExport SEXP _zarr_createDataset(SEXP dSEXP, SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::Dataset> >::type d(dSEXP);
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::DatasetMetadata> >::type m(mSEXP);
+    createDataset(d, m);
+    return R_NilValue;
+END_RCPP
+}
+// getFileHandle
+Rcpp::XPtr<z5::filesystem::handle::File> getFileHandle(const std::string& path, const std::string& mode);
+RcppExport SEXP _zarr_getFileHandle(SEXP pathSEXP, SEXP modeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type path(pathSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type mode(modeSEXP);
+    rcpp_result_gen = Rcpp::wrap(getFileHandle(path, mode));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FileIsS3
+bool FileIsS3(Rcpp::XPtr<z5::filesystem::handle::File> f);
+RcppExport SEXP _zarr_FileIsS3(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(FileIsS3(f));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FileIsGcs
+bool FileIsGcs(Rcpp::XPtr<z5::filesystem::handle::File> f);
+RcppExport SEXP _zarr_FileIsGcs(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(FileIsGcs(f));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FileExists
+bool FileExists(Rcpp::XPtr<z5::filesystem::handle::File> f);
+RcppExport SEXP _zarr_FileExists(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(FileExists(f));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FileIsZarr
+bool FileIsZarr(Rcpp::XPtr<z5::filesystem::handle::File> f);
+RcppExport SEXP _zarr_FileIsZarr(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(FileIsZarr(f));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FilePath
+std::string FilePath(Rcpp::XPtr<z5::filesystem::handle::File> f);
+RcppExport SEXP _zarr_FilePath(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(FilePath(f));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FileDelete
+void FileDelete(Rcpp::XPtr<z5::filesystem::handle::File> f);
+RcppExport SEXP _zarr_FileDelete(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    FileDelete(f);
+    return R_NilValue;
+END_RCPP
+}
+// FileKeys
+Rcpp::CharacterVector FileKeys(Rcpp::XPtr<z5::filesystem::handle::File> f);
+RcppExport SEXP _zarr_FileKeys(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(FileKeys(f));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FileIn
+bool FileIn(Rcpp::XPtr<z5::filesystem::handle::File> f, const std::string& key);
+RcppExport SEXP _zarr_FileIn(SEXP fSEXP, SEXP keySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type key(keySEXP);
+    rcpp_result_gen = Rcpp::wrap(FileIn(f, key));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getGroupHandleFile
+Rcpp::XPtr<z5::filesystem::handle::Group> getGroupHandleFile(Rcpp::XPtr<z5::filesystem::handle::File> f, std::string& key);
+RcppExport SEXP _zarr_getGroupHandleFile(SEXP fSEXP, SEXP keySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    Rcpp::traits::input_parameter< std::string& >::type key(keySEXP);
+    rcpp_result_gen = Rcpp::wrap(getGroupHandleFile(f, key));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getGroupHandleGroup
+Rcpp::XPtr<z5::filesystem::handle::Group> getGroupHandleGroup(Rcpp::XPtr<z5::filesystem::handle::Group> g1, std::string& key);
+RcppExport SEXP _zarr_getGroupHandleGroup(SEXP g1SEXP, SEXP keySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::Group> >::type g1(g1SEXP);
+    Rcpp::traits::input_parameter< std::string& >::type key(keySEXP);
+    rcpp_result_gen = Rcpp::wrap(getGroupHandleGroup(g1, key));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getDatasetHandleFile
+Rcpp::XPtr<z5::filesystem::handle::Dataset> getDatasetHandleFile(Rcpp::XPtr<z5::filesystem::handle::File> f, std::string& key);
+RcppExport SEXP _zarr_getDatasetHandleFile(SEXP fSEXP, SEXP keySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
+    Rcpp::traits::input_parameter< std::string& >::type key(keySEXP);
+    rcpp_result_gen = Rcpp::wrap(getDatasetHandleFile(f, key));
+    return rcpp_result_gen;
+END_RCPP
+}
+// getDatasetHandleGroup
+Rcpp::XPtr<z5::filesystem::handle::Dataset> getDatasetHandleGroup(Rcpp::XPtr<z5::filesystem::handle::Group> g, std::string& key);
+RcppExport SEXP _zarr_getDatasetHandleGroup(SEXP gSEXP, SEXP keySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::Group> >::type g(gSEXP);
+    Rcpp::traits::input_parameter< std::string& >::type key(keySEXP);
+    rcpp_result_gen = Rcpp::wrap(getDatasetHandleGroup(g, key));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ListToMetadata
+Rcpp::XPtr<z5::DatasetMetadata> ListToMetadata(const Rcpp::List& l);
+RcppExport SEXP _zarr_ListToMetadata(SEXP lSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type l(lSEXP);
+    rcpp_result_gen = Rcpp::wrap(ListToMetadata(l));
+    return rcpp_result_gen;
+END_RCPP
+}
+// MetadataToList
+Rcpp::List MetadataToList(Rcpp::XPtr<z5::DatasetMetadata> mptr);
+RcppExport SEXP _zarr_MetadataToList(SEXP mptrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::DatasetMetadata> >::type mptr(mptrSEXP);
+    rcpp_result_gen = Rcpp::wrap(MetadataToList(mptr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// createDatasetMetadata
+Rcpp::XPtr<z5::DatasetMetadata> createDatasetMetadata(const std::string& dtype, const Rcpp::IntegerVector& shape, const Rcpp::IntegerVector& chunkShape, const bool createAsZarr, const std::string& compressor, const Rcpp::List& compressionOptions, const double fillValue);
+RcppExport SEXP _zarr_createDatasetMetadata(SEXP dtypeSEXP, SEXP shapeSEXP, SEXP chunkShapeSEXP, SEXP createAsZarrSEXP, SEXP compressorSEXP, SEXP compressionOptionsSEXP, SEXP fillValueSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const std::string& >::type dtype(dtypeSEXP);
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type shape(shapeSEXP);
     Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type chunkShape(chunkShapeSEXP);
@@ -77,8 +275,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::string& >::type compressor(compressorSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List& >::type compressionOptions(compressionOptionsSEXP);
     Rcpp::traits::input_parameter< const double >::type fillValue(fillValueSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type file_mode(file_modeSEXP);
-    rcpp_result_gen = Rcpp::wrap(createDataset(path, dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue, file_mode));
+    rcpp_result_gen = Rcpp::wrap(createDatasetMetadata(dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -109,12 +306,30 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_zarr_readAttributesSubset", (DL_FUNC) &_zarr_readAttributesSubset, 2},
-    {"_zarr_readAttributes", (DL_FUNC) &_zarr_readAttributes, 1},
-    {"_zarr_writeAttributes", (DL_FUNC) &_zarr_writeAttributes, 2},
-    {"_zarr_getPath", (DL_FUNC) &_zarr_getPath, 1},
-    {"_zarr_openDataset", (DL_FUNC) &_zarr_openDataset, 2},
-    {"_zarr_createDataset", (DL_FUNC) &_zarr_createDataset, 9},
+    {"_zarr_readAttributesGroup", (DL_FUNC) &_zarr_readAttributesGroup, 1},
+    {"_zarr_readAttributesDataset", (DL_FUNC) &_zarr_readAttributesDataset, 1},
+    {"_zarr_writeAttributesFile", (DL_FUNC) &_zarr_writeAttributesFile, 2},
+    {"_zarr_writeAttributesGroup", (DL_FUNC) &_zarr_writeAttributesGroup, 2},
+    {"_zarr_writeAttributesDataset", (DL_FUNC) &_zarr_writeAttributesDataset, 2},
+    {"_zarr_createFile", (DL_FUNC) &_zarr_createFile, 1},
+    {"_zarr_createGroup", (DL_FUNC) &_zarr_createGroup, 1},
+    {"_zarr_createDataset", (DL_FUNC) &_zarr_createDataset, 2},
+    {"_zarr_getFileHandle", (DL_FUNC) &_zarr_getFileHandle, 2},
+    {"_zarr_FileIsS3", (DL_FUNC) &_zarr_FileIsS3, 1},
+    {"_zarr_FileIsGcs", (DL_FUNC) &_zarr_FileIsGcs, 1},
+    {"_zarr_FileExists", (DL_FUNC) &_zarr_FileExists, 1},
+    {"_zarr_FileIsZarr", (DL_FUNC) &_zarr_FileIsZarr, 1},
+    {"_zarr_FilePath", (DL_FUNC) &_zarr_FilePath, 1},
+    {"_zarr_FileDelete", (DL_FUNC) &_zarr_FileDelete, 1},
+    {"_zarr_FileKeys", (DL_FUNC) &_zarr_FileKeys, 1},
+    {"_zarr_FileIn", (DL_FUNC) &_zarr_FileIn, 2},
+    {"_zarr_getGroupHandleFile", (DL_FUNC) &_zarr_getGroupHandleFile, 2},
+    {"_zarr_getGroupHandleGroup", (DL_FUNC) &_zarr_getGroupHandleGroup, 2},
+    {"_zarr_getDatasetHandleFile", (DL_FUNC) &_zarr_getDatasetHandleFile, 2},
+    {"_zarr_getDatasetHandleGroup", (DL_FUNC) &_zarr_getDatasetHandleGroup, 2},
+    {"_zarr_ListToMetadata", (DL_FUNC) &_zarr_ListToMetadata, 1},
+    {"_zarr_MetadataToList", (DL_FUNC) &_zarr_MetadataToList, 1},
+    {"_zarr_createDatasetMetadata", (DL_FUNC) &_zarr_createDatasetMetadata, 7},
     {"_zarr_readSubarray", (DL_FUNC) &_zarr_readSubarray, 3},
     {"_zarr_writeSubarray", (DL_FUNC) &_zarr_writeSubarray, 3},
     {NULL, NULL, 0}

@@ -2,46 +2,40 @@
 #include "json.h"
 
 #include <Rcpp.h>
-#include <nlohmann/json.hpp>
-#include <string>
-#include <vector>
 #include <z5/attributes.hxx>
 
 // [[Rcpp::export]]
-Rcpp::List readAttributesSubset(const std::string & path,
-                                const std::vector<std::string> & keys) {
+Rcpp::List readAttributesGroup(const Rcpp::XPtr <z5::filesystem::handle::Group> g) {
   nlohmann::json j;
-  fs::path attributes_path(path);
-
-  z5::attrs_detail::readAttributes(attributes_path, keys, j);
-
+  z5::readAttributes(*g, j);
   return json_to_rlist(j);
 }
 
-
 // [[Rcpp::export]]
-Rcpp::List readAttributes(const std::string & path) {
+Rcpp::List readAttributesDataset(const Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
   nlohmann::json j;
-  fs::path attributes_path(path);
-
-  z5::attrs_detail::readAttributes(attributes_path, j);
-
+  z5::readAttributes(*d, j);
   return json_to_rlist(j);
 }
 
-
 // [[Rcpp::export]]
-void writeAttributes(const std::string & path, const Rcpp::List & l) {
-  fs::path attributes_path(path);
-
+void writeAttributesFile(const Rcpp::XPtr<z5::filesystem::handle::File> f,
+                         const Rcpp::List &l) {
   nlohmann::json j = rlist_to_json(l);
-
-  z5::attrs_detail::writeAttributes(attributes_path, j);
+  z5::writeAttributes(*f, j);
 }
 
 // [[Rcpp::export]]
-std::string getPath(const Rcpp::XPtr<z5::Dataset> ds) {
-  std::string s(ds->handle().path());
-
-  return s;
+void writeAttributesGroup(const Rcpp::XPtr<z5::filesystem::handle::Group> g,
+                          const Rcpp::List &l) {
+  nlohmann::json j = rlist_to_json(l);
+  z5::writeAttributes(*g, j);
 }
+
+// [[Rcpp::export]]
+void writeAttributesDataset(const Rcpp::XPtr<z5::filesystem::handle::Dataset> ds,
+                            const Rcpp::List & l) {
+  nlohmann::json j = rlist_to_json(l);
+  z5::writeAttributes(*ds, j);
+}
+

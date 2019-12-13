@@ -5,7 +5,7 @@
 
 #include <Rcpp.h>
 #include <z5/attributes.hxx>
-#include <z5/dataset_factory.hxx>
+#include <z5/factory.hxx>
 #include <xtensor-r/rarray.hpp>
 #include <z5/multiarray/xtensor_access.hxx>
 
@@ -157,8 +157,12 @@ template <typename T> inline T get_fill_value(z5::Dataset &ds) {
   return fw;
 }
 
-#endif // INCLUDE_ZARR_HELPER_HEADER
 
-/* Local Variables: */
-/* mode: c++ */
-/* End: */
+// // [[Rcpp::export]]
+// std::string getPath(const Rcpp::XPtr<z5::filesystem::handle::Dataset> ds) {
+//   std::string s(ds->path());
+
+//   return s;
+// }
+
+#endif // INCLUDE_ZARR_HELPER_HEADER

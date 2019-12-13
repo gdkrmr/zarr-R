@@ -16,6 +16,9 @@ LinkingTo: Rcpp, xtensor
 RoxygenNote: 7.0.0
 Collate: 
     'RcppExports.R'
+    'metadata.R'
+    'factory.R'
+    'handles.R'
     'helpers.R'
     'zarr-package.R'
     'zarr.R'

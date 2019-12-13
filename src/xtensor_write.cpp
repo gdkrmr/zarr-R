@@ -29,7 +29,6 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     check_bounds(offset, data_, *ds);
 
     switch (target_type) {
-      // NOTE: We use na conversion if R supports both types, else we don't care about preserving NAs
     case z5::types::int8:    { transform_write<  int8_t, uint8_t>(*ds, data_, offset_); break; };
     case z5::types::int16:   { transform_write< int16_t, uint8_t>(*ds, data_, offset_); break; };
     case z5::types::int32:   { transform_write< int32_t, uint8_t>(*ds, data_, offset_); break; };
@@ -78,9 +77,9 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     case z5::types::int64:   { transform_write< int64_t, double>(*ds, data_, offset_); break; };
     case z5::types::uint8:   { transform_write< uint8_t, double>(*ds, data_, offset_); break; };
     case z5::types::uint16:  { transform_write<uint16_t, double>(*ds, data_, offset_); break; };
-    case z5::types::uint32:  { transform_write<uint32_t, double>(*ds, data_, offset_); break;};
-    case z5::types::uint64:  { transform_write<uint64_t, double>(*ds, data_, offset_); break;};
-    case z5::types::float32: { transform_write<   float, double>(*ds, data_, offset_); break;};
+    case z5::types::uint32:  { transform_write<uint32_t, double>(*ds, data_, offset_); break; };
+    case z5::types::uint64:  { transform_write<uint64_t, double>(*ds, data_, offset_); break; };
+    case z5::types::float32: { transform_write<   float, double>(*ds, data_, offset_); break; };
     case z5::types::float64: { z5::multiarray::writeSubarray<double>(*ds, data_, offset_.begin()); break;};
     default: { Rf_error("Error: Type of R array (Real) and zarr array do not match."); }
     }

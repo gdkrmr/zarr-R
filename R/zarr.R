@@ -1,5 +1,6 @@
-#' @include RcppExports.R zarr-package.R helpers.R
+#' @include RcppExports.R helpers.R handles.R metadata.R factory.R
 NULL
+
 
 #' Read attributes
 #'
@@ -95,7 +96,7 @@ data_type.zarr_attributes <- function(x, ...) {
 
 # // the (python / h5py) I/O modes:
 # // r: can only read, file must exist
-# // r+: can read and write, file must existinline nlohmann::json rlist_to_json(const Rcpp::List & l)
+# // r+: can read and write, file must exist
 # // w: can read and write, if file exists, will be overwritten
 # // w-: can read and write, file must not exist
 # // x: can read and write, file must not exist (same as w- ?!, so omitted here)
