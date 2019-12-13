@@ -3,9 +3,10 @@
 #include <vector>
 #include <string>
 #include <map>
-#include <boost/any.hpp>
+#include "boost/variant.hpp"
 
 #include "nlohmann/json.hpp"
+
 
 
 namespace z5 {
@@ -200,10 +201,17 @@ namespace types {
 
 
     //
-    // Compression Options
+    // Compression Options and Fill Value
     //
 
-    typedef std::map<std::string, boost::any> CompressionOptions;
+    // TODO explore use of boost::variant and boost::optional here
+    /*
+    typedef boost::variant::variant<int8_t, int16_t, int32_t, int64_t,
+                                    uint8_t, uint16_t, uint32_t, uint64_t,
+                                    float, double> InternalFillValueType;
+    typedef boost::optional::optional<InternalFillValueType> FillValueType;
+    */
+    typedef std::map<std::string, boost::variant<int, bool, std::string>> CompressionOptions;
 
 
     inline void readZarrCompressionOptionsFromJson(Compressor compressor,
@@ -212,19 +220,18 @@ namespace types {
         std::string codec;
         switch(compressor) {
             #ifdef WITH_BLOSC
-            case blosc: codec = jOpts["cname"];
-                        options["codec"] = codec;
-                        options["level"] = static_cast<int>(jOpts["clevel"]);
-                        options["shuffle"] = static_cast<int>(jOpts["shuffle"]);
+            case blosc: options["codec"] = jOpts["cname"].get<std::string>();
+                        options["level"] = jOpts["clevel"].get<int>();
+                        options["shuffle"] = jOpts["shuffle"].get<int>();
                         break;
             #endif
             #ifdef WITH_ZLIB
-            case zlib: options["level"] = static_cast<int>(jOpts["level"]);
-                       options["useZlib"] = true;
+            case zlib: options["level"] = jOpts["level"].get<int>();
+                       options["useZlib"] = jOpts["id"].get<std::string>() == "zlib";
                        break;
             #endif
             #ifdef WITH_BZIP2
-            case bzip2: options["level"] = static_cast<int>(jOpts["level"]);
+            case bzip2: options["level"] = jOpts["level"].get<int>(); break;
             #endif
             // raw compression has no parameters
             default: break;
@@ -247,14 +254,18 @@ namespace types {
 
         switch(compressor) {
             #ifdef WITH_BLOSC
-            case blosc: jOpts["cname"]   = boost::any_cast<std::string>(options.at("codec"));
-                        jOpts["clevel"]  = boost::any_cast<int>(options.at("level"));
-                        jOpts["shuffle"] = boost::any_cast<int>(options.at("shuffle"));
+            case blosc: jOpts["cname"]   = boost::get<std::string>(options.at("codec"));
+                        jOpts["clevel"]  = boost::get<int>(options.at("level"));
+                        jOpts["shuffle"] = boost::get<int>(options.at("shuffle"));
                         break;
             #endif
             #ifdef WITH_ZLIB
-            case zlib: jOpts["level"] = boost::any_cast<int>(options.at("level"));
+            case zlib: jOpts["id"] = boost::get<bool>(options.at("useZlib")) ? "zlib" : "gzip";
+                       jOpts["level"] = boost::get<int>(options.at("level"));
                        break;
+            #endif
+            #ifdef WITH_BZIP2
+            case bzip2: jOpts["level"] = boost::get<int>(options.at("level")); break;
             #endif
             // raw compression has no parameters
             default: break;
@@ -267,27 +278,19 @@ namespace types {
                                                  CompressionOptions & options) {
         std::string codec;
         switch(compressor) {
-            // TODO blosc in n5
-            #ifdef WITH_BLOSC
-            case blosc: codec = jOpts["codec"];
-                        options["codec"] = codec;
-                        options["level"] = static_cast<int>(jOpts["level"]);
-                        options["shuffle"] = static_cast<int>(jOpts["shuffle"]);
-                        break;
-            #endif
             #ifdef WITH_ZLIB
-            case zlib: options["level"] = static_cast<int>(jOpts["level"]);
+            case zlib: options["level"] = jOpts["level"].get<int>();
                        options["useZlib"] = false;
                        break;
             #endif
             #ifdef WITH_BZIP2
-            case bzip2: options["level"] = static_cast<int>(jOpts["blockSize"]); break;
+            case bzip2: options["level"] = jOpts["blockSize"].get<int>(); break;
             #endif
             #ifdef WITH_XZ
-            case xz: options["level"] = static_cast<int>(jOpts["preset"]); break;
+            case xz: options["level"] = jOpts["preset"].get<int>(); break;
             #endif
             #ifdef WITH_LZ4
-            case lz4: options["level"] = static_cast<int>(jOpts["blockSize"]); break;
+            case lz4: options["level"] = jOpts["blockSize"].get<int>(); break;
             #endif
             // raw compression has no parameters
             default: break;
@@ -305,26 +308,19 @@ namespace types {
         }
 
         switch(compressor) {
-            // TODO blosc in n5
-            #ifdef WITH_BLOSC
-            case blosc: jOpts["name"] = boost::any_cast<std::string>(options.at("codec"));
-                        jOpts["level"] = boost::any_cast<int>(options.at("level"));
-                        jOpts["shuffle"] = boost::any_cast<int>(options.at("shuffle"));
-                        break;
-            #endif
             #ifdef WITH_ZLIB
-            case zlib: jOpts["level"] = boost::any_cast<int>(options.at("level"));
+            case zlib: jOpts["level"] = boost::get<int>(options.at("level"));
                        break;
             #endif
             #ifdef WITH_BZIP2
-            case bzip2: jOpts["blockSize"] = boost::any_cast<int>(options.at("level"));
+            case bzip2: jOpts["blockSize"] = boost::get<int>(options.at("level"));
                         break;
             #endif
             #ifdef WITH_XZ
-            case xz: jOpts["preset"] = boost::any_cast<int>(options.at("level")); break;
+            case xz: jOpts["preset"] = boost::get<int>(options.at("level")); break;
             #endif
             #ifdef WITH_LZ4
-            case lz4: jOpts["blockSize"] = boost::any_cast<int>(options.at("level")); break;
+            case lz4: jOpts["blockSize"] = boost::get<int>(options.at("level")); break;
             #endif
             // raw compression has no parameters
             default: break;
@@ -354,6 +350,40 @@ namespace types {
             #endif
             // raw compression has no parameters
             default: break;
+        }
+    }
+
+    // generic translation from compression type to json
+    // for pybindings
+    inline void jsonToCompressionType(const nlohmann::json & j, CompressionOptions & opts) {
+        for(const auto & elem : j.items()) {
+            const std::string & key = elem.key();
+            const auto & val = elem.value();
+            if(val.type() == nlohmann::json::value_t::boolean) {
+                opts[key] = static_cast<bool>(val);
+            } else if (val.type() == nlohmann::json::value_t::number_integer || val.type() == nlohmann::json::value_t::number_unsigned) {
+                opts[key] = static_cast<int>(val);
+            } else if (val.type() == nlohmann::json::value_t::string) {
+                // msvc does not like the static cast here ....
+                const std::string tmp = val;
+                opts[key] = tmp;
+            } else {
+                std::cout << val.type_name() << std::endl;
+                throw std::runtime_error("Invalid type conversion for compression type");
+            }
+        }
+    }
+
+    inline void compressionTypeToJson(const CompressionOptions & opts, nlohmann::json & j) {
+        for(auto & elem : opts) {
+            const auto & val = elem.second;
+            const int type_id = val.which();
+            switch(type_id) {
+                case 0: j[elem.first] = boost::get<int>(val); break;
+                case 1: j[elem.first] = boost::get<bool>(val); break;
+                case 2: j[elem.first] = boost::get<std::string>(val); break;
+                default: throw std::runtime_error("Invalid type conversion for compression type");
+            }
         }
     }
 
