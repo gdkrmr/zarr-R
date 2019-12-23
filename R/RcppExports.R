@@ -21,68 +21,164 @@ writeAttributesDataset <- function(ds, l) {
     invisible(.Call(`_zarr_writeAttributesDataset`, ds, l))
 }
 
-createFile <- function(f) {
-    invisible(.Call(`_zarr_createFile`, f))
+openDatasetFile <- function(f, key) {
+    .Call(`_zarr_openDatasetFile`, f, key)
 }
 
-createGroup <- function(g) {
-    invisible(.Call(`_zarr_createGroup`, g))
+openDatasetGroup <- function(g, key) {
+    .Call(`_zarr_openDatasetGroup`, g, key)
 }
 
-createDataset <- function(d, m) {
-    invisible(.Call(`_zarr_createDataset`, d, m))
+createDatasetFile <- function(f, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue) {
+    .Call(`_zarr_createDatasetFile`, f, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue)
+}
+
+createDatasetGroup <- function(g, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue) {
+    .Call(`_zarr_createDatasetGroup`, g, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue)
+}
+
+DatasetIsZarr <- function(d) {
+    .Call(`_zarr_DatasetIsZarr`, d)
+}
+
+DatasetGetDtype <- function(d) {
+    .Call(`_zarr_DatasetGetDtype`, d)
 }
 
 getFileHandle <- function(path, mode) {
     .Call(`_zarr_getFileHandle`, path, mode)
 }
 
-FileIsS3 <- function(f) {
-    .Call(`_zarr_FileIsS3`, f)
+FileHandleIsS3 <- function(f) {
+    .Call(`_zarr_FileHandleIsS3`, f)
 }
 
-FileIsGcs <- function(f) {
-    .Call(`_zarr_FileIsGcs`, f)
+FileHandleIsGcs <- function(f) {
+    .Call(`_zarr_FileHandleIsGcs`, f)
 }
 
-FileExists <- function(f) {
-    .Call(`_zarr_FileExists`, f)
+FileHandleExists <- function(f) {
+    .Call(`_zarr_FileHandleExists`, f)
 }
 
-FileIsZarr <- function(f) {
-    .Call(`_zarr_FileIsZarr`, f)
+FileHandleIsZarr <- function(f) {
+    .Call(`_zarr_FileHandleIsZarr`, f)
 }
 
-FilePath <- function(f) {
-    .Call(`_zarr_FilePath`, f)
+FileHandlePath <- function(f) {
+    .Call(`_zarr_FileHandlePath`, f)
 }
 
-FileDelete <- function(f) {
-    invisible(.Call(`_zarr_FileDelete`, f))
+FileHandleDelete <- function(f) {
+    invisible(.Call(`_zarr_FileHandleDelete`, f))
 }
 
-FileKeys <- function(f) {
-    .Call(`_zarr_FileKeys`, f)
+FileHandleKeys <- function(f) {
+    .Call(`_zarr_FileHandleKeys`, f)
 }
 
-FileIn <- function(f, key) {
-    .Call(`_zarr_FileIn`, f, key)
+FileHandleIn <- function(f, key) {
+    .Call(`_zarr_FileHandleIn`, f, key)
 }
 
-getGroupHandleFile <- function(f, key) {
-    .Call(`_zarr_getGroupHandleFile`, f, key)
+FileHandleNameInBucket <- function(f) {
+    .Call(`_zarr_FileHandleNameInBucket`, f)
 }
 
-getGroupHandleGroup <- function(g1, key) {
-    .Call(`_zarr_getGroupHandleGroup`, g1, key)
+FileHandleBucket <- function(f) {
+    .Call(`_zarr_FileHandleBucket`, f)
 }
 
-getDatasetHandleFile <- function(f, key) {
-    .Call(`_zarr_getDatasetHandleFile`, f, key)
+FileHandleCreate <- function(f) {
+    invisible(.Call(`_zarr_FileHandleCreate`, f))
 }
 
-getDatasetHandleGroup <- function(g, key) {
-    .Call(`_zarr_getDatasetHandleGroup`, g, key)
+getGroupHandleFileHandle <- function(f, key) {
+    .Call(`_zarr_getGroupHandleFileHandle`, f, key)
+}
+
+getGroupHandleGroupHandle <- function(g1, key) {
+    .Call(`_zarr_getGroupHandleGroupHandle`, g1, key)
+}
+
+GroupHandleIsS3 <- function(g) {
+    .Call(`_zarr_GroupHandleIsS3`, g)
+}
+
+GroupHandleIsGcs <- function(g) {
+    .Call(`_zarr_GroupHandleIsGcs`, g)
+}
+
+GroupHandleExists <- function(g) {
+    .Call(`_zarr_GroupHandleExists`, g)
+}
+
+GroupHandleIsZarr <- function(g) {
+    .Call(`_zarr_GroupHandleIsZarr`, g)
+}
+
+GroupHandlePath <- function(g) {
+    .Call(`_zarr_GroupHandlePath`, g)
+}
+
+GroupHandleDelete <- function(g) {
+    invisible(.Call(`_zarr_GroupHandleDelete`, g))
+}
+
+GroupHandleKeys <- function(g) {
+    .Call(`_zarr_GroupHandleKeys`, g)
+}
+
+GroupHandleIn <- function(g, key) {
+    .Call(`_zarr_GroupHandleIn`, g, key)
+}
+
+GroupHandleNameInBucket <- function(g) {
+    .Call(`_zarr_GroupHandleNameInBucket`, g)
+}
+
+GroupHandleBucket <- function(g) {
+    .Call(`_zarr_GroupHandleBucket`, g)
+}
+
+GroupHandleCreate <- function(g) {
+    invisible(.Call(`_zarr_GroupHandleCreate`, g))
+}
+
+getDatasetHandleFileHandle <- function(f, key) {
+    .Call(`_zarr_getDatasetHandleFileHandle`, f, key)
+}
+
+getDatasetHandleGroupHandle <- function(g, key) {
+    .Call(`_zarr_getDatasetHandleGroupHandle`, g, key)
+}
+
+DatasetHandleIsS3 <- function(d) {
+    .Call(`_zarr_DatasetHandleIsS3`, d)
+}
+
+DatasetHandleIsGcs <- function(d) {
+    .Call(`_zarr_DatasetHandleIsGcs`, d)
+}
+
+DatasetHandleExists <- function(d) {
+    .Call(`_zarr_DatasetHandleExists`, d)
+}
+
+DatasetHandleIsZarr <- function(d) {
+    .Call(`_zarr_DatasetHandleIsZarr`, d)
+}
+
+DatasetHandlePath <- function(d) {
+    .Call(`_zarr_DatasetHandlePath`, d)
+}
+
+DatasetHandleDelete <- function(d) {
+    invisible(.Call(`_zarr_DatasetHandleDelete`, d))
+}
+
+DatasetHandleCreate <- function(d) {
+    invisible(.Call(`_zarr_DatasetHandleCreate`, d))
 }
 
 ListToMetadata <- function(l) {

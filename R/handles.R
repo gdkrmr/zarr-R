@@ -29,11 +29,11 @@ get_file_handle.file_handle <- function(x, ...) {
 ## }
 
 get_group_handle.file_handle <- function(x, key) {
-  structure(getGroupHandleFile(x, key), class = "group_handle")
+  structure(getGroupHandleFileHandle(x, key), class = "group_handle")
 }
 
 get_group_handle.group_handle <- function(x, key) {
-  structure(getGroupHandleGroup(x, key), class = "group_handle")
+  structure(getGroupHandleGroupHandle(x, key), class = "group_handle")
 }
 
 ### dataset handle
@@ -47,9 +47,9 @@ get_group_handle.group_handle <- function(x, key) {
 ## }
 
 get_dataset_handle.file_handle <- function(x, key) {
-  structure(getDatasetHandleFile(x, key), class = "dataset_handle")
+  structure(getDatasetHandleFileHandle(x, key), class = "dataset_handle")
 }
 
 get_dataset_handle.group_handle <- function(x, key) {
-  structure(getDatasetHandleGroup(x, key), class = "dataset_handle")
+  structure(getDatasetHandleGroupHandle(x, key), class = "dataset_handle")
 }

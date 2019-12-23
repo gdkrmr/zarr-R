@@ -68,6 +68,23 @@ inline z5::types::ShapeType intvec_to_shapetype(const Rcpp::IntegerVector & int_
   return z5::types::ShapeType(sizet_vec);
 }
 
+inline Rcpp::IntegerVector shapetype_to_intvec(const z5::types::ShapeType& shape) {
+  auto sizet_vec = std::vector<size_t>(shape);
+  return Rcpp::wrap(sizet_vec);
+}
+
+/////////////////////////////////////////////////////////////////////////
+// dtype
+/////////////////////////////////////////////////////////////////////////
+
+inline z5::types::Datatype string_to_datatype(const std::string & dtype) {
+  return z5::types::Datatypes::n5ToDtype()[dtype];
+}
+
+inline std::string datatype_to_string(const z5::types::Datatype dtype) {
+  return z5::types::Datatypes::dtypeToN5()[dtype];
+}
+
 /////////////////////////////////////////////////////////////////////////
 // bounds checking
 /////////////////////////////////////////////////////////////////////////
@@ -149,13 +166,6 @@ inline void transform_write(z5::Dataset &out_data, xt::rarray<FROM_T> &in_data,
 /////////////////////////////////////////////////////////////////////////
 // fill value
 /////////////////////////////////////////////////////////////////////////
-
-template <typename T> inline T get_fill_value(z5::Dataset &ds) {
-  T *fp;
-  ds.getFillValue(fp);
-  T fw = *fp;
-  return fw;
-}
 
 
 // // [[Rcpp::export]]
