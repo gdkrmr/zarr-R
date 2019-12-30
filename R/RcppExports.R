@@ -21,6 +21,10 @@ writeAttributesDataset <- function(ds, l) {
     invisible(.Call(`_zarr_writeAttributesDataset`, ds, l))
 }
 
+openDatasetDataset <- function(d) {
+    .Call(`_zarr_openDatasetDataset`, d)
+}
+
 openDatasetFile <- function(f, key) {
     .Call(`_zarr_openDatasetFile`, f, key)
 }
@@ -43,6 +47,34 @@ DatasetIsZarr <- function(d) {
 
 DatasetGetDtype <- function(d) {
     .Call(`_zarr_DatasetGetDtype`, d)
+}
+
+DatasetDimension <- function(d) {
+    .Call(`_zarr_DatasetDimension`, d)
+}
+
+DatasetShape <- function(d) {
+    .Call(`_zarr_DatasetShape`, d)
+}
+
+DatasetSize <- function(d) {
+    .Call(`_zarr_DatasetSize`, d)
+}
+
+DatasetPath <- function(d) {
+    .Call(`_zarr_DatasetPath`, d)
+}
+
+DatasetGetFillValue <- function(d) {
+    .Call(`_zarr_DatasetGetFillValue`, d)
+}
+
+DatasetGetCompressor <- function(d) {
+    .Call(`_zarr_DatasetGetCompressor`, d)
+}
+
+DatasetGetFileMode <- function(d) {
+    .Call(`_zarr_DatasetGetFileMode`, d)
 }
 
 getFileHandle <- function(path, mode) {

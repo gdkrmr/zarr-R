@@ -43,6 +43,11 @@ inline z5::FileMode::modes rfilemode_to_filemode(const std::string & rmode) {
   Rf_error("Unsupported file mode");
 }
 
+inline std::string filemode_to_rfilemode(const z5::FileMode m) {
+  return m.printMode();
+}
+
+
 /////////////////////////////////////////////////////////////////////////
 // compressor
 /////////////////////////////////////////////////////////////////////////
@@ -57,6 +62,10 @@ inline z5::types::Compressor string_to_compressor(const std::string & compressor
   }
 
   return compressor_;
+}
+
+inline std::string compressor_to_string(const z5::types::Compressor c) {
+  return z5::types::Compressors::compressorToZarr().at(c);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -130,10 +139,10 @@ inline void check_bounds(const Rcpp::IntegerVector& offset,
 // conversions
 /////////////////////////////////////////////////////////////////////////
 
-template <typename T> inline T             const na();
-template <>           inline double        const na() { return NA_REAL;    };
-template <>           inline int           const na() { return NA_INTEGER; };
-template <>           inline unsigned char const na() { return NA_LOGICAL; };
+template <typename T> inline T             na();
+template <>           inline double        na() { return NA_REAL;    };
+template <>           inline int           na() { return NA_INTEGER; };
+template <>           inline unsigned char na() { return NA_LOGICAL; };
 
 // template <typename FROM, typename TO>
 // auto cast_l = [](const FROM x) { return static_cast<TO>(x); };
