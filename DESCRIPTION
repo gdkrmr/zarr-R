@@ -12,10 +12,11 @@ License: GPL-3 | file LICENSE
 Depends: R (>= 3.0.0)
 Imports: Rcpp
 Suggests: testthat
-LinkingTo: Rcpp, xtensor
+LinkingTo: Rcpp, xtensor, testthat
 RoxygenNote: 7.0.0
 Collate: 
     'RcppExports.R'
+    'catch-routine-registration.R'
     'metadata.R'
     'factory.R'
     'handles.R'

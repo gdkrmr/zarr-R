@@ -5,7 +5,8 @@
 \title{Create a zarr dataset}
 \usage{
 create_dataset(
-  path,
+  x,
+  key,
   shape,
   chunk_shape,
   data_type = "float64",
@@ -14,12 +15,11 @@ create_dataset(
   file_mode = "a",
   compressor = "raw",
   compression_options = list(),
-  as_zarr = TRUE
+  as_zarr = TRUE,
+  ...
 )
 }
 \arguments{
-\item{path}{The path on disk}
-
 \item{shape}{The size of the data set}
 
 \item{chunk_shape}{The size of the chunks}
@@ -37,6 +37,8 @@ create_dataset(
 \item{compression_options}{The options for compression}
 
 \item{as_zarr}{Save as zarr?}
+
+\item{path}{The path on disk}
 }
 \description{
 Creat a dataset in zarr format on disk

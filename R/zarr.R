@@ -136,15 +136,14 @@ data_type.zarr_attributes <- function(x, ...) {
 #' @param compression_options The options for compression
 #' @param as_zarr Save as zarr?
 #' @export
-create_dataset <- function(path,
-                           shape, chunk_shape,
+create_dataset <- function(x, key, shape, chunk_shape,
                            data_type = "float64",
                            fill_value = "auto", missing_value = "auto",
                            file_mode = "a",
                            compressor = "raw", compression_options = list(),
-                           as_zarr = TRUE) {
+                           as_zarr = TRUE, ...) {
   if (fill_value == "auto") {
-    if      (data_type == "int8")    { fill_value <- 0L          }
+    if (data_type == "int8")         { fill_value <- 0L          }
     else if (data_type == "int16")   { fill_value <- 0L          }
     else if (data_type == "int32")   { fill_value <- NA_integer_ }
     else if (data_type == "int64")   { fill_value <- 0L          }
@@ -154,14 +153,24 @@ create_dataset <- function(path,
     else if (data_type == "uint64")  { fill_value <- 0L          }
     else if (data_type == "float32") { fill_value <- 0           }
     else if (data_type == "float64") { fill_value <- NA_real_    }
-    else stop("unknown data_type")
+    else                             { stop("unknown data_type") }
   }
 
   if (missing_value == "auto") { missing_value <- fill_value }
 
-  res <- createDataset(path, data_type, shape, chunk_shape,
-                       as_zarr, compressor, compression_options,
-                       fill_value, file_mode)
+
+  if (inherits(x, "group_handle")) {
+    res <- createDatasetGroupHandle(x, key, data_type, shape, chunk_shape,
+                                    compressor, compression_options, fill_value)
+  } else if (inherits(x, "file_handle")) {
+    res <- createDatasetFileHandle(x, key, data_type, shape, chunk_shape,
+                                   compressor, compression_options, fill_value)
+  } else {
+    # TODO: add a method for character!!
+    stop("Cannot create dataset from class(x) ", class(x))
+  }
+
+
   class(res) <- "zarr_dataset"
 
   res_attr <- read_attributes(res)
@@ -169,6 +178,39 @@ create_dataset <- function(path,
   write_attributes(res, res_attr)
 
   return(res)
+}
+
+
+#' Open a Zarr dataset
+#'
+#' Open a Zarr dataset from a file, group or dataset handles
+#'
+#' @param x the handle
+#' @param key internal path of the data set
+#' @export
+open_dataset <- function(x, key, ...) {
+  UseMethod("open_dataset", x)
+}
+
+#' @export
+open_dataset.default <- function(x, key, ...) {
+  stop("no method for class(x) ", class(x))
+}
+
+#' @export
+open_dataset.file_handle <- function(x, key) {
+  structure(openDatasetFile(x, key), class = "dataset")
+}
+
+#' @export
+open_dataset.group_handle <- function(x, key) {
+  structure(openDatasetGroup(x, key), class = "dataset")
+}
+
+#' @export
+open_dataset.dataset_handle <- function(x, key) {
+  if (!missing(key)) warning("key will be ignored.")
+  structure(openDatasetDataset(x), class = "dataset")
 }
 
 #' Get the path of an object.

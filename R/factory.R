@@ -10,19 +10,6 @@ NULL
 ##   UseMethod("open_dataset")
 ## }
 
-## this one should work for all group/file handle types
-open_dataset <- function(x, key) {
-  if (inherits(x, "file_handle")) {
-    structure(openDatasetFile(x, key), class = "dataset")
-  } else if (inherits(x, "group_handle")) {
-    structure(openDatasetGroup(x, key), class = "dataset")
-  } else if (inherits(x, "dataset_handle")) {
-    if (!missing(key)) warning("key provided but not used!")
-    structure(openDatasetDataset(x))
-  } else {
-    stop("open_dataset doesn't work for ", class(x))
-  }
-}
 
 ## this one is for z5::filesystem::handle::dataset
 ## open_dataset.dataset_handle <- function(x) {
