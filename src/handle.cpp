@@ -1,3 +1,13 @@
+/*
+
+///// The code in this file has been moved to *_handle.cpp!!!!
+
+///// TODO: Delete this file!
+
+
+/// contains the code handling z5::filesystem::handle::File,
+/// z5::filesystem::handle::Group
+
 #include "helpers.h"
 #include <Rcpp.h>
 #include <z5/filesystem/handle.hxx>
@@ -18,7 +28,9 @@ getFileHandle(const std::string &path, const std::string &mode) {
 }
 
 // [[Rcpp::export]]
-bool FileHandleIsS3(Rcpp::XPtr<z5::filesystem::handle::File> f) { return f->isS3(); }
+bool FileHandleIsS3(Rcpp::XPtr<z5::filesystem::handle::File> f) {
+  return f->isS3();
+}
 
 // [[Rcpp::export]]
 bool FileHandleIsGcs(Rcpp::XPtr<z5::filesystem::handle::File> f) {
@@ -41,10 +53,13 @@ std::string FileHandlePath(Rcpp::XPtr<z5::filesystem::handle::File> f) {
 }
 
 // [[Rcpp::export]]
-void FileHandleDelete(Rcpp::XPtr<z5::filesystem::handle::File> f) { f->remove(); }
+void FileHandleDelete(Rcpp::XPtr<z5::filesystem::handle::File> f) {
+  f->remove();
+}
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector FileHandleKeys(Rcpp::XPtr<z5::filesystem::handle::File> f) {
+Rcpp::CharacterVector
+FileHandleKeys(Rcpp::XPtr<z5::filesystem::handle::File> f) {
   std::vector<std::string> out;
   f->keys(out);
   return Rcpp::wrap(out);
@@ -75,10 +90,10 @@ void FileHandleCreate(Rcpp::XPtr<z5::filesystem::handle::File> f) {
 ///////////// Group ////////////////////////////////////
 ////////////////////////////////////////////////////////
 
-    // [[Rcpp::export]]
+// [[Rcpp::export]]
 Rcpp::XPtr<z5::filesystem::handle::Group>
 getGroupHandleFileHandle(Rcpp::XPtr<z5::filesystem::handle::File> f,
-                   std::string &key) {
+                         std::string &key) {
   auto g =  new z5::filesystem::handle::Group(*f, key);
   Rcpp::XPtr<z5::filesystem::handle::Group> gptr(g, true);
   return gptr;
@@ -119,13 +134,12 @@ std::string GroupHandlePath(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
 }
 
 // [[Rcpp::export]]
-void GroupHandleDelete(Rcpp::XPtr<z5::filesystem::handle::Group> g) { g->remove(); }
+void GroupHandleDelete(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
+g->remove(); }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector GroupHandleKeys(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
-  std::vector<std::string> out;
-  g->keys(out);
-  return Rcpp::wrap(out);
+Rcpp::CharacterVector GroupHandleKeys(Rcpp::XPtr<z5::filesystem::handle::Group>
+g) { std::vector<std::string> out; g->keys(out); return Rcpp::wrap(out);
 }
 
 // [[Rcpp::export]]
@@ -135,8 +149,8 @@ bool GroupHandleIn(Rcpp::XPtr<z5::filesystem::handle::Group> g,
 }
 
 // [[Rcpp::export]]
-std::string GroupHandleNameInBucket(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
-  return g->nameInBucket();
+std::string GroupHandleNameInBucket(Rcpp::XPtr<z5::filesystem::handle::Group> g)
+{ return g->nameInBucket();
 }
 
 // [[Rcpp::export]]
@@ -150,6 +164,10 @@ void GroupHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
 }
 
 
+////////////////// The code below should be handled for z5::Dataset and NOT
+////////////////// z5::filesystem::handle::Dataset therefore this code should
+////////////////// not be used. Everything should be handled in factory.cpp
+
 ////////////////////////////////////////////////////////
 ///////////// Dataset //////////////////////////////////
 ////////////////////////////////////////////////////////
@@ -159,7 +177,7 @@ Rcpp::XPtr<z5::filesystem::handle::Dataset>
 getDatasetHandleFileHandle(Rcpp::XPtr<z5::filesystem::handle::File> f,
                            std::string &key) {
   auto d = new z5::filesystem::handle::Dataset(*f, key);
-  Rcpp::XPtr<z5::filesystem::handle::Dataset> dptr(d);
+  Rcpp::XPtr<z5::filesystem::handle::Dataset> dptr(d, true);
   return dptr;
 }
 
@@ -168,7 +186,7 @@ Rcpp::XPtr<z5::filesystem::handle::Dataset>
 getDatasetHandleGroupHandle(Rcpp::XPtr<z5::filesystem::handle::Group> g,
                             std::string &key) {
   auto d =  new z5::filesystem::handle::Dataset(*g, key);
-  Rcpp::XPtr<z5::filesystem::handle::Dataset> dptr(d);
+  Rcpp::XPtr<z5::filesystem::handle::Dataset> dptr(d, true);
   return dptr;
 }
 
@@ -206,3 +224,4 @@ void DatasetHandleDelete(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
 void DatasetHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
   d->create();
 }
+*/

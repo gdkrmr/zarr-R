@@ -15,5 +15,5 @@ R CMD build --compact-vignettes .
 
 pkgversion=$(cat DESCRIPTION | grep Version | sed 's|Version: \(.*\)|\1|')
 
-echo "== CHECKING version $pkgversion ======================"
+echo "== R CMD check: version $pkgversion ==================="
 R CMD check zarr_$pkgversion.tar.gz --as-cran --timings

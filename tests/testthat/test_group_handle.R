@@ -1,7 +1,6 @@
-testthat("group handle", {
+context("group handle")
 
-  library(testthat)
-  library(zarr)
+test_that("group handle", {
 
   path <- tempfile()
 
@@ -50,6 +49,7 @@ testthat("group handle", {
   expect_equal(zarr:::GroupHandleBucket(g1), "")
   expect_equal(zarr:::GroupHandleBucket(g2), "")
 
+
   ## NOTE: It is possible to delete this the other way round!
   zarr:::GroupHandleDelete(g2)
 
@@ -66,5 +66,6 @@ testthat("group handle", {
 
   expect_error(zarr:::get_group_handle.group_handle(1))
   expect_error(zarr:::get_group_handle.file_handle(1))
+  expect_error(zarr:::create_group.group_handle(1))
 
 })

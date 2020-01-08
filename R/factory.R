@@ -1,59 +1,35 @@
 #' @include metadata.R
 NULL
 
-### create group ###################################
-
-## create_group <- function(x) {
-##   UseMethod("create_group")
-## }
-
-## create_group.default <- function(x) {
-##   stop("cannot create group from ", class(x))
-## }
-
-create_group.group_handle <- function(x) {
-  GroupHandleCreate(x)
-}
-
-
-### create file ####################################
-
-## create_file <- function(x) {
-##   UseMethod("create_file")
-## }
-
-## create_file.default <- function(x) {
-##   stop("cannot create file from ", class(x))
-## }
-
-## create_file.file_handle <- function(x) {
-##   FileHandleCreate(x)
-## }
 
 ### open dataset ###################################
+
+# TODO: let go of S3 class dispatch?????
 
 ## open_dataset <- function(x, key, ...) {
 ##   UseMethod("open_dataset")
 ## }
 
 ## this one should work for all group/file handle types
-open_dataset.default <- function(x, key) {
+open_dataset <- function(x, key) {
   if (inherits(x, "file_handle")) {
-    res <- openDatasetFile(x, key)
+    structure(openDatasetFile(x, key), class = "dataset")
   } else if (inherits(x, "group_handle")) {
-    res <- openDatasetGroup(x, key)
+    structure(openDatasetGroup(x, key), class = "dataset")
+  } else if (inherits(x, "dataset_handle")) {
+    if (!missing(key)) warning("key provided but not used!")
+    structure(openDatasetDataset(x))
   } else {
-    stop("open_dataset doesn't work for the provided class.")
+    stop("open_dataset doesn't work for ", class(x))
   }
-  structure(res, class = "dataset")
 }
 
 ## this one is for z5::filesystem::handle::dataset
-open_dataset.dataset_handle <- function(x) {
-  structure(openDatasetDataset(x),
-    class = "dataset"
-  )
-}
+## open_dataset.dataset_handle <- function(x) {
+##   structure(openDatasetDataset(x),
+##     class = "dataset"
+##   )
+## }
 
 ### create dataset #################################
 
