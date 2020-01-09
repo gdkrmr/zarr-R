@@ -144,7 +144,7 @@ create_dataset <- function(x, key, shape, chunk_shape,
                            as_zarr = TRUE, ...) {
 
   if (fill_value == "auto") {
-    if (data_type == "int8")         { fill_value <- 0L          }
+    if      (data_type == "int8")    { fill_value <- 0L          }
     else if (data_type == "int16")   { fill_value <- 0L          }
     else if (data_type == "int32")   { fill_value <- NA_integer_ }
     else if (data_type == "int64")   { fill_value <- 0L          }
@@ -167,10 +167,11 @@ create_dataset <- function(x, key, shape, chunk_shape,
     res <- createDatasetFileHandle(x, key, data_type, shape, chunk_shape,
                                    compressor, compression_options, fill_value)
   } else if (inherits(x, "dataset_handle")) {
-    if(!missing(key))
+    if (!missing(key))
       warning("creating dataset from dataset handle, `key` will be ignored!")
-    res <- createDatasetDatasetHandle(x, data_type, shape, chunk_shape, compressor,
-                                      compression_options, as_zarr, fill_value)
+    res <- createDatasetDatasetHandle(x, data_type, shape, chunk_shape,
+                                      compressor, compression_options, as_zarr,
+                                      fill_value)
   } else {
     stop("Cannot create dataset from class(x) ", class(x))
   }
