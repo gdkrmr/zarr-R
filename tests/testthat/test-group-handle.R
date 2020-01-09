@@ -12,11 +12,11 @@ test_that("group handle", {
 
   zarr:::create_group(g1)
   expect_true(dir.exists(paste0(path, "/group1")))
-  expect_true(zarr::GroupHandleExists(g1))
+  expect_true(zarr:::GroupHandleExists(g1))
 
   g2 <- zarr:::get_group_handle(g1, "group2")
   expect_false(dir.exists(paste0(path, "/group1/group2")))
-  expect_false(zarr::GroupHandleExists(g2))
+  expect_false(zarr:::GroupHandleExists(g2))
 
   zarr:::create_group(g2)
   expect_true(dir.exists(paste0(path, "/group1/group2")))
