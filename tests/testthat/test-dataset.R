@@ -2,13 +2,13 @@ context("dataset")
 
 test_that("dataset", {
 
-  path <- tempfile()
+  ## path <- tempfile()
 
-  f <- zarr:::get_file_handle.character(path)
-  g <- zarr:::get_group_handle.file_handle(f, "group1")
+  ## f <- zarr:::get_file_handle.character(path)
+  ## g <- zarr:::get_group_handle.file_handle(f, "group1")
 
-  zarr:::create_group.group_handle(g)
-  d1 <- zarr::create_dataset(g, "dataset1", c(9, 9, 9), c(3, 3, 3))
+  ## zarr:::create_group.group_handle(g)
+  ## d1 <- zarr::create_dataset(g, "dataset1", c(9, 9, 9), c(3, 3, 3))
 
 
 

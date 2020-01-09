@@ -1,17 +1,7 @@
-/*
-
-////////////////// This code should be handled for z5::Dataset and NOT
-////////////////// z5::filesystem::handle::Dataset therefore this code should
-////////////////// not be used. Everything should be handled in factory.cpp
-
 #include "helpers.h"
 #include <Rcpp.h>
 #include <z5/filesystem/handle.hxx>
 #include <z5/util/file_mode.hxx>
-
-////////////////////////////////////////////////////////
-///////////// Dataset //////////////////////////////////
-////////////////////////////////////////////////////////
 
 // [[Rcpp::export]]
 Rcpp::XPtr<z5::filesystem::handle::Dataset>
@@ -65,4 +55,13 @@ void DatasetHandleDelete(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
 void DatasetHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
   d->create();
 }
-*/
+
+// [[Rcpp::export]]
+std::string DatasetHandleBucket(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
+  return d->bucketName();
+}
+
+// [[Rcpp::export]]
+std::string DatasetHandleNameInBucket(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
+  return d->nameInBucket();
+}

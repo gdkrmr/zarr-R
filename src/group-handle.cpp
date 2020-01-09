@@ -1,4 +1,3 @@
-
 #include "helpers.h"
 #include <Rcpp.h>
 #include <z5/filesystem/handle.hxx>
@@ -8,7 +7,7 @@
 Rcpp::XPtr<z5::filesystem::handle::Group>
 getGroupHandleFileHandle(Rcpp::XPtr<z5::filesystem::handle::File> f,
                          std::string &key) {
-  auto g =  new z5::filesystem::handle::Group(*f, key);
+  auto g = new z5::filesystem::handle::Group(*f, key);
   Rcpp::XPtr<z5::filesystem::handle::Group> gptr(g, true);
   return gptr;
 }
@@ -48,10 +47,13 @@ std::string GroupHandlePath(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
 }
 
 // [[Rcpp::export]]
-void GroupHandleDelete(Rcpp::XPtr<z5::filesystem::handle::Group> g) { g->remove(); }
+void GroupHandleDelete(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
+  g->remove();
+}
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector GroupHandleKeys(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
+Rcpp::CharacterVector
+GroupHandleKeys(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
   std::vector<std::string> out;
   g->keys(out);
   return Rcpp::wrap(out);
@@ -64,7 +66,8 @@ bool GroupHandleIn(Rcpp::XPtr<z5::filesystem::handle::Group> g,
 }
 
 // [[Rcpp::export]]
-std::string GroupHandleNameInBucket(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
+std::string
+GroupHandleNameInBucket(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
   return g->nameInBucket();
 }
 

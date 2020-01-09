@@ -1,5 +1,6 @@
 #include "helpers.h"
 #include "json.h"
+#include "z5/metadata.hxx"
 #include <z5/filesystem/dataset.hxx>
 #include <z5/filesystem/factory.hxx>
 #include <z5/dataset.hxx>
@@ -64,3 +65,30 @@ createDatasetGroupHandle(const Rcpp::XPtr<z5::filesystem::handle::Group> g,
   return Rcpp::XPtr<z5::Dataset>(d.release(), true);
 }
 
+// [[Rcpp::export]]
+Rcpp::XPtr<z5::Dataset>
+createDatasetDatasetHandle(const Rcpp::XPtr<z5::filesystem::handle::Dataset> d,
+                           const std::string &dtype,
+                           const Rcpp::IntegerVector &shape,
+                           const Rcpp::IntegerVector &chunkShape,
+                           const std::string &compressor,
+                           const Rcpp::List &compressionOptions,
+                           const bool isZarr,
+                           const double fillValue) {
+  auto shape_ = intvec_to_shapetype(shape);
+  auto chunkShape_ = intvec_to_shapetype(chunkShape);
+
+  auto compressionOptions_json = rlist_to_json(compressionOptions);
+  z5::types::CompressionOptions compressionOptions_z5;
+  auto compressor_ = string_to_compressor(compressor);
+
+  z5::types::readZarrCompressionOptionsFromJson(
+      compressor_, compressionOptions_json, compressionOptions_z5);
+
+  z5::DatasetMetadata m;
+  z5::createDatasetMetadata(dtype, shape_, chunkShape_, isZarr, compressor,
+                            compressionOptions_z5, fillValue, m);
+
+  auto d2 = z5::filesystem::createDataset(*d, m);
+  return Rcpp::XPtr<z5::Dataset>(d2.release(), true);
+}

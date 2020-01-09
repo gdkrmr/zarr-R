@@ -37,6 +37,50 @@ removeAttributesDatasetHandle <- function(d, key) {
     invisible(.Call(`_zarr_removeAttributesDatasetHandle`, d, key))
 }
 
+getDatasetHandleFileHandle <- function(f, key) {
+    .Call(`_zarr_getDatasetHandleFileHandle`, f, key)
+}
+
+getDatasetHandleGroupHandle <- function(g, key) {
+    .Call(`_zarr_getDatasetHandleGroupHandle`, g, key)
+}
+
+DatasetHandleIsS3 <- function(d) {
+    .Call(`_zarr_DatasetHandleIsS3`, d)
+}
+
+DatasetHandleIsGcs <- function(d) {
+    .Call(`_zarr_DatasetHandleIsGcs`, d)
+}
+
+DatasetHandleExists <- function(d) {
+    .Call(`_zarr_DatasetHandleExists`, d)
+}
+
+DatasetHandleIsZarr <- function(d) {
+    .Call(`_zarr_DatasetHandleIsZarr`, d)
+}
+
+DatasetHandlePath <- function(d) {
+    .Call(`_zarr_DatasetHandlePath`, d)
+}
+
+DatasetHandleDelete <- function(d) {
+    invisible(.Call(`_zarr_DatasetHandleDelete`, d))
+}
+
+DatasetHandleCreate <- function(d) {
+    invisible(.Call(`_zarr_DatasetHandleCreate`, d))
+}
+
+DatasetHandleBucket <- function(d) {
+    .Call(`_zarr_DatasetHandleBucket`, d)
+}
+
+DatasetHandleNameInBucket <- function(d) {
+    .Call(`_zarr_DatasetHandleNameInBucket`, d)
+}
+
 DatasetIsZarr <- function(d) {
     .Call(`_zarr_DatasetIsZarr`, d)
 }
@@ -103,6 +147,10 @@ createDatasetFileHandle <- function(f, key, dtype, shape, chunkShape, compressor
 
 createDatasetGroupHandle <- function(g, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue) {
     .Call(`_zarr_createDatasetGroupHandle`, g, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue)
+}
+
+createDatasetDatasetHandle <- function(d, dtype, shape, chunkShape, compressor, compressionOptions, isZarr, fillValue) {
+    .Call(`_zarr_createDatasetDatasetHandle`, d, dtype, shape, chunkShape, compressor, compressionOptions, isZarr, fillValue)
 }
 
 getFileHandle <- function(path, mode) {

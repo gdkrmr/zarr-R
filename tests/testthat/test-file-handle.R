@@ -4,7 +4,7 @@ test_that("file handle", {
 
   path <- tempfile()
 
-  f <- zarr:::get_file_handle.character(path)
+  f <- zarr:::get_file_handle(path)
   expect_s3_class(f, "file_handle")
   expect_false(dir.exists(path))
 
@@ -18,7 +18,7 @@ test_that("file handle", {
   expect_equal(zarr:::FileHandleNameInBucket(f), "")
   expect_equal(zarr:::FileHandleBucket(f), "")
 
-  zarr:::create_file.file_handle(f)
+  zarr:::create_file(f)
   ## TODO: until when does this fail?
   expect_error(expect_true(zarr:::FileHandleIsZarr(f)))
   expect_true(dir.exists(path))
@@ -28,9 +28,9 @@ test_that("file handle", {
   zarr:::FileHandleDelete(f)
   expect_false(dir.exists(path))
 
-  expect_error(zarr:::get_file_handle.character(1))
-  expect_error(zarr:::get_file_handle.file_handle(1))
-  expect_error(create_file.file_handle(1))
+  expect_error(zarr:::get_file_handle(1))
+  expect_error(zarr:::get_file_handle(1))
+  expect_error(create_file(1))
 
 
 })
