@@ -25,16 +25,16 @@ writeAttributesDatasetHandle <- function(d, l) {
     invisible(.Call(`_zarr_writeAttributesDatasetHandle`, d, l))
 }
 
-removeAttributesFileHandle <- function(f, key) {
-    invisible(.Call(`_zarr_removeAttributesFileHandle`, f, key))
+removeAttributeFileHandle <- function(f, key) {
+    invisible(.Call(`_zarr_removeAttributeFileHandle`, f, key))
 }
 
-removeAttributesGroupHandle <- function(g, key) {
-    invisible(.Call(`_zarr_removeAttributesGroupHandle`, g, key))
+removeAttributeGroupHandle <- function(g, key) {
+    invisible(.Call(`_zarr_removeAttributeGroupHandle`, g, key))
 }
 
-removeAttributesDatasetHandle <- function(d, key) {
-    invisible(.Call(`_zarr_removeAttributesDatasetHandle`, d, key))
+removeAttributeDatasetHandle <- function(d, key) {
+    invisible(.Call(`_zarr_removeAttributeDatasetHandle`, d, key))
 }
 
 getDatasetHandleFileHandle <- function(f, key) {
@@ -263,6 +263,10 @@ MetadataToList <- function(mptr) {
 
 createDatasetMetadata <- function(dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue) {
     .Call(`_zarr_createDatasetMetadata`, dtype, shape, chunkShape, createAsZarr, compressor, compressionOptions, fillValue)
+}
+
+getDatasetMetadataDataset <- function(d) {
+    .Call(`_zarr_getDatasetMetadataDataset`, d)
 }
 
 readSubarray <- function(ds, offset, shape) {

@@ -4,10 +4,10 @@
 #include <Rcpp.h>
 #include <z5/attributes.hxx>
 
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ////// readAttributes
 ///////////////////////////////////////////////////////////////////////////////////////
-
 
 // [[Rcpp::export]]
 Rcpp::List readAttributesFileHandle(const Rcpp::XPtr<z5::filesystem::handle::File> f) {
@@ -29,6 +29,7 @@ Rcpp::List readAttributesDatasetHandle(const Rcpp::XPtr<z5::filesystem::handle::
   z5::readAttributes(*d, j);
   return json_to_rlist(j);
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////
 ////// writeAttributes
@@ -55,24 +56,25 @@ void writeAttributesDatasetHandle(const Rcpp::XPtr<z5::filesystem::handle::Datas
   z5::writeAttributes(*d, j);
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////////////
 ////// removeAttributes
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // [[Rcpp::export]]
-void removeAttributesFileHandle(const Rcpp::XPtr<z5::filesystem::handle::File> f,
+void removeAttributeFileHandle(const Rcpp::XPtr<z5::filesystem::handle::File> f,
                                 const std::string &key) {
   z5::removeAttribute(*f, key);
 }
 
 // [[Rcpp::export]]
-void removeAttributesGroupHandle(const Rcpp::XPtr<z5::filesystem::handle::Group> g,
+void removeAttributeGroupHandle(const Rcpp::XPtr<z5::filesystem::handle::Group> g,
                                 const std::string &key) {
   z5::removeAttribute(*g, key);
 }
 
 // [[Rcpp::export]]
-void removeAttributesDatasetHandle(const Rcpp::XPtr<z5::filesystem::handle::Dataset> d,
+void removeAttributeDatasetHandle(const Rcpp::XPtr<z5::filesystem::handle::Dataset> d,
                                 const std::string &key) {
   z5::removeAttribute(*d, key);
 }

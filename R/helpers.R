@@ -72,6 +72,19 @@ zarrdt_to_dt <- list(
   `<f8` = "float64"
 )
 
+type_to_auto_fill_value <- list(
+ int8 = 0L,
+ int16 = 0L,
+ int32 = NA_integer_,
+ int64 = 0L,
+ uint8 = 0L,
+ uint16 = 0L,
+ uint32 = 0L,
+ uint64 = 0L,
+ float32 = 0,
+ float64 = NA_real_
+)
+
 .onUnload <- function(libpath) {
   library.dynam.unload("zarr", libpath)
 }

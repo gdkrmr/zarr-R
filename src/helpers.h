@@ -176,12 +176,49 @@ inline void transform_write(z5::Dataset &out_data, xt::rarray<FROM_T> &in_data,
 // fill value
 /////////////////////////////////////////////////////////////////////////
 
+template <typename T1, typename T2>
+inline T2 get_fill_value(const z5::Dataset &d) {
+  T1 fv;
+  d.getFillValue(&fv);
+  return static_cast<T2>(fv);
+}
 
-// // [[Rcpp::export]]
-// std::string getPath(const Rcpp::XPtr<z5::filesystem::handle::Dataset> ds) {
-//   std::string s(ds->path());
+/////////////////////////////////////////////////////////////////////////
+// metadata
+/////////////////////////////////////////////////////////////////////////
 
-//   return s;
-// }
+inline nlohmann::json getDatasetMetadataDatasetJson(z5::Dataset &d, nlohmann::json &j) {
+  nlohmann::json compressionOptsJson;
+  z5::types::CompressionOptions compressionOptions;
+
+  d.getCompressionOptions(compressionOptions);
+  z5::types::writeZarrCompressionOptionsToJson(d.getCompressor(), compressionOptions, compressionOptsJson);
+
+  j["compressor"] = compressionOptsJson;
+  j["dtype"] = z5::types::Datatypes::dtypeToZarr().at(d.getDtype());
+  j["shape"] = d.shape();
+  j["chunks"] = d.defaultChunkShape();
+
+  switch (d.getDtype()) {
+  case z5::types::Datatype::uint8:   { j["fill_value"] = get_fill_value<uint8_t,   int>(d); break; };
+  case z5::types::Datatype::uint16:  { j["fill_value"] = get_fill_value<uint16_t,  int>(d); break; };
+  case z5::types::Datatype::uint32:  { j["fill_value"] = get_fill_value<uint32_t,  int>(d); break; };
+  case z5::types::Datatype::uint64:  { j["fill_value"] = get_fill_value<uint64_t,  int>(d); break; };
+  case z5::types::Datatype::int8:    { j["fill_value"] = get_fill_value<int8_t,    int>(d); break; };
+  case z5::types::Datatype::int16:   { j["fill_value"] = get_fill_value<int16_t,   int>(d); break; };
+  case z5::types::Datatype::int32:   { j["fill_value"] = get_fill_value<int32_t,   int>(d); break; };
+  case z5::types::Datatype::int64:   { j["fill_value"] = get_fill_value<int64_t,   int>(d); break; };
+  case z5::types::Datatype::float32: { j["fill_value"] = get_fill_value<float,  double>(d); break; };
+  case z5::types::Datatype::float64: { j["fill_value"] = get_fill_value<double, double>(d); break; };
+  default: Rf_error("wrong data type");
+  }
+
+  j["filters"] = nullptr;
+  j["order"] = "C";
+  j["zarr_format"] = 2;
+
+
+  return j;
+}
 
 #endif // INCLUDE_ZARR_HELPER_HEADER

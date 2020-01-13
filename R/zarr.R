@@ -1,64 +1,6 @@
 #' @include RcppExports.R helpers.R handles.R metadata.R factory.R
 NULL
 
-
-#' Read attributes
-#'
-#' @description
-#'
-#' Read the attributes of an object or path
-#'
-#' @details
-#'
-#' This is an S3 generic to read the attributes of zarr arrays.
-#'
-#' @param x The object
-#' @param ... currently unused
-#'
-#' @export
-read_attributes <- function(x, ...) {
-  UseMethod("read_attributes", x)
-}
-
-#' @export
-read_attributes.character <- function(x, ...) {
-  if (!dir.exists(x) && file.exists(x)) {
-    att <- readAttributes(x)
-    class(att) <- "zarr_attributes"
-    return(att)
-  } else {
-    stop("path does not exist")
-  }
-}
-
-#' @export
-read_attributes.zarr_dataset <- function(x, ...) {
-  read_attributes(paste(get_path(x), ".zarray", sep = "/"))
-}
-
-#' Write attributes
-#'
-#' Write the attributes of an object or path
-#'
-#' @param x The object
-#' @param attributes A list of attributes
-#' @param ... Currently unused
-#' @export
-write_attributes <- function(x, attributes, ...) {
-  UseMethod("write_attributes", x)
-}
-
-#' @export
-write_attributes.character <- function(x, attributes, ...) {
-  writeAttributes(x, attributes)
-}
-
-#' @export
-write_attributes.zarr_dataset <- function(x, attributes, ...) {
-  write_attributes(paste(get_path(x), ".zarray", sep = "/"),
-                   attributes)
-}
-
 #' Open a zarr object.
 #'
 #' Opens a zarr array saved on disk.
@@ -142,23 +84,12 @@ create_dataset <- function(x, key, shape, chunk_shape,
                            file_mode = "a",
                            compressor = "raw", compression_options = list(),
                            as_zarr = TRUE, ...) {
-
   if (fill_value == "auto") {
-    if      (data_type == "int8")    { fill_value <- 0L          }
-    else if (data_type == "int16")   { fill_value <- 0L          }
-    else if (data_type == "int32")   { fill_value <- NA_integer_ }
-    else if (data_type == "int64")   { fill_value <- 0L          }
-    else if (data_type == "uint8")   { fill_value <- NA          }
-    else if (data_type == "uint16")  { fill_value <- 0L          }
-    else if (data_type == "uint32")  { fill_value <- 0L          }
-    else if (data_type == "uint64")  { fill_value <- 0L          }
-    else if (data_type == "float32") { fill_value <- 0           }
-    else if (data_type == "float64") { fill_value <- NA_real_    }
-    else                             { stop("unknown data_type") }
+    fill_value <- type_to_auto_fill_value[[data_type]]
+    if (is.null(fill_value)) { stop("unknown data_type") }
   }
 
   if (missing_value == "auto") { missing_value <- fill_value }
-
 
   if (inherits(x, "group_handle")) {
     res <- createDatasetGroupHandle(x, key, data_type, shape, chunk_shape,

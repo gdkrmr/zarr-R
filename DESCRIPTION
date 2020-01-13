@@ -16,6 +16,7 @@ LinkingTo: Rcpp, xtensor, testthat
 RoxygenNote: 7.0.0
 Collate: 
     'RcppExports.R'
+    'attributes.R'
     'catch-routine-registration.R'
     'metadata.R'
     'factory.R'

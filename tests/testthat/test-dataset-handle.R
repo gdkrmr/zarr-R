@@ -55,4 +55,5 @@ test_that("dataset handle", {
   expect_error(zarr:::get_dataset_handle(1))
   expect_error(zarr:::get_dataset_handle(1))
   expect_error(zarr:::create_group(1))
+
 })

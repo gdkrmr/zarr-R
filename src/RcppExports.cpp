@@ -72,36 +72,36 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// removeAttributesFileHandle
-void removeAttributesFileHandle(const Rcpp::XPtr<z5::filesystem::handle::File> f, const std::string& key);
-RcppExport SEXP _zarr_removeAttributesFileHandle(SEXP fSEXP, SEXP keySEXP) {
+// removeAttributeFileHandle
+void removeAttributeFileHandle(const Rcpp::XPtr<z5::filesystem::handle::File> f, const std::string& key);
+RcppExport SEXP _zarr_removeAttributeFileHandle(SEXP fSEXP, SEXP keySEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type key(keySEXP);
-    removeAttributesFileHandle(f, key);
+    removeAttributeFileHandle(f, key);
     return R_NilValue;
 END_RCPP
 }
-// removeAttributesGroupHandle
-void removeAttributesGroupHandle(const Rcpp::XPtr<z5::filesystem::handle::Group> g, const std::string& key);
-RcppExport SEXP _zarr_removeAttributesGroupHandle(SEXP gSEXP, SEXP keySEXP) {
+// removeAttributeGroupHandle
+void removeAttributeGroupHandle(const Rcpp::XPtr<z5::filesystem::handle::Group> g, const std::string& key);
+RcppExport SEXP _zarr_removeAttributeGroupHandle(SEXP gSEXP, SEXP keySEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::filesystem::handle::Group> >::type g(gSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type key(keySEXP);
-    removeAttributesGroupHandle(g, key);
+    removeAttributeGroupHandle(g, key);
     return R_NilValue;
 END_RCPP
 }
-// removeAttributesDatasetHandle
-void removeAttributesDatasetHandle(const Rcpp::XPtr<z5::filesystem::handle::Dataset> d, const std::string& key);
-RcppExport SEXP _zarr_removeAttributesDatasetHandle(SEXP dSEXP, SEXP keySEXP) {
+// removeAttributeDatasetHandle
+void removeAttributeDatasetHandle(const Rcpp::XPtr<z5::filesystem::handle::Dataset> d, const std::string& key);
+RcppExport SEXP _zarr_removeAttributeDatasetHandle(SEXP dSEXP, SEXP keySEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const Rcpp::XPtr<z5::filesystem::handle::Dataset> >::type d(dSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type key(keySEXP);
-    removeAttributesDatasetHandle(d, key);
+    removeAttributeDatasetHandle(d, key);
     return R_NilValue;
 END_RCPP
 }
@@ -761,6 +761,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// getDatasetMetadataDataset
+Rcpp::XPtr<z5::DatasetMetadata> getDatasetMetadataDataset(Rcpp::XPtr<z5::Dataset> d);
+RcppExport SEXP _zarr_getDatasetMetadataDataset(SEXP dSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::Dataset> >::type d(dSEXP);
+    rcpp_result_gen = Rcpp::wrap(getDatasetMetadataDataset(d));
+    return rcpp_result_gen;
+END_RCPP
+}
 // readSubarray
 SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds, const Rcpp::IntegerVector& offset, const Rcpp::IntegerVector& shape);
 RcppExport SEXP _zarr_readSubarray(SEXP dsSEXP, SEXP offsetSEXP, SEXP shapeSEXP) {
@@ -796,9 +807,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_zarr_writeAttributesFileHandle", (DL_FUNC) &_zarr_writeAttributesFileHandle, 2},
     {"_zarr_writeAttributesGroupHandle", (DL_FUNC) &_zarr_writeAttributesGroupHandle, 2},
     {"_zarr_writeAttributesDatasetHandle", (DL_FUNC) &_zarr_writeAttributesDatasetHandle, 2},
-    {"_zarr_removeAttributesFileHandle", (DL_FUNC) &_zarr_removeAttributesFileHandle, 2},
-    {"_zarr_removeAttributesGroupHandle", (DL_FUNC) &_zarr_removeAttributesGroupHandle, 2},
-    {"_zarr_removeAttributesDatasetHandle", (DL_FUNC) &_zarr_removeAttributesDatasetHandle, 2},
+    {"_zarr_removeAttributeFileHandle", (DL_FUNC) &_zarr_removeAttributeFileHandle, 2},
+    {"_zarr_removeAttributeGroupHandle", (DL_FUNC) &_zarr_removeAttributeGroupHandle, 2},
+    {"_zarr_removeAttributeDatasetHandle", (DL_FUNC) &_zarr_removeAttributeDatasetHandle, 2},
     {"_zarr_getDatasetHandleFileHandle", (DL_FUNC) &_zarr_getDatasetHandleFileHandle, 2},
     {"_zarr_getDatasetHandleGroupHandle", (DL_FUNC) &_zarr_getDatasetHandleGroupHandle, 2},
     {"_zarr_DatasetHandleIsS3", (DL_FUNC) &_zarr_DatasetHandleIsS3, 1},
@@ -856,6 +867,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_zarr_ListToMetadata", (DL_FUNC) &_zarr_ListToMetadata, 1},
     {"_zarr_MetadataToList", (DL_FUNC) &_zarr_MetadataToList, 1},
     {"_zarr_createDatasetMetadata", (DL_FUNC) &_zarr_createDatasetMetadata, 7},
+    {"_zarr_getDatasetMetadataDataset", (DL_FUNC) &_zarr_getDatasetMetadataDataset, 1},
     {"_zarr_readSubarray", (DL_FUNC) &_zarr_readSubarray, 3},
     {"_zarr_writeSubarray", (DL_FUNC) &_zarr_writeSubarray, 3},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 0},

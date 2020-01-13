@@ -32,27 +32,19 @@ std::string DatasetPath(const Rcpp::XPtr<z5::Dataset> d) {
   return std::string(d->path());
 }
 
-template <typename T1, typename T2>
-inline SEXP get_fill_value(const z5::Dataset &d) {
-  T1 fv;
-  d.getFillValue(&fv);
-  T2 fv2 = static_cast<T2>(fv);
-  return Rcpp::wrap(fv2);
-}
-
 // [[Rcpp::export]]
 SEXP DatasetGetFillValue(const Rcpp::XPtr<z5::Dataset> d) {
   switch(d->getDtype()) {
-  case z5::types::Datatype::uint8:   return get_fill_value<uint8_t,   int>(*d);
-  case z5::types::Datatype::uint16:  return get_fill_value<uint16_t,  int>(*d);
-  case z5::types::Datatype::uint32:  return get_fill_value<uint32_t,  int>(*d);
-  case z5::types::Datatype::uint64:  return get_fill_value<uint64_t,  int>(*d);
-  case z5::types::Datatype::int8:    return get_fill_value<int8_t,    int>(*d);
-  case z5::types::Datatype::int16:   return get_fill_value<int16_t,   int>(*d);
-  case z5::types::Datatype::int32:   return get_fill_value<int32_t,   int>(*d);
-  case z5::types::Datatype::int64:   return get_fill_value<int64_t,   int>(*d);
-  case z5::types::Datatype::float32: return get_fill_value<float,  double>(*d);
-  case z5::types::Datatype::float64: return get_fill_value<double, double>(*d);
+  case z5::types::Datatype::uint8:   return Rcpp::wrap(get_fill_value<uint8_t,   int>(*d));
+  case z5::types::Datatype::uint16:  return Rcpp::wrap(get_fill_value<uint16_t,  int>(*d));
+  case z5::types::Datatype::uint32:  return Rcpp::wrap(get_fill_value<uint32_t,  int>(*d));
+  case z5::types::Datatype::uint64:  return Rcpp::wrap(get_fill_value<uint64_t,  int>(*d));
+  case z5::types::Datatype::int8:    return Rcpp::wrap(get_fill_value<int8_t,    int>(*d));
+  case z5::types::Datatype::int16:   return Rcpp::wrap(get_fill_value<int16_t,   int>(*d));
+  case z5::types::Datatype::int32:   return Rcpp::wrap(get_fill_value<int32_t,   int>(*d));
+  case z5::types::Datatype::int64:   return Rcpp::wrap(get_fill_value<int64_t,   int>(*d));
+  case z5::types::Datatype::float32: return Rcpp::wrap(get_fill_value<float,  double>(*d));
+  case z5::types::Datatype::float64: return Rcpp::wrap(get_fill_value<double, double>(*d));
   default: Rf_error("wrong data type");
   }
 }
