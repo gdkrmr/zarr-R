@@ -34,7 +34,7 @@ get_dataset_metadata <- function(x) {
 }
 
 #' @export
-as.list.dataset_metadata <- function(x) {
+as.list.dataset_metadata <- function(x, ...) {
   MetadataToList(x)
 }
 
