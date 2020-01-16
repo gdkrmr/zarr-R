@@ -15,11 +15,14 @@ create_dataset(
   file_mode = "a",
   compressor = "raw",
   compression_options = list(),
-  as_zarr = TRUE,
-  ...
+  as_zarr = TRUE
 )
 }
 \arguments{
+\item{x}{A `group_handle`, `file_handle`, or `dataset_handle`}
+
+\item{key}{The name of the dataset}
+
 \item{shape}{The size of the data set}
 
 \item{chunk_shape}{The size of the chunks}
@@ -37,8 +40,6 @@ create_dataset(
 \item{compression_options}{The options for compression}
 
 \item{as_zarr}{Save as zarr?}
-
-\item{path}{The path on disk}
 }
 \description{
 Creat a dataset in zarr format on disk

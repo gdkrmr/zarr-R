@@ -67,7 +67,8 @@ data_type.zarr_attributes <- function(x, ...) {
 #'
 #' Creat a dataset in zarr format on disk
 #'
-#' @param path The path on disk
+#' @param x A `group_handle`, `file_handle`, or `dataset_handle`
+#' @param key The name of the dataset
 #' @param shape The size of the data set
 #' @param chunk_shape The size of the chunks
 #' @param data_type The data type to store the data
@@ -83,7 +84,7 @@ create_dataset <- function(x, key, shape, chunk_shape,
                            fill_value = "auto", missing_value = "auto",
                            file_mode = "a",
                            compressor = "raw", compression_options = list(),
-                           as_zarr = TRUE, ...) {
+                           as_zarr = TRUE) {
   if (fill_value == "auto") {
     fill_value <- type_to_auto_fill_value[[data_type]]
     if (is.null(fill_value)) { stop("unknown data_type") }
@@ -124,6 +125,7 @@ create_dataset <- function(x, key, shape, chunk_shape,
 #'
 #' @param x the handle
 #' @param key internal path of the data set
+#' @param ... reserved.
 #' @export
 open_dataset <- function(x, key, ...) {
   UseMethod("open_dataset", x)
@@ -135,17 +137,17 @@ open_dataset.default <- function(x, key, ...) {
 }
 
 #' @export
-open_dataset.file_handle <- function(x, key) {
+open_dataset.file_handle <- function(x, key, ...) {
   structure(openDatasetFile(x, key), class = "dataset")
 }
 
 #' @export
-open_dataset.group_handle <- function(x, key) {
+open_dataset.group_handle <- function(x, key, ...) {
   structure(openDatasetGroup(x, key), class = "dataset")
 }
 
 #' @export
-open_dataset.dataset_handle <- function(x, key) {
+open_dataset.dataset_handle <- function(x, key, ...) {
   if (!missing(key)) warning("key will be ignored.")
   structure(openDatasetDataset(x), class = "dataset")
 }

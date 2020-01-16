@@ -15,15 +15,15 @@ create_dataset_metadata <- function(shape,
                                chunk_shape,
                                create_as_zarr,
                                compressor,
-                               compression_optionsions,
+                               compression_options,
                                fill_value)
   class(res) <- "dataset_metadata"
   return(res)
 }
 
 get_dataset_metadata <- function(x) {
-  if(inherits(x, "zarr_dataset")) {
-    res <- getDatasetMetadataDatasetList(x)
+  if (inherits(x, "zarr_dataset")) {
+    res <- getDatasetMetadataDataset(x)
   } else {
     stop("x must be of class \"zarr_dataset\"")
   }
@@ -33,12 +33,20 @@ get_dataset_metadata <- function(x) {
   return(res)
 }
 
+#' @export
 as.list.dataset_metadata <- function(x) {
   MetadataToList(x)
 }
 
-as.dataset_metadata.list <- function(x) {
-  structure(ListToMetadata(x),
-            class = "dataset_metadata")
+as.dataset_metadata <- function(x) {
+  if(inherits(x, "list")) {
+    res <- ListToMetadata(x)
+  } else {
+    stop("x must be of class \"list\"")
+  }
+
+  class(res) <- "dataset_metadata"
+
+  return(res)
 }
 

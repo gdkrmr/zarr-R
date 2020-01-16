@@ -3,6 +3,7 @@
 S3method("[",zarr_dataset)
 S3method("[<-",zarr_dataset)
 S3method("dim<-",zarr_dataset)
+S3method(as.list,dataset_metadata)
 S3method(data_type,zarr_attributes)
 S3method(data_type,zarr_dataset)
 S3method(dim,zarr_attributes)

@@ -10,6 +10,8 @@ open_dataset(x, key, ...)
 \item{x}{the handle}
 
 \item{key}{internal path of the data set}
+
+\item{...}{reserved.}
 }
 \description{
 Open a Zarr dataset from a file, group or dataset handles

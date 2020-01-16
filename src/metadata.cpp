@@ -9,7 +9,7 @@
 Rcpp::XPtr<z5::DatasetMetadata> ListToMetadata(const Rcpp::List& l) {
   nlohmann::json j = rlist_to_json(l);
 
-  z5::DatasetMetadata* m;
+  auto m = new z5::DatasetMetadata();
   m->fromJson(j, true);
 
   Rcpp::XPtr<z5::DatasetMetadata> mptr(m, true);
@@ -44,12 +44,12 @@ createDatasetMetadata(const std::string &dtype,
                                                 compressionOptions_json,
                                                 compressionOptions_z5);
 
-  z5::DatasetMetadata m;
+  auto m = new z5::DatasetMetadata();
   z5::createDatasetMetadata(dtype, shape_, chunkShape_, createAsZarr,
                             compressor, compressionOptions_z5, fillValue,
-                            m);
+                            *m);
 
-  Rcpp::XPtr<z5::DatasetMetadata> mptr(&m, true);
+  Rcpp::XPtr<z5::DatasetMetadata> mptr(m, true);
   return mptr;
 }
 
