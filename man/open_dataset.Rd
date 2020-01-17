@@ -4,14 +4,14 @@
 \alias{open_dataset}
 \title{Open a Zarr dataset}
 \usage{
-open_dataset(x, key, ...)
+open_dataset(x, key, mode = "a")
 }
 \arguments{
 \item{x}{the handle}
 
 \item{key}{internal path of the data set}
 
-\item{...}{reserved.}
+\item{mode}{file mode}
 }
 \description{
 Open a Zarr dataset from a file, group or dataset handles

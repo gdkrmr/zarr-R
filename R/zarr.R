@@ -125,31 +125,26 @@ create_dataset <- function(x, key, shape, chunk_shape,
 #'
 #' @param x the handle
 #' @param key internal path of the data set
-#' @param ... reserved.
+#' @param mode file mode
 #' @export
-open_dataset <- function(x, key, ...) {
-  UseMethod("open_dataset", x)
-}
+open_dataset <- function(x, key, mode = "a") {
+  if (inherits(x, "character")) {
+    fh <- getFileHandle(x, mode)
+    res <- getDatasetHandleFileHandle(fh, key)
+  } else if (inherits(x, "file_handle")) {
+    res <- openDatasetFileHandle(x, key)
+  } else if (inherits(x, "group_handle")) {
+    res <- openDatasetGroupHandle(x, key)
+  } else if (inheritx(x, "dataset_handle")) {
+    if (!missing(key)) warning("key will be ignored.")
+    openDatasetDatasetHandle(x)
+  } else {
+    stop("Cannot open dataset from class(x) = ", class(x))
+  }
 
-#' @export
-open_dataset.default <- function(x, key, ...) {
-  stop("no method for class(x) ", class(x))
-}
+  class(res) <- "zarr_dataset"
 
-#' @export
-open_dataset.file_handle <- function(x, key, ...) {
-  structure(openDatasetFile(x, key), class = "dataset")
-}
-
-#' @export
-open_dataset.group_handle <- function(x, key, ...) {
-  structure(openDatasetGroup(x, key), class = "dataset")
-}
-
-#' @export
-open_dataset.dataset_handle <- function(x, key, ...) {
-  if (!missing(key)) warning("key will be ignored.")
-  structure(openDatasetDataset(x), class = "dataset")
+  return(res)
 }
 
 #' Get the path of an object.
