@@ -135,7 +135,7 @@ open_dataset <- function(x, key, mode = "a") {
     res <- openDatasetFileHandle(x, key)
   } else if (inherits(x, "group_handle")) {
     res <- openDatasetGroupHandle(x, key)
-  } else if (inheritx(x, "dataset_handle")) {
+  } else if (inherits(x, "dataset_handle")) {
     if (!missing(key)) warning("key will be ignored.")
     openDatasetDatasetHandle(x)
   } else {
@@ -165,15 +165,10 @@ get_path.zarr_dataset <- function(x, ...) {
 }
 
 #' @export
-dim.zarr_attributes <- function(x) {
-  return(as.numeric(x$shape))
-}
+dim.dataset_metadata <- function(x) { as.integer(as.list(x)$shape) }
 
 #' @export
-dim.zarr_dataset <- function(x) {
-  attribs <- read_attributes(paste0(get_path(x), "/.zarray"))
-  return(dim(attribs))
-}
+dim.zarr_dataset <- function(x) { DatasetShape(x) }
 
 #' @export
 `dim<-.zarr_dataset` <- function(x, value) {

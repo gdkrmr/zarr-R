@@ -1,6 +1,7 @@
 #include "helpers.h"
 #include <Rcpp.h>
 #include <z5/filesystem/handle.hxx>
+#include <z5/filesystem/metadata.hxx>
 #include <z5/util/file_mode.hxx>
 
 // [[Rcpp::export]]
@@ -51,10 +52,11 @@ void DatasetHandleDelete(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
   d->remove();
 }
 
-// [[Rcpp::export]]
-void DatasetHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
-  d->create();
-}
+////////// This one should NOT be used!!!!!
+// // [[Rcpp::export]]
+// void DatasetHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Dataset> d, const bool isZarr) {
+//   d->create();
+// }
 
 // [[Rcpp::export]]
 std::string DatasetHandleBucket(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {

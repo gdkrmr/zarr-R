@@ -194,16 +194,6 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
-// DatasetHandleCreate
-void DatasetHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Dataset> d);
-RcppExport SEXP _zarr_DatasetHandleCreate(SEXP dSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::Dataset> >::type d(dSEXP);
-    DatasetHandleCreate(d);
-    return R_NilValue;
-END_RCPP
-}
 // DatasetHandleBucket
 std::string DatasetHandleBucket(Rcpp::XPtr<z5::filesystem::handle::Dataset> d);
 RcppExport SEXP _zarr_DatasetHandleBucket(SEXP dSEXP) {
@@ -569,12 +559,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // FileHandleCreate
-void FileHandleCreate(Rcpp::XPtr<z5::filesystem::handle::File> f);
-RcppExport SEXP _zarr_FileHandleCreate(SEXP fSEXP) {
+void FileHandleCreate(Rcpp::XPtr<z5::filesystem::handle::File> f, const bool isZarr);
+RcppExport SEXP _zarr_FileHandleCreate(SEXP fSEXP, SEXP isZarrSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::File> >::type f(fSEXP);
-    FileHandleCreate(f);
+    Rcpp::traits::input_parameter< const bool >::type isZarr(isZarrSEXP);
+    FileHandleCreate(f, isZarr);
     return R_NilValue;
 END_RCPP
 }
@@ -713,12 +704,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // GroupHandleCreate
-void GroupHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Group> g);
-RcppExport SEXP _zarr_GroupHandleCreate(SEXP gSEXP) {
+void GroupHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Group> g, const bool isZarr);
+RcppExport SEXP _zarr_GroupHandleCreate(SEXP gSEXP, SEXP isZarrSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::XPtr<z5::filesystem::handle::Group> >::type g(gSEXP);
-    GroupHandleCreate(g);
+    Rcpp::traits::input_parameter< const bool >::type isZarr(isZarrSEXP);
+    GroupHandleCreate(g, isZarr);
     return R_NilValue;
 END_RCPP
 }
@@ -818,7 +810,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_zarr_DatasetHandleIsZarr", (DL_FUNC) &_zarr_DatasetHandleIsZarr, 1},
     {"_zarr_DatasetHandlePath", (DL_FUNC) &_zarr_DatasetHandlePath, 1},
     {"_zarr_DatasetHandleDelete", (DL_FUNC) &_zarr_DatasetHandleDelete, 1},
-    {"_zarr_DatasetHandleCreate", (DL_FUNC) &_zarr_DatasetHandleCreate, 1},
     {"_zarr_DatasetHandleBucket", (DL_FUNC) &_zarr_DatasetHandleBucket, 1},
     {"_zarr_DatasetHandleNameInBucket", (DL_FUNC) &_zarr_DatasetHandleNameInBucket, 1},
     {"_zarr_DatasetIsZarr", (DL_FUNC) &_zarr_DatasetIsZarr, 1},
@@ -850,7 +841,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_zarr_FileHandleIn", (DL_FUNC) &_zarr_FileHandleIn, 2},
     {"_zarr_FileHandleNameInBucket", (DL_FUNC) &_zarr_FileHandleNameInBucket, 1},
     {"_zarr_FileHandleBucket", (DL_FUNC) &_zarr_FileHandleBucket, 1},
-    {"_zarr_FileHandleCreate", (DL_FUNC) &_zarr_FileHandleCreate, 1},
+    {"_zarr_FileHandleCreate", (DL_FUNC) &_zarr_FileHandleCreate, 2},
     {"_zarr_getGroupHandleFileHandle", (DL_FUNC) &_zarr_getGroupHandleFileHandle, 2},
     {"_zarr_getGroupHandleGroupHandle", (DL_FUNC) &_zarr_getGroupHandleGroupHandle, 2},
     {"_zarr_GroupHandleIsS3", (DL_FUNC) &_zarr_GroupHandleIsS3, 1},
@@ -863,7 +854,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_zarr_GroupHandleIn", (DL_FUNC) &_zarr_GroupHandleIn, 2},
     {"_zarr_GroupHandleNameInBucket", (DL_FUNC) &_zarr_GroupHandleNameInBucket, 1},
     {"_zarr_GroupHandleBucket", (DL_FUNC) &_zarr_GroupHandleBucket, 1},
-    {"_zarr_GroupHandleCreate", (DL_FUNC) &_zarr_GroupHandleCreate, 1},
+    {"_zarr_GroupHandleCreate", (DL_FUNC) &_zarr_GroupHandleCreate, 2},
     {"_zarr_ListToMetadata", (DL_FUNC) &_zarr_ListToMetadata, 1},
     {"_zarr_MetadataToList", (DL_FUNC) &_zarr_MetadataToList, 1},
     {"_zarr_createDatasetMetadata", (DL_FUNC) &_zarr_createDatasetMetadata, 7},

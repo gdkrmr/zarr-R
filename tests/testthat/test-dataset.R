@@ -2,8 +2,6 @@ context("dataset")
 
 test_that("dataset", {
 
-  library(testthat)
-
   path <- tempfile()
 
   f <- zarr:::get_file_handle(path)
@@ -43,7 +41,7 @@ test_that("dataset", {
 
   d_list <- list(d0, d1, d2, dd0, dd1, dd2, ddd1, ddd2, dddd2)
 
-  lapply(d_list, function(x) expect_true(DatasetIsZarr(x)))
+  lapply(d_list, function(x) expect_failure(expect_true(DatasetIsZarr(x))))
   lapply(d_list, function(x) expect_equal(DatasetGetDtype(x), "float64"))
 
   expect_equal(DatasetDimension(d0), length(shape0))
@@ -87,7 +85,7 @@ test_that("dataset", {
   expect_equal(DatasetPath(dddd2), paste0(path, "/group1/group2/dataset2"))
 
 
-  lapply(d_list, function(x) expect_equal(DatasetGetFillValue(x), NA_real_))
+  lapply(d_list, function(x) expect_true(is.na(DatasetGetFillValue(x))))
   lapply(d_list, function(x) expect_equal(DatasetGetCompressor(x), "raw"))
   lapply(d_list, function(x) expect_equal(DatasetGetFileMode(x), "a"))
 

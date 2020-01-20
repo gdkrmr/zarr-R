@@ -26,12 +26,8 @@ test_that("group handle", {
   expect_false(zarr:::GroupHandleIsS3(g2))
   expect_false(zarr:::GroupHandleIsGcs(g1))
   expect_false(zarr:::GroupHandleIsGcs(g2))
-  expect_failure(
-    expect_true(zarr:::GroupHandleIsZarr(g1))
-  )
-  expect_failure(
-    expect_true(zarr:::GroupHandleIsZarr(g2))
-  )
+  expect_true(zarr:::GroupHandleIsZarr(g1))
+  expect_true(zarr:::GroupHandleIsZarr(g2))
 
   expect_equal(zarr:::GroupHandlePath(g1), paste0(path, "/group1"))
   expect_equal(zarr:::GroupHandlePath(g2), paste0(path, "/group1/group2"))

@@ -11,7 +11,7 @@ test_that("file handle", {
   expect_false(zarr:::FileHandleIsS3(f))
   expect_false(zarr:::FileHandleIsGcs(f))
   ## TODO: until when does this fail?
-  expect_error(expect_false(zarr:::FileHandleIsZarr(f)))
+  expect_error(zarr:::FileHandleIsZarr(f))
   expect_false(zarr:::FileHandleExists(f))
   expect_equal(zarr:::FileHandlePath(f), path)
   expect_error(zarr:::FileHandleKeys(f), c())
@@ -20,7 +20,7 @@ test_that("file handle", {
 
   zarr:::create_file(f)
   ## TODO: until when does this fail?
-  expect_error(expect_true(zarr:::FileHandleIsZarr(f)))
+  expect_true(zarr:::FileHandleIsZarr(f))
   expect_true(dir.exists(path))
   expect_equal(zarr:::FileHandleKeys(f), character(0))
 
@@ -31,6 +31,5 @@ test_that("file handle", {
   expect_error(zarr:::get_file_handle(1))
   expect_error(zarr:::get_file_handle(1))
   expect_error(create_file(1))
-
 
 })

@@ -69,10 +69,6 @@ DatasetHandleDelete <- function(d) {
     invisible(.Call(`_zarr_DatasetHandleDelete`, d))
 }
 
-DatasetHandleCreate <- function(d) {
-    invisible(.Call(`_zarr_DatasetHandleCreate`, d))
-}
-
 DatasetHandleBucket <- function(d) {
     .Call(`_zarr_DatasetHandleBucket`, d)
 }
@@ -197,8 +193,8 @@ FileHandleBucket <- function(f) {
     .Call(`_zarr_FileHandleBucket`, f)
 }
 
-FileHandleCreate <- function(f) {
-    invisible(.Call(`_zarr_FileHandleCreate`, f))
+FileHandleCreate <- function(f, isZarr) {
+    invisible(.Call(`_zarr_FileHandleCreate`, f, isZarr))
 }
 
 getGroupHandleFileHandle <- function(f, key) {
@@ -249,8 +245,8 @@ GroupHandleBucket <- function(g) {
     .Call(`_zarr_GroupHandleBucket`, g)
 }
 
-GroupHandleCreate <- function(g) {
-    invisible(.Call(`_zarr_GroupHandleCreate`, g))
+GroupHandleCreate <- function(g, isZarr) {
+    invisible(.Call(`_zarr_GroupHandleCreate`, g, isZarr))
 }
 
 ListToMetadata <- function(l) {

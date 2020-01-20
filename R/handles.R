@@ -7,9 +7,9 @@ get_file_handle <- function(x, mode = "a") {
   }
 }
 
-create_file <- function(x) {
+create_file <- function(x, zarr = TRUE) {
   if (inherits(x, "file_handle")) {
-    FileHandleCreate(x)
+    FileHandleCreate(x, zarr)
   } else {
     stop("cannot create file from ", class(x))
   }
@@ -25,9 +25,9 @@ get_group_handle <- function(x, key) {
   }
 }
 
-create_group <- function(x) {
+create_group <- function(x, zarr = TRUE) {
   if (inherits(x, "group_handle")) {
-    GroupHandleCreate(x)
+    GroupHandleCreate(x, zarr)
   } else {
     stop("x must be of class \"group_handle\"")
   }

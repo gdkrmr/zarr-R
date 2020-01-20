@@ -2,6 +2,7 @@
 #include <Rcpp.h>
 #include <z5/filesystem/handle.hxx>
 #include <z5/util/file_mode.hxx>
+#include <z5/factory.hxx>
 
 // [[Rcpp::export]]
 Rcpp::XPtr<z5::filesystem::handle::Group>
@@ -77,6 +78,6 @@ std::string GroupHandleBucket(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
 }
 
 // [[Rcpp::export]]
-void GroupHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
-  g->create();
+void GroupHandleCreate(Rcpp::XPtr<z5::filesystem::handle::Group> g, const bool isZarr) {
+  z5::filesystem::createGroup(*g, isZarr);
 }

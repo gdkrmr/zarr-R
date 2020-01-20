@@ -48,6 +48,9 @@ test_that("dataset handle", {
   expect_false(zarr:::DatasetHandleExists(d2))
   expect_false(dir.exists(paste0(path, "/group1/dataset2")))
 
+  zarr::GroupHandleDelete(g)
+  expect_false(zarr::GroupHandleExists(g))
+
   zarr:::FileHandleDelete(f)
   expect_false(zarr:::FileHandleExists(f))
   expect_false(dir.exists(path))

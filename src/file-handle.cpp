@@ -1,5 +1,6 @@
 #include "helpers.h"
 #include <Rcpp.h>
+#include <z5/factory.hxx>
 #include <z5/filesystem/handle.hxx>
 #include <z5/util/file_mode.hxx>
 
@@ -68,6 +69,6 @@ std::string FileHandleBucket(Rcpp::XPtr<z5::filesystem::handle::File> f) {
 }
 
 // [[Rcpp::export]]
-void FileHandleCreate(Rcpp::XPtr<z5::filesystem::handle::File> f) {
-  f->create();
+void FileHandleCreate(Rcpp::XPtr<z5::filesystem::handle::File> f, const bool isZarr) {
+  z5::createFile(*f, isZarr);
 }
