@@ -9,6 +9,10 @@
 Rcpp::XPtr<z5::DatasetMetadata> ListToMetadata(const Rcpp::List& l) {
   nlohmann::json j = rlist_to_json(l);
 
+  if (j["compressor"] == "raw") {
+    j["compressor"] = nullptr;
+  }
+
   auto m = new z5::DatasetMetadata();
   m->fromJson(j, true);
 
@@ -19,9 +23,13 @@ Rcpp::XPtr<z5::DatasetMetadata> ListToMetadata(const Rcpp::List& l) {
 // [[Rcpp::export]]
 Rcpp::List MetadataToList(Rcpp::XPtr<z5::DatasetMetadata> mptr) {
   nlohmann::json j;
+
   mptr->toJson(j);
-  Rcpp::List l = json_to_rlist(j);
-  return l;
+  if (j["compressor"].is_null()) {
+    j["compressor"] = "raw";
+  }
+
+  return json_to_rlist(j);
 }
 
 // [[Rcpp::export]]
