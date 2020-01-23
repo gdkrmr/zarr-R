@@ -137,7 +137,7 @@ open_dataset <- function(x, key, mode = "a") {
     res <- openDatasetGroupHandle(x, key)
   } else if (inherits(x, "dataset_handle")) {
     if (!missing(key)) warning("key will be ignored.")
-    openDatasetDatasetHandle(x)
+    res <- openDatasetDatasetHandle(x)
   } else {
     stop("Cannot open dataset from class(x) = ", class(x))
   }
