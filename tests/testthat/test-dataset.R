@@ -1,5 +1,6 @@
 context("dataset")
 
+
 test_that("dataset", {
 
   path <- tempfile()
@@ -83,7 +84,6 @@ test_that("dataset", {
   expect_equal(DatasetPath(dd2), paste0(path, "/group1/group2/dataset2"))
   expect_equal(DatasetPath(ddd2), paste0(path, "/group1/group2/dataset2"))
   expect_equal(DatasetPath(dddd2), paste0(path, "/group1/group2/dataset2"))
-
 
   lapply(d_list, function(x) expect_true(is.na(DatasetGetFillValue(x))))
   lapply(d_list, function(x) expect_equal(DatasetGetCompressor(x), "raw"))

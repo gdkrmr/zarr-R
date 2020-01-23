@@ -167,6 +167,7 @@ inline nlohmann::json rlist_named_to_json(const Rcpp::List& l) {
   Rcpp::CharacterVector l_names(l.names());
 
   for (int i = 0; i < l.length(); i++) {
+
     std::string new_name = Rcpp::as<std::string>(l_names[i]);
     SEXP new_val = l[i];
 
@@ -206,7 +207,6 @@ inline nlohmann::json rlist_named_to_json(const Rcpp::List& l) {
     }
     }
   }
-
   return j;
 }
 

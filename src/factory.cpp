@@ -59,6 +59,7 @@ createDatasetGroupHandle(const Rcpp::XPtr<z5::filesystem::handle::Group> g,
                          const std::string &compressor,
                          const Rcpp::List &compressionOptions,
                          const double fillValue) {
+
   auto d = z5::createDataset(*g, key, dtype, intvec_to_shapetype(shape),
                              intvec_to_shapetype(chunkShape), compressor,
                              rlist_to_json(compressionOptions), fillValue);

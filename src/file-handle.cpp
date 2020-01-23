@@ -8,7 +8,7 @@
 Rcpp::XPtr<z5::filesystem::handle::File>
 getFileHandle(const std::string &path, const std::string &mode) {
   fs::path p(path);
-  z5::FileMode mode_ = rfilemode_to_filemode(mode);
+  auto mode_ = rfilemode_to_filemode(mode);
   auto f = new z5::filesystem::handle::File(p, mode_);
   Rcpp::XPtr<z5::filesystem::handle::File> fptr(f, true);
   return fptr;
