@@ -41,7 +41,7 @@ test_that("dataset", {
 
   d_list <- list(d0, d1, d2, dd0, dd1, dd2, ddd1, ddd2, dddd2)
 
-  lapply(d_list, function(x) expect_failure(expect_true(DatasetIsZarr(x))))
+  lapply(d_list, function(x) expect_true(DatasetIsZarr(x)))
   lapply(d_list, function(x) expect_equal(DatasetGetDtype(x), "float64"))
 
   expect_equal(DatasetDimension(d0), length(shape0))
