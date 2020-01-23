@@ -249,6 +249,14 @@ GroupHandleCreate <- function(g, isZarr) {
     invisible(.Call(`_zarr_GroupHandleCreate`, g, isZarr))
 }
 
+json_to_list <- function(s) {
+    .Call(`_zarr_json_to_list`, s)
+}
+
+list_to_json <- function(l) {
+    .Call(`_zarr_list_to_json`, l)
+}
+
 ListToMetadata <- function(l) {
     .Call(`_zarr_ListToMetadata`, l)
 }

@@ -714,6 +714,28 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// json_to_list
+Rcpp::List json_to_list(const std::string s);
+RcppExport SEXP _zarr_json_to_list(SEXP sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string >::type s(sSEXP);
+    rcpp_result_gen = Rcpp::wrap(json_to_list(s));
+    return rcpp_result_gen;
+END_RCPP
+}
+// list_to_json
+std::string list_to_json(const Rcpp::List l);
+RcppExport SEXP _zarr_list_to_json(SEXP lSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type l(lSEXP);
+    rcpp_result_gen = Rcpp::wrap(list_to_json(l));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ListToMetadata
 Rcpp::XPtr<z5::DatasetMetadata> ListToMetadata(const Rcpp::List& l);
 RcppExport SEXP _zarr_ListToMetadata(SEXP lSEXP) {
@@ -855,6 +877,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_zarr_GroupHandleNameInBucket", (DL_FUNC) &_zarr_GroupHandleNameInBucket, 1},
     {"_zarr_GroupHandleBucket", (DL_FUNC) &_zarr_GroupHandleBucket, 1},
     {"_zarr_GroupHandleCreate", (DL_FUNC) &_zarr_GroupHandleCreate, 2},
+    {"_zarr_json_to_list", (DL_FUNC) &_zarr_json_to_list, 1},
+    {"_zarr_list_to_json", (DL_FUNC) &_zarr_list_to_json, 1},
     {"_zarr_ListToMetadata", (DL_FUNC) &_zarr_ListToMetadata, 1},
     {"_zarr_MetadataToList", (DL_FUNC) &_zarr_MetadataToList, 1},
     {"_zarr_createDatasetMetadata", (DL_FUNC) &_zarr_createDatasetMetadata, 7},
