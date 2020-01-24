@@ -18,4 +18,4 @@ r_packages:
   - covr
 
 after_success:
-  - test $TRAVIS_R_VERSION_STRING = 'release' && travis_wait 20 Rscript -e 'covr::codecov()'
+  - test $TRAVIS_R_VERSION_STRING = 'release' && Rscript -e 'covr::codecov()'
