@@ -14,8 +14,8 @@ r:
   - release
   - devel
 
-before_install:
-  - Rscript -e "if (!'covr' %in% rownames(installed.packages())) install.packages('covr')"
+r_packages:
+  - covr
 
 after_success:
   - test $TRAVIS_R_VERSION_STRING = 'release' && travis_wait 20 Rscript -e 'covr::codecov()'
