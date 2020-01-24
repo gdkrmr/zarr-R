@@ -6,9 +6,9 @@ test_that("single access", {
   path <- tempfile()
   shape <- c(9, 9)
   chunk_shape <- c(3, 3)
-  fill_value <- 0L
+  fill_value <- 0
   data_type <- c("float64")
-  test_data <- array(as.integer(runif(prod(shape)) * 100), dim = shape)
+  test_data <- array(runif(prod(shape)) * 100, dim = shape)
 
 
   f <- zarr:::get_file_handle(path)
@@ -43,12 +43,13 @@ test_that("single access", {
 })
 
 test_that("row access", {
+
   path <- tempfile()
   shape <- c(9, 9)
   chunk_shape <- c(3, 3)
-  fill_value <- 0L
+  fill_value <- 0
   data_type <- c("float64")
-  test_data <- array(as.integer(runif(prod(shape)) * 100), dim = shape)
+  test_data <- array(runif(prod(shape)) * 100, dim = shape)
 
 
   f <- zarr:::get_file_handle(path)
@@ -81,9 +82,9 @@ test_that("column access", {
   path <- tempfile()
   shape <- c(9, 9)
   chunk_shape <- c(3, 3)
-  fill_value <- 0L
+  fill_value <- 0
   data_type <- c("float64")
-  test_data <- array(as.integer(runif(prod(shape)) * 100), dim = shape)
+  test_data <- array(runif(prod(shape)) * 100, dim = shape)
 
 
   f <- zarr:::get_file_handle(path)
