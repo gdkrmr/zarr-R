@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Rcpp.h>
+
 #include <memory>
 
 #include "z5/metadata.hxx"
@@ -48,8 +50,8 @@ namespace z5 {
             }
             for(int d = 0; d < shape_.size(); ++d) {
                 if(offset[d] + shape[d] > shape_[d]) {
-                    std::cout << "Out of range: " << offset << " + " << shape << std::endl;
-                    std::cout << " = " << offset[d] + shape[d] << " > " << shape_[d] << std::endl;;
+                    Rcpp::Rcout << "Out of range: " << offset << " + " << shape << std::endl;
+                    Rcpp::Rcout << " = " << offset[d] + shape[d] << " > " << shape_[d] << std::endl;;
                     throw std::runtime_error("Request is out of range");
                 }
                 if(shape[d] == 0) {

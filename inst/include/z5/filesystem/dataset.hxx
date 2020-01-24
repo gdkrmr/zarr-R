@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Rcpp.h>
+
 #include <ios>
 
 #include "z5/dataset.hxx"
@@ -95,7 +97,7 @@ namespace filesystem {
         inline void checkRequestType(const std::type_info & type) const {
             if(type != typeid(T)) {
                 // TODO all in error message
-                std::cout << "Mytype: " << typeid(T).name() << " your type: " << type.name() << std::endl;
+                Rcpp::Rcout << "Mytype: " << typeid(T).name() << " your type: " << type.name() << std::endl;
                 throw std::runtime_error("Request has wrong type");
             }
         }

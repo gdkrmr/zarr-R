@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Rcpp.h>
+
 #include <vector>
 #include <string>
 #include <map>
@@ -369,7 +371,7 @@ namespace types {
                 const std::string tmp = val;
                 opts[key] = tmp;
             } else {
-                std::cout << val.type_name() << std::endl;
+                Rcpp::Rcout << val.type_name() << std::endl;
                 throw std::runtime_error("Invalid type conversion for compression type");
             }
         }

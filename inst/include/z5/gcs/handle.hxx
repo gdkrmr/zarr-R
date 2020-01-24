@@ -1,4 +1,6 @@
 #pragma once
+
+#include <Rcpp.h>
 #include "z5/handle.hxx"
 
 
@@ -60,7 +62,7 @@ namespace handle {
 
         inline void create() const {
             if(mode().mode() == FileMode::modes::r) {
-                std::cout << "Hereee" << std::endl;
+                Rcpp::Rcout << "Hereee" << std::endl;
                 const std::string err = "Cannot create new group in file mode " + mode().printMode();
                 throw std::invalid_argument(err.c_str());
             }

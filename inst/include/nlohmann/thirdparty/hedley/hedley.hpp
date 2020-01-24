@@ -831,15 +831,15 @@
 
 
 JSON_HEDLEY_DIAGNOSTIC_PUSH
-#if \
-    JSON_HEDLEY_HAS_WARNING("-Wvariadic-macros") || \
-    JSON_HEDLEY_GCC_VERSION_CHECK(4,0,0)
-    #if defined(__clang__)
-        #pragma clang diagnostic ignored "-Wvariadic-macros"
-    #elif defined(JSON_HEDLEY_GCC_VERSION)
-        #pragma GCC diagnostic ignored "-Wvariadic-macros"
-    #endif
-#endif
+// #if \
+//     JSON_HEDLEY_HAS_WARNING("-Wvariadic-macros") || \
+//     JSON_HEDLEY_GCC_VERSION_CHECK(4,0,0)
+//     #if defined(__clang__)
+//         #pragma clang diagnostic ignored "-Wvariadic-macros"
+//     #elif defined(JSON_HEDLEY_GCC_VERSION)
+//         #pragma GCC diagnostic ignored "-Wvariadic-macros"
+//     #endif
+// #endif
 #if defined(JSON_HEDLEY_NON_NULL)
     #undef JSON_HEDLEY_NON_NULL
 #endif
