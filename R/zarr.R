@@ -85,7 +85,7 @@ create_dataset <- function(x, key, shape, chunk_shape,
                            file_mode = "a",
                            compressor = "raw", compression_options = list(),
                            as_zarr = TRUE) {
-  if (fill_value == "auto") {
+  if (is.character(fill_value) && fill_value == "auto") {
     fill_value <- type_to_auto_fill_value[[data_type]]
     if (is.null(fill_value)) { stop("unknown data_type") }
   }
