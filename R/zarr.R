@@ -1,41 +1,6 @@
 #' @include RcppExports.R helpers.R handles.R metadata.R factory.R
 NULL
 
-#' Open a zarr object.
-#'
-#' Opens a zarr array saved on disk.
-#'
-#' @param path The path on disk
-#' @param file_mode File mode to open the object
-#' @export
-open_zarr <- function(path, file_mode = "a") {
-  ds <- openDataset(path, file_mode)
-  class(ds) <- "zarr_dataset"
-  return(ds)
-}
-
-#' Data type
-#'
-#' Get the data type of an object.
-#'
-#' @param x The object
-#' @param ... Unused
-#' @export
-data_type <- function(x, ...) {
-  UseMethod("data_type", x)
-}
-
-#' @export
-data_type.zarr_dataset <- function(x, ...) {
-  data_type(read_attributes(x))
-}
-
-#' @export
-data_type.zarr_attributes <- function(x, ...) {
-  zarrdt_to_dt[[x$dtype]]
-}
-
-
 # // the (python / h5py) I/O modes:
 # // r: can only read, file must exist
 # // r+: can read and write, file must exist
@@ -145,23 +110,6 @@ open_dataset <- function(x, key, mode = "a") {
   class(res) <- "zarr_dataset"
 
   return(res)
-}
-
-#' Get the path of an object.
-#'
-#' Gets the path of an object stored on disk.
-#'
-#' @param x The object
-#' @param ... Currently unused
-#'
-#' @export
-get_path <- function(x, ...) {
-  UseMethod("get_path", x)
-}
-
-#' @export
-get_path.zarr_dataset <- function(x, ...) {
-  return(getPath(x))
 }
 
 #' @export

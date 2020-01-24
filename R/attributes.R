@@ -18,8 +18,8 @@ read_attributes <- function(x) {
     readAttributesGroupHandle(x)
   } else if (inherits(x, "dataset_handle")) {
     readAttributesDatasetHandle(x)
-  } else if (inherits(x, "zarr_dataset")) {
-    readAttributesDataset(x)
+  ## } else if (inherits(x, "zarr_dataset")) {
+  ##   readAttributesDataset(x)
   } else {
     stop("cannot use class(x) ", class(x))
   }

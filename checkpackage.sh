@@ -1,22 +1,24 @@
 #! /bin/sh
 
+RSCRIPT="/home/gkraemer/bin/Rscript-3.6.2"
+R="/home/gkraemer/bin/R-3.6.2"
 
 echo "== Do Rcpp stuff ====================================="
-Rscript --vanilla \
+$RSCRIPT --vanilla \
         -e 'Rcpp::compileAttributes(verbose = FALSE)'
 
 
 echo "== BUILDING DOCUMENTATION ============================"
-Rscript --vanilla \
+$RSCRIPT --vanilla \
         --default-packages=methods,utils \
         -e 'devtools::document()'
 
 
 echo "== R CMD build ======================================="
-R CMD build --compact-vignettes .
+$R CMD build --compact-vignettes .
 
 pkgversion=$(cat DESCRIPTION | grep Version | sed 's|Version: \(.*\)|\1|')
 
 
 echo "== R CMD check: version $pkgversion ==================="
-R CMD check zarr_$pkgversion.tar.gz --as-cran --timings
+$R CMD check zarr_$pkgversion.tar.gz --as-cran --timings
