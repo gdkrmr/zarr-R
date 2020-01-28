@@ -4,9 +4,10 @@
 #define STRICT_R_HEADERS // otherwise a PI macro is defined in R
 
 #include <Rcpp.h>
+#include <limits>
+#include <xtensor-r/rarray.hpp>
 #include <z5/attributes.hxx>
 #include <z5/factory.hxx>
-#include <xtensor-r/rarray.hpp>
 #include <z5/multiarray/xtensor_access.hxx>
 
 #ifdef WITH_BOOST_FS
@@ -158,7 +159,14 @@ inline void transform_write(z5::Dataset &out_data, xt::rarray<FROM_T> &in_data,
   for (auto& s : in_data.shape()) { in_shape.push_back(s); }
   xt::xarray<TO_T> middle_data(in_shape);
   std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
-                 [](const INNER_FROM_T x) { return static_cast<TO_T>(x); });
+                 [](const INNER_FROM_T x) {
+                   if (std::numeric_limits<TO_T>::min() <= x &&
+                       x <= std::numeric_limits<TO_T>::max()) {
+                     return static_cast<TO_T>(x);
+                   }
+
+                   Rf_error("Cannot convert to target value, out of range.");
+                 });
   z5::multiarray::writeSubarray<TO_T>(out_data, middle_data, offset.begin());
 }
 

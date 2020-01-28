@@ -1,3 +1,4 @@
+#include "R_ext/Error.h"
 #define STRICT_R_HEADERS // otherwise a PI macro is defined in R
 
 // TODO: handle missing values correctly
@@ -103,14 +104,20 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
   };
 
   case z5::types::uint64: {
-    Rf_warning("WARNING: reading 64 bit unsigned integers, R cannot deal with "
-               "this data type and you may loose information!");
+    // Rf_warning("WARNING: reading 64 bit unsigned integers, R cannot deal with "
+    //            "this data type and you may loose information!");
     xt::xarray<uint64_t> middle_array(shape_);
     xt::rarray<double> out_array(shape_);
 
     z5::multiarray::readSubarray<uint64_t>(*ds, middle_array, offset_.begin());
     std::transform(middle_array.begin(), middle_array.end(), out_array.begin(),
-                   [](const uint64_t x) { return static_cast<double>(x); });
+                   [](const uint64_t x) {
+                     auto tmp = static_cast<double>(x);
+                     if (static_cast<uint64_t>(tmp) != x){
+                       Rf_error("Inexact error when reading from uint64.");
+                     }
+                     return tmp;
+                   });
 
     res = wrap(out_array);
     break;

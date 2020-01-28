@@ -73,12 +73,7 @@ create_dataset <- function(x, key, shape, chunk_shape,
     stop("Cannot create dataset from class(x) ", class(x))
   }
 
-
   class(res) <- "zarr_dataset"
-
-  ## res_attr <- read_attributes(res)
-  ## res_attr$missing_value <- missing_value
-  ## write_attributes(res, res_attr)
 
   return(res)
 }

@@ -29,17 +29,18 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     check_bounds(offset, data_, *ds);
 
     switch (target_type) {
-    case z5::types::int8:    { transform_write<  int8_t, uint8_t>(*ds, data_, offset_); break; };
-    case z5::types::int16:   { transform_write< int16_t, uint8_t>(*ds, data_, offset_); break; };
-    case z5::types::int32:   { transform_write< int32_t, uint8_t>(*ds, data_, offset_); break; };
-    case z5::types::int64:   { transform_write< int64_t, uint8_t>(*ds, data_, offset_); break; };
-    case z5::types::uint8:   { z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin()); break; };
-    case z5::types::uint16:  { transform_write<uint16_t, uint8_t>(*ds, data_, offset_); break; };
-    case z5::types::uint32:  { transform_write<uint32_t, uint8_t>(*ds, data_, offset_); break; };
-    case z5::types::uint64:  { transform_write<uint64_t, uint8_t>(*ds, data_, offset_); break; };
-    case z5::types::float32: { transform_write<   float, uint8_t>(*ds, data_, offset_); break; };
-    case z5::types::float64: { transform_write<  double, uint8_t>(*ds, data_, offset_); break; };
-    default: { Rf_error("Error: Type of R array (Logical) and zarr array do not match."); }
+    // case z5::types::int8:    { transform_write<  int8_t, rlogical>(*ds, data_, offset_); break; };
+    // case z5::types::int16:   { transform_write< int16_t, rlogical>(*ds, data_, offset_); break; };
+    // case z5::types::int32:   { z5::multiarray::writeSubarray<rlogical>(*ds, data_, offset_.begin()); break; };
+    // case z5::types::int64:   { transform_write< int64_t, rlogical>(*ds, data_, offset_); break; };
+    // case z5::types::uint16:  { transform_write<uint8_t,  rlogical>(*ds, data_, offset_); break;};
+    // case z5::types::uint16:  { transform_write<uint16_t, rlogical>(*ds, data_, offset_); break;};
+    // case z5::types::uint32:  { transform_write<uint32_t, rlogical>(*ds, data_, offset_); break; };
+    // case z5::types::uint64:  { transform_write<uint64_t, rlogical>(*ds, data_, offset_); break; };
+    // case z5::types::float32: { transform_write<   float, rlogical>(*ds, data_, offset_); break; };
+    // case z5::types::float64: { transform_write<  double, rlogical>(*ds, data_, offset_); break; };
+    // default: { Rf_error("Error: Type of R array (Logical) and zarr array do not match."); }
+    default: { Rf_error("Rlogicals currently not supportet!"); }
     }
     break;
   };
@@ -86,34 +87,30 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
     break;
   };
 
-  // case RAWSXP: {
-  //   // NOTE: not checking bounds may lead to memory leaks
-  //   xt::rarray<uint8_t> data_(data);
-  //   check_bounds(offset, data_, *ds);
+  case RAWSXP: {
+    // NOTE: not checking bounds may lead to memory leaks
+    xt::rarray<uint8_t> data_(data);
+    check_bounds(offset, data_, *ds);
 
-  //   switch (target_type) {
-  //   // case z5::types::int8:  { z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin()); };
-  //   // case z5::types::int8:    {write_subarray_transform<int8_t, int8_t>(*ds, data_, offset_);};
-  //   // case z5::types::int16:   {write_subarray_transform<int16_t, int16_t>(*ds, data_, offset_);};
-  //   // case z5::types::int32:   {write_subarray_transform<int32_t, int32_t>(*ds, data_, offset_);};
-  //   // case z5::types::int64:   { write_subarray_transform<int64_t, int64_t>(*ds, data_, offset_); };
-  //   case z5::types::uint8: {
-  //     z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin());
-  //     break;
-  //   };
-  //   // case z5::types::uint16:  { write_subarray_transform<uint16_t, uint16_t> (*ds, data_, offset_); };
-  //   // case z5::types::uint32:  {write_subarray_transform<uint32_t, uint32_t> (*ds, data_, offset_); };
-  //   // case z5::types::uint64:  { write_subarray_transform<uint64_t, uint64_t> (*ds, data_, offset_); };
-  //   // case z5::types::float32: {write_subarray_transform<float, float>       (*ds, data_, offset_); };
-  //   // case z5::types::float64: { write_subarray_transform_na<double, double>(*ds, data_, offset_); };
-  //   default: { Rf_error("Error: Type of R array (Raw) and zarr array do not match."); }
-  //   }
-  //   break;
-  // };
+    switch (target_type) {
+    case z5::types::int8:    { transform_write<  int8_t, uint8_t>(*ds, data_, offset_); break; };
+    case z5::types::int16:   { transform_write< int16_t, uint8_t>(*ds, data_, offset_); break; };
+    case z5::types::int32:   { transform_write< int32_t, uint8_t>(*ds, data_, offset_); break; };
+    case z5::types::int64:   { transform_write< int64_t, uint8_t>(*ds, data_, offset_); break; };
+    case z5::types::uint8:   { z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin()); break; };
+    case z5::types::uint16:  { transform_write<uint16_t, uint8_t>(*ds, data_, offset_); break; };
+    case z5::types::uint32:  { transform_write<uint32_t, uint8_t>(*ds, data_, offset_); break; };
+    case z5::types::uint64:  { transform_write<uint64_t, uint8_t>(*ds, data_, offset_); break; };
+    case z5::types::float32: { transform_write<   float, uint8_t>(*ds, data_, offset_); break; };
+    case z5::types::float64: { transform_write<  double, uint8_t>(*ds, data_, offset_); break; };
+    default: { Rf_error("Error: Type of R array (Raw) and zarr array do not match."); }
+    }
+    break;
+  };
 
   default: {
-    // Rf_error("Value must be Logical, Integer, Real, or Raw.");
-    Rf_error("Value must be Logical, Integer, or Real.");
+    Rf_error("Value must be Logical, Integer, Real, or Raw.");
+    // Rf_error("Value must be Logical, Integer, or Real.");
   };
   }
 }
