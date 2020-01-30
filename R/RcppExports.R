@@ -167,12 +167,12 @@ openDatasetGroupHandle <- function(g, key) {
     .Call(`_zarr_openDatasetGroupHandle`, g, key)
 }
 
-createDatasetFileHandle <- function(f, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue) {
-    .Call(`_zarr_createDatasetFileHandle`, f, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue)
+createDatasetFileHandle <- function(f, key, dtype, shape, chunkShape, compressor, compressionOptions, isZarr, fillValue) {
+    .Call(`_zarr_createDatasetFileHandle`, f, key, dtype, shape, chunkShape, compressor, compressionOptions, isZarr, fillValue)
 }
 
-createDatasetGroupHandle <- function(g, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue) {
-    .Call(`_zarr_createDatasetGroupHandle`, g, key, dtype, shape, chunkShape, compressor, compressionOptions, fillValue)
+createDatasetGroupHandle <- function(g, key, dtype, shape, chunkShape, compressor, compressionOptions, isZarr, fillValue) {
+    .Call(`_zarr_createDatasetGroupHandle`, g, key, dtype, shape, chunkShape, compressor, compressionOptions, isZarr, fillValue)
 }
 
 createDatasetDatasetHandle <- function(d, dtype, shape, chunkShape, compressor, compressionOptions, isZarr, fillValue) {
