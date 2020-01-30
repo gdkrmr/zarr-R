@@ -6,7 +6,7 @@ create_dataset_metadata <- function(shape,
                                     compressor = "raw",
                                     compression_options = list()) {
   if (fill_value == "auto") {
-    fill_value <- type_to_auto_fill_value[[data_type]]
+    fill_value <- TYPE_TO_AUTO_FILL_VALUE[[data_type]]
     if (is.null(fill_value)) { stop("unknown data_type") }
   }
 

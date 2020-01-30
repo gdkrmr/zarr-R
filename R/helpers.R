@@ -46,7 +46,7 @@ match_shape <- function(dim_value, shape_target) {
   return(new_dim_value)
 }
 
-dt_to_zarrdt <- list(
+DT_TO_ZARRDT <- list(
   int8    = "|i1",
   int16   = "<i2",
   int32   = "<i4",
@@ -59,7 +59,7 @@ dt_to_zarrdt <- list(
   float64 = "<f8"
 )
 
-zarrdt_to_dt <- list(
+ZARRDT_TO_DT <- list(
   `|i1` = "int8",
   `<i2` = "int16",
   `<i4` = "int32",
@@ -72,7 +72,7 @@ zarrdt_to_dt <- list(
   `<f8` = "float64"
 )
 
-type_to_auto_fill_value <- list(
+TYPE_TO_AUTO_FILL_VALUE <- list(
  int8 = 0L,
  int16 = 0L,
  int32 = NA_integer_,
@@ -84,6 +84,20 @@ type_to_auto_fill_value <- list(
  float32 = 0,
  float64 = NA_real_
 )
+
+DEFAULT_COMPRESSOR_OPTIONS  <- list(
+  blosc = list(cname = "lzf", clevel = 5L, shuffle = 1L),
+  zlib = list(level = 5L, useZlib = TRUE),
+  bzip2 = list(level = 2L)
+)
+
+complete_compression_options <- function (compressor = "raw", opts = list()) {
+  for (n in names(DEFAULT_COMPRESSOR_OPTIONS[[compressor]])) {
+    if (is.null(opts[[n]]))
+      opts[[n]]  <- DEFAULT_COMPRESSOR_OPTIONS[[compressor]][[n]]
+  }
+  opts
+}
 
 .onUnload <- function(libpath) {
   library.dynam.unload("zarr", libpath)
