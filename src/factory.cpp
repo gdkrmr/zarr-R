@@ -42,10 +42,21 @@ createDatasetFileHandle(const Rcpp::XPtr<z5::filesystem::handle::File> f,
                         const Rcpp::IntegerVector &chunkShape,
                         const std::string &compressor,
                         const Rcpp::List &compressionOptions,
+                        const bool isZarr,
                         const double fillValue) {
-  auto d = z5::createDataset(*f, key, dtype, intvec_to_shapetype(shape),
-                             intvec_to_shapetype(chunkShape), compressor,
-                             rlist_to_json(compressionOptions), fillValue);
+  auto shape_ = intvec_to_shapetype(shape);
+  auto chunkShape_ = intvec_to_shapetype(chunkShape);
+  auto compressionOptions_json = rlist_to_json(compressionOptions);
+  z5::types::CompressionOptions compressionOptions_;
+  auto compressor_ = string_to_compressor(compressor);
+  z5::DatasetMetadata m;
+
+  z5::types::readZarrCompressionOptionsFromJson(
+      compressor_, compressionOptions_json, compressionOptions_);
+  z5::createDatasetMetadata(dtype, shape_, chunkShape_, isZarr, compressor,
+                            compressionOptions_, fillValue, m);
+  std::unique_ptr<z5::Dataset> d = z5::createDataset(*f, key, m);
+
   return Rcpp::XPtr<z5::Dataset>(d.release(), true);
 }
 
@@ -58,11 +69,21 @@ createDatasetGroupHandle(const Rcpp::XPtr<z5::filesystem::handle::Group> g,
                          const Rcpp::IntegerVector &chunkShape,
                          const std::string &compressor,
                          const Rcpp::List &compressionOptions,
+                         const bool isZarr,
                          const double fillValue) {
+  auto shape_ = intvec_to_shapetype(shape);
+  auto chunkShape_ = intvec_to_shapetype(chunkShape);
+  auto compressionOptions_json = rlist_to_json(compressionOptions);
+  z5::types::CompressionOptions compressionOptions_;
+  auto compressor_ = string_to_compressor(compressor);
+  z5::DatasetMetadata m;
 
-  auto d = z5::createDataset(*g, key, dtype, intvec_to_shapetype(shape),
-                             intvec_to_shapetype(chunkShape), compressor,
-                             rlist_to_json(compressionOptions), fillValue);
+  z5::types::readZarrCompressionOptionsFromJson(
+      compressor_, compressionOptions_json, compressionOptions_);
+  z5::createDatasetMetadata(dtype, shape_, chunkShape_, isZarr, compressor,
+                            compressionOptions_, fillValue, m);
+  std::unique_ptr<z5::Dataset> d = z5::createDataset(*g, key, m);
+
   return Rcpp::XPtr<z5::Dataset>(d.release(), true);
 }
 
@@ -76,6 +97,7 @@ createDatasetDatasetHandle(const Rcpp::XPtr<z5::filesystem::handle::Dataset> d,
                            const Rcpp::List &compressionOptions,
                            const bool isZarr,
                            const double fillValue) {
+
   auto shape_ = intvec_to_shapetype(shape);
   auto chunkShape_ = intvec_to_shapetype(chunkShape);
 

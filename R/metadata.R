@@ -10,6 +10,8 @@ create_dataset_metadata <- function(shape,
     if (is.null(fill_value)) { stop("unknown data_type") }
   }
 
+  compression_options <- complete_compression_options(compressor, compression_options)
+
   res <- createDatasetMetadata(data_type,
                                shape,
                                chunk_shape,

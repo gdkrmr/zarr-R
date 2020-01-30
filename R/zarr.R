@@ -50,6 +50,10 @@ create_dataset <- function(x, key, shape, chunk_shape,
                            file_mode = "a",
                            compressor = "raw", compression_options = list(),
                            as_zarr = TRUE) {
+
+  compression_options <- complete_compression_options(compressor,
+                                                      compression_options)
+
   if (is.character(fill_value) && fill_value == "auto") {
     fill_value <- TYPE_TO_AUTO_FILL_VALUE[[data_type]]
     if (is.null(fill_value)) { stop("unknown data_type") }
@@ -58,11 +62,17 @@ create_dataset <- function(x, key, shape, chunk_shape,
   if (missing_value == "auto") { missing_value <- fill_value }
 
   if (inherits(x, "group_handle")) {
+    if (!GroupHandleExists(x))
+      GroupHandleCreate(x, as_zarr)
     res <- createDatasetGroupHandle(x, key, data_type, shape, chunk_shape,
-                                    compressor, compression_options, fill_value)
+                                    compressor, compression_options, as_zarr,
+                                    fill_value)
   } else if (inherits(x, "file_handle")) {
+    if (!FileHandleExists(x))
+      FileHandleCreate(x, as_zarr)
     res <- createDatasetFileHandle(x, key, data_type, shape, chunk_shape,
-                                   compressor, compression_options, fill_value)
+                                   compressor, compression_options, as_zarr,
+                                   fill_value)
   } else if (inherits(x, "dataset_handle")) {
     if (!missing(key))
       warning("creating dataset from dataset handle, `key` will be ignored!")
