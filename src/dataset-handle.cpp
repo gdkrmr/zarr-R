@@ -1,7 +1,6 @@
 #include "helpers.h"
 #include <Rcpp.h>
 #include <z5/filesystem/handle.hxx>
-#include <z5/filesystem/metadata.hxx>
 #include <z5/util/file_mode.hxx>
 
 // [[Rcpp::export]]

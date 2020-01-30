@@ -5,3 +5,4 @@
 #include <z5/attributes.hxx>
 #include <z5/factory.hxx>
 #include <z5/multiarray/xtensor_access.hxx>
+#include <z5/metadata.hxx>
