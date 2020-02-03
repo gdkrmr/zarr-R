@@ -62,4 +62,29 @@ test_that("blosc compressor works", {
 
 })
 
+
+test_that("zlib compressor works", {
+
+  path <- tempfile()
+  shape <- c(9, 9)
+  chunk_shape <- c(3, 3)
+  fill_value <- 0
+  data_type <- c("float64")
+  test_data <- array(runif(prod(shape)) * 100, dim = shape)
+
+  f <- zarr:::get_file_handle(path)
+  g <- zarr:::get_group_handle(f, "group1")
+  d1 <- zarr:::get_dataset_handle(f, "dataset1")
+  dh1 <- zarr::create_dataset(d1, shape = shape, chunk_shape = chunk_shape, compressor = "zlib")
+
+  dh2 <- zarr::create_dataset(g, "dataset2", shape = shape, chunk_shape = chunk_shape, compressor = "zlib")
+
+  expect_invisible(dh1[1, 1] <- 1)
+  expect_invisible(dh2[1, 1] <- 1)
+
+  expect_equal(dh1[1, 1, drop = TRUE], 1)
+  expect_equal(dh2[1, 1, drop = TRUE], 1)
+
+  expect_equal(zarr:::MetadataToList(zarr:::get_dataset_metadata(dh1))$compressor$cname, zarr:::DEFAULT_COMPRESSOR_OPTIONS$blosc$cname)
+
 })

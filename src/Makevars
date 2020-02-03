@@ -5,6 +5,9 @@ PKG_LIBS=-lstdc++fs
 PKG_CPPFLAGS+=-DWITH_BLOSC
 PKG_LIBS+=-lblosc
 
+PKG_CPPFLAGS+=-DWITH_ZLIB
+PKG_CPPFLAGS+=-lzlib
+
 ######### TODO for release everything below this line has to be removed!!
 
 
