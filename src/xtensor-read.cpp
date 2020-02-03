@@ -14,6 +14,24 @@
 #include <z5/multiarray/xtensor_access.hxx>
 #include <z5/types/types.hxx>
 
+void check_bounds(const Rcpp::IntegerVector& offset,
+                  const Rcpp::IntegerVector& subarray_shape,
+                  const z5::Dataset& dataset) {
+
+  if (offset.size() != subarray_shape.size() ||
+      offset.size() != dataset.shape().size()) {
+    Rf_error("iterators must be of the same length");
+  }
+
+  for (size_t i = 0; i < offset.size(); i++) {
+    if (offset[i] + subarray_shape[i] > dataset.shape()[i] || offset[i] < 0)
+    {
+      Rf_error("out of bounds error");
+    }
+  }
+
+}
+
 // [[Rcpp::export]]
 SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
                   const Rcpp::IntegerVector& offset,

@@ -99,42 +99,6 @@ inline std::string datatype_to_string(const z5::types::Datatype dtype) {
 // bounds checking
 /////////////////////////////////////////////////////////////////////////
 
-inline void check_bounds(const Rcpp::IntegerVector& offset,
-                         const Rcpp::IntegerVector& subarray_shape,
-                         const z5::Dataset& dataset) {
-
-  // TODO: Not sure but I think this is really slow, because it has to be read
-  // from disk every time.
-  if (offset.size() != subarray_shape.size() ||
-      offset.size() != dataset.shape().size()) {
-    Rf_error("iterators must be of the same length");
-  }
-
-  for (size_t i = 0; i < offset.size(); i++) {
-    if (offset[i] + subarray_shape[i] > dataset.shape()[i] || offset[i] < 0) {
-      Rf_error("out of bounds error");
-    }
-  }
-
-}
-
-inline void check_bounds(const Rcpp::IntegerVector& offset,
-                         const xt::rarray<double>& subarray,
-                         const z5::Dataset& dataset) {
-
-  // TODO: Not sure but I think this is really slow, because it has to be read
-  // from disk every time.
-  if (offset.size() != subarray.dimension() ||
-      offset.size() != dataset.shape().size()) {
-    Rf_error("iterators must be of the same length");
-  }
-
-  for (size_t i = 0; i < offset.size(); i++) {
-    if (offset[i] + subarray.shape()[i] > dataset.shape()[i] || offset[i] < 0) {
-      Rf_error("out of bounds error");
-    }
-  }
-}
 
 /////////////////////////////////////////////////////////////////////////
 // conversions
@@ -152,23 +116,6 @@ template <>           inline unsigned char na() { return NA_LOGICAL; };
 // auto cast_na_l =
 //   [](const FROM x) { return R_IsNA(x) ? na<TO>() : static_cast<TO>(x); };
 
-template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
-inline void transform_write(z5::Dataset &out_data, xt::rarray<FROM_T> &in_data,
-                            z5::types::ShapeType &offset) {
-  std::vector<std::size_t> in_shape;
-  for (auto& s : in_data.shape()) { in_shape.push_back(s); }
-  xt::xarray<TO_T> middle_data(in_shape);
-  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
-                 [](const INNER_FROM_T x) {
-                   if (std::numeric_limits<TO_T>::min() <= x &&
-                       x <= std::numeric_limits<TO_T>::max()) {
-                     return static_cast<TO_T>(x);
-                   }
-
-                   Rf_error("Cannot convert to target value, out of range.");
-                 });
-  z5::multiarray::writeSubarray<TO_T>(out_data, middle_data, offset.begin());
-}
 
 // template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
 // inline void subarray_transform_na(z5::Dataset &out_data,
