@@ -5,6 +5,7 @@ addons:
   apt:
     packages:
       - libboost-dev
+      - libblosc-dev
 
 cache:
   packages: true

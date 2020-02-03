@@ -86,9 +86,9 @@ TYPE_TO_AUTO_FILL_VALUE <- list(
 )
 
 DEFAULT_COMPRESSOR_OPTIONS  <- list(
-  blosc = list(cname = "lzf", clevel = 5L, shuffle = 1L),
   zlib = list(level = 5L, useZlib = TRUE),
   bzip2 = list(level = 2L)
+  blosc = list(cname = "lz4", clevel = 5L, shuffle = 1L),
 )
 
 complete_compression_options <- function (compressor = "raw", opts = list()) {

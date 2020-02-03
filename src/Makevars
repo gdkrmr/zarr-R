@@ -1,7 +1,9 @@
 CXX_STD=CXX14
-PKG_CPPFLAGS=-I"../inst/include" -DWITH_BLOSC
-PKG_LIBS=-lstdc++fs -lblosc
+PKG_CPPFLAGS=-I"../inst/include"
+PKG_LIBS=-lstdc++fs
 
+PKG_CPPFLAGS+=-DWITH_BLOSC
+PKG_LIBS+=-lblosc
 
 ######### TODO for release everything below this line has to be removed!!
 
