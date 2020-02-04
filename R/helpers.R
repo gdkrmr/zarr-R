@@ -85,11 +85,11 @@ TYPE_TO_AUTO_FILL_VALUE <- list(
  float64 = NA_real_
 )
 
+## NOTE: Get these from `readZarrCompressionOptionsFromJson`
 DEFAULT_COMPRESSOR_OPTIONS  <- list(
   blosc = list(cname = "lz4", clevel = 5L, shuffle = 1L),
-  zlib = list(clevel = 5L),
-  glib = list(clevel = 5L),
-  bzip2 = list(clevel = 2L)
+  zlib = list(level = 5L, id = "zlib"),
+  bzip2 = list(level = 2L)
 )
 
 complete_compression_options <- function (compressor = "raw", opts = list()) {
