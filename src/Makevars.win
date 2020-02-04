@@ -1,0 +1,32 @@
+CXX14="$(BINPREF)g++ $(M_ARCH)"
+CXX14FLAGS="-O2 -Wall"
+CXX14STD=-std=gnu1y
+
+CXX_STD=CXX14
+PKG_CPPFLAGS=-I"../inst/include"
+PKG_LIBS=-lstdc++fs
+
+PKG_CPPFLAGS+=-DWITH_BLOSC
+PKG_LIBS+=-lblosc
+
+PKG_CPPFLAGS+=-DWITH_ZLIB
+PKG_CPPFLAGS+=-lzlib
+
+PKG_CPPFLAGS+=-DWITH_BZIP2
+PKG_CPPFLAGS+=-lbzip2
+
+# PKG_CPPFLAGS+=-DWITH_LZ4
+# PKG_CPPFLAGS+=-llz4
+
+
+
+######### TODO for release everything below this line has to be removed!!
+
+
+MAKEFLAGS=-j4
+
+##### this reduces the size of the executable down to 1.3 Mb:
+# strippedLib: $(SHLIB)
+# 	if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" ]] ; \
+#         then /usr/bin/strip --strip-debug $(SHLIB); fi
+# .phony: strippedLib
