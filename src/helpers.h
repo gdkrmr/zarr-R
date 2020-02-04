@@ -31,25 +31,6 @@
 // shouldn't be inlined!
 
 /////////////////////////////////////////////////////////////////////////
-// file mode
-/////////////////////////////////////////////////////////////////////////
-
-
-inline z5::FileMode::modes rfilemode_to_filemode(const std::string & rmode) {
-  if (rmode == "r")  return z5::FileMode::r;
-  if (rmode == "r+") return z5::FileMode::r_p;
-  if (rmode == "w")  return z5::FileMode::w;
-  if (rmode == "w-") return z5::FileMode::w_m;
-  if (rmode == "a")  return z5::FileMode::a;
-  Rf_error("Unsupported file mode");
-}
-
-inline std::string filemode_to_rfilemode(const z5::FileMode m) {
-  return m.printMode();
-}
-
-
-/////////////////////////////////////////////////////////////////////////
 // compressor
 /////////////////////////////////////////////////////////////////////////
 

@@ -4,6 +4,20 @@
 #include <z5/filesystem/handle.hxx>
 #include <z5/util/file_mode.hxx>
 
+z5::FileMode::modes rfilemode_to_filemode(const std::string &rmode) {
+  if (rmode == "r")
+    return z5::FileMode::r;
+  if (rmode == "r+")
+    return z5::FileMode::r_p;
+  if (rmode == "w")
+    return z5::FileMode::w;
+  if (rmode == "w-")
+    return z5::FileMode::w_m;
+  if (rmode == "a")
+    return z5::FileMode::a;
+  Rf_error("Unsupported file mode");
+}
+
 // [[Rcpp::export]]
 Rcpp::XPtr<z5::filesystem::handle::File>
 getFileHandle(const std::string &path, const std::string &mode) {

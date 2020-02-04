@@ -4,6 +4,10 @@
 #include <z5/dataset.hxx>
 #include <z5/types/types.hxx>
 
+std::string filemode_to_rfilemode(const z5::FileMode m) {
+  return m.printMode();
+}
+
 // [[Rcpp::export]]
 bool DatasetIsZarr(Rcpp::XPtr<z5::Dataset> d) { return d->isZarr(); }
 
