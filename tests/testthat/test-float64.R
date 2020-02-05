@@ -39,6 +39,29 @@ test_that("single access", {
     }
   }
 
+  test_data
+
+  dh[1,1]
+  dh[9,9]
+
+  dh[2,]
+  dh[,2]
+  dh[,9]
+  dh[9,]
+
+  dh[1:3,] <- test_data[1:3,]
+  expect_identical(dh[1:3,], test_data[1:3,])
+
+  dh[1:3, 1:3] <- test_data[1:3, 1:3]
+  dh[1:3, 1:3]
+
+  dh[1:2,] <- array(1:18, dim = c(2, 9))
+
+  dh[,] <- test_data
+  expect_identical(dh[,], test_data)
+  dh[, ] <- test_data
+  expect_identical(dh[, ], test_data)
+
   zarr:::DatasetRemove(dh)
 })
 
