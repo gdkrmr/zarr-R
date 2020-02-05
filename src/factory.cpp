@@ -20,7 +20,7 @@ openDatasetDatasetHandle(const Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
 // [[Rcpp::export]]
 Rcpp::XPtr<z5::Dataset>
 openDatasetFileHandle(const Rcpp::XPtr<z5::filesystem::handle::File> f,
-                const std::string &key) {
+                      const std::string &key) {
   std::unique_ptr<z5::Dataset> d = z5::openDataset(*f, key);
   return Rcpp::XPtr<z5::Dataset>(d.release(), true);
 }

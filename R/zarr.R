@@ -99,8 +99,13 @@ create_dataset <- function(x, key, shape, chunk_shape,
 #' @export
 open_dataset <- function(x, key, mode = "a") {
   if (inherits(x, "character")) {
-    fh <- getFileHandle(x, mode)
-    res <- getDatasetHandleFileHandle(fh, key)
+    if (missing(key)) {
+      # TODO: open dataset from path only!
+      # use constructur of z5::Filesystem::Handle::Dataset(path, FileMode)
+    } else {
+      fh <- getFileHandle(x, mode)
+      res <- openDatasetFileHandle(fh, key)
+    }
   } else if (inherits(x, "file_handle")) {
     res <- openDatasetFileHandle(x, key)
   } else if (inherits(x, "group_handle")) {
