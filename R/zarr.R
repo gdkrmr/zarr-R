@@ -61,6 +61,7 @@ create_dataset <- function(x, key, shape, chunk_shape,
 
   if (missing_value == "auto") { missing_value <- fill_value }
 
+  ## TODO: allow creation from character
   if (inherits(x, "group_handle")) {
     if (!GroupHandleExists(x))
       GroupHandleCreate(x, as_zarr)
@@ -161,6 +162,10 @@ dim.zarr_dataset <- function(x) { DatasetShape(x) }
 
   ## quote = TRUE prevents 1:i from expanding
   os <- do.call(range_to_offset_shape, ellipsis_args)
+
+  ## str(os$offset)
+  ## str(os$shape)
+
   res <- readSubarray(x, os$offset, os$shape)
   if (drop) { res <- drop_dim(res) }
 
@@ -193,6 +198,9 @@ dim.zarr_dataset <- function(x) { DatasetShape(x) }
   }
 
   dim(value) <- match_shape(dim(value), os$shape)
+
+  ## str(dim(value))
+  ## str(os$offset)
 
   writeSubarray(x, value, os$offset)
   return(x)

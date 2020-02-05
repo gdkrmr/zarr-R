@@ -31,8 +31,9 @@ void check_bounds(const Rcpp::IntegerVector& offset,
 }
 
 template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
-void transform_write(z5::Dataset &out_data, xt::rarray<FROM_T> &in_data,
-                            z5::types::ShapeType &offset) {
+void transform_write(z5::Dataset &out_data,
+                     xt::rarray<FROM_T> &in_data,
+                     z5::types::ShapeType &offset) {
   std::vector<std::size_t> in_shape;
   for (auto &s : in_data.shape()) {
     in_shape.push_back(s);
@@ -51,7 +52,8 @@ void transform_write(z5::Dataset &out_data, xt::rarray<FROM_T> &in_data,
 }
 
 // [[Rcpp::export]]
-void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds, const SEXP data,
+void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds,
+                   const SEXP data,
                    const Rcpp::IntegerVector &offset) {
 
   auto target_type = ds->getDtype();
