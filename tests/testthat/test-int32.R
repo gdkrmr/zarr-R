@@ -39,6 +39,8 @@ test_that("single access", {
     }
   }
 
+  expect_identical(dh[1:3, 1:3], test_data[1:3, 1:3])
+
   zarr:::DatasetRemove(dh)
 })
 

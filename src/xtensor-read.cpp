@@ -70,11 +70,20 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
   };
 
   case z5::types::int32: {
-    xt::rarray<int32_t> array(shape_);
+    // xt::rarray<int32_t> array(shape_);
 
-    z5::multiarray::readSubarray<int32_t>(*ds, array, offset_.begin());
+    // z5::multiarray::readSubarray<int32_t>(*ds, array, offset_.begin());
 
-    res = wrap(array);
+    // res = wrap(array);
+    // break;
+    xt::xarray<int32_t> middle_array(shape_);
+    xt::rarray<int32_t> out_array(shape_);
+
+    z5::multiarray::readSubarray<int32_t>(*ds, middle_array, offset_.begin());
+    std::transform(middle_array.begin(), middle_array.end(), out_array.begin(),
+                   [](const int32_t x) { return x; });
+
+    res = wrap(out_array);
     break;
   };
 
@@ -154,9 +163,18 @@ SEXP readSubarray(const Rcpp::XPtr<z5::Dataset> ds,
   };
 
   case z5::types::float64: {
-    xt::rarray<double> array(shape_);
-    z5::multiarray::readSubarray<double>(*ds, array, offset_.begin());
-    res = wrap(array);
+
+    // xt::rarray<double> array(shape_);
+    // z5::multiarray::readSubarray<double>(*ds, array, offset_.begin());
+    // res = wrap(array);
+    xt::xarray<double> middle_array(shape_);
+    xt::rarray<double> out_array(shape_);
+
+    z5::multiarray::readSubarray<double>(*ds, middle_array, offset_.begin());
+    std::transform(middle_array.begin(), middle_array.end(), out_array.begin(),
+                   [](const float x) { return x; });
+
+    res = wrap(out_array);
     break;
   };
 

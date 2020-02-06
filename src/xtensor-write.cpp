@@ -34,7 +34,7 @@ template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
 void transform_write(z5::Dataset &out_data,
                      xt::rarray<FROM_T> &in_data,
                      z5::types::ShapeType &offset) {
-  std::vector<std::size_t> in_shape;
+  std::vector<size_t> in_shape;
   for (auto &s : in_data.shape()) {
     in_shape.push_back(s);
   }
@@ -49,6 +49,38 @@ void transform_write(z5::Dataset &out_data,
                    Rf_error("Cannot convert to target value, out of range.");
                  });
   z5::multiarray::writeSubarray<TO_T>(out_data, middle_data, offset.begin());
+}
+
+template <>
+void transform_write<double, double>(z5::Dataset &out_data,
+                                     xt::rarray<double> &in_data,
+                                     z5::types::ShapeType &offset) {
+  std::vector<size_t> in_shape;
+  for (auto & s : in_data.shape()) {
+    in_shape.push_back(s);
+  }
+
+  xt::xarray<double> middle_data(in_shape);
+  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
+                 [](const double x) { return x; });
+
+  z5::multiarray::writeSubarray<double>(out_data, middle_data, offset.begin());
+}
+
+template <>
+void transform_write<int32_t, int32_t>(z5::Dataset &out_data,
+                                       xt::rarray<int32_t> &in_data,
+                                       z5::types::ShapeType &offset) {
+  std::vector<size_t> in_shape;
+  for (auto &s : in_data.shape()) {
+    in_shape.push_back(s);
+  }
+
+  xt::xarray<double> middle_data(in_shape);
+  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
+                 [](const int32_t x) { return x; });
+
+  z5::multiarray::writeSubarray<int32_t>(out_data, middle_data, offset.begin());
 }
 
 // [[Rcpp::export]]
@@ -92,7 +124,8 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds,
     switch (target_type) {
     case z5::types::int8:    { transform_write<  int8_t, int32_t>(*ds, data_, offset_); break; };
     case z5::types::int16:   { transform_write< int16_t, int32_t>(*ds, data_, offset_); break; };
-    case z5::types::int32:   { z5::multiarray::writeSubarray<int32_t>(*ds, data_, offset_.begin()); break;};
+    // case z5::types::int32:   { z5::multiarray::writeSubarray<int32_t>(*ds, data_, offset_.begin()); break;};
+    case z5::types::int32:   { transform_write< int32_t, int32_t>(*ds, data_, offset_); break; };
     case z5::types::int64:   { transform_write< int64_t, int32_t>(*ds, data_, offset_); break; };
     case z5::types::uint8:   { transform_write< uint8_t, int32_t>(*ds, data_, offset_); break; };
     case z5::types::uint16:  { transform_write<uint16_t, int32_t>(*ds, data_, offset_); break; };
@@ -120,7 +153,8 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds,
     case z5::types::uint32:  { transform_write<uint32_t, double>(*ds, data_, offset_); break; };
     case z5::types::uint64:  { transform_write<uint64_t, double>(*ds, data_, offset_); break; };
     case z5::types::float32: { transform_write<   float, double>(*ds, data_, offset_); break; };
-    case z5::types::float64: { z5::multiarray::writeSubarray<double>(*ds, data_, offset_.begin()); break;};
+    // case z5::types::float64: { z5::multiarray::writeSubarray<double>(*ds, data_, offset_.begin()); break;};
+    case z5::types::float64: { transform_write<  double, double>(*ds, data_, offset_); break; };
     default: { Rf_error("Error: Type of R array (Real) and zarr array do not match."); }
     }
     break;
@@ -136,7 +170,8 @@ void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds,
     case z5::types::int16:   { transform_write< int16_t, uint8_t>(*ds, data_, offset_); break; };
     case z5::types::int32:   { transform_write< int32_t, uint8_t>(*ds, data_, offset_); break; };
     case z5::types::int64:   { transform_write< int64_t, uint8_t>(*ds, data_, offset_); break; };
-    case z5::types::uint8:   { z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin()); break; };
+    // case z5::types::uint8:   { z5::multiarray::writeSubarray<uint8_t>(*ds, data_, offset_.begin()); break; };
+    case z5::types::uint8:   { transform_write< uint8_t, uint8_t>(*ds, data_, offset_); break; };
     case z5::types::uint16:  { transform_write<uint16_t, uint8_t>(*ds, data_, offset_); break; };
     case z5::types::uint32:  { transform_write<uint32_t, uint8_t>(*ds, data_, offset_); break; };
     case z5::types::uint64:  { transform_write<uint64_t, uint8_t>(*ds, data_, offset_); break; };

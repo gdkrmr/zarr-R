@@ -64,7 +64,7 @@ test_that("NA_real_", {
 
   for (i in 1:shape[1]) {
     for (j in 1:shape[2]) {
-      expect_identical(dh[i, j, drop = TRUE], fill_value)
+      expect_equal(dh[i, j, drop = TRUE], fill_value)
     }
   }
 
@@ -76,7 +76,7 @@ test_that("NA_real_", {
 
   for (i in 1:shape[1]) {
     for (j in 1:shape[2]) {
-      expect_identical(dh[i, j, drop = TRUE], fill_value)
+      expect_equal(dh[i, j, drop = TRUE], fill_value)
     }
   }
 
