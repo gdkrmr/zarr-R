@@ -1,7 +1,10 @@
 #! /bin/sh
 
-RSCRIPT="/home/gkraemer/bin/Rscript-3.6.2"
-R="/home/gkraemer/bin/R-3.6.2"
+# RSCRIPT="/home/gkraemer/bin/Rscript-3.6.2"
+# R="/home/gkraemer/bin/R-3.6.2"
+
+RSCRIPT="Rscript"
+R=R
 
 echo "== Do Rcpp stuff ====================================="
 $RSCRIPT --vanilla \
