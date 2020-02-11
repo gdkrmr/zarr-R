@@ -8,47 +8,7 @@
 // #include "Rinternals.h"
 #include <Rcpp.h>
 #include <nlohmann/json.hpp>
-#include <z5/common.hxx>
-
-// #ifdef WITH_BOOST_FS
-//   #ifndef BOOST_FILESYSTEM_NO_DEPERECATED
-//     #define BOOST_FILESYSTEM_NO_DEPERECATED
-//   #endif
-//   #include <boost/filesystem.hpp>
-//   namespace fs = boost::filesystem;
-// #else
-//   #if __GCC__ > 7
-//     #include <filesystem>
-//     namespace fs = std::filesystem;
-//   #else
-//     #include <experimental/filesystem>
-//     namespace fs = std::experimental::filesystem;
-//   #endif
-// #endif
-
-inline void read_json_from_disk(fs::path& path, nlohmann::json& j) {
-
-  #ifdef WITH_BOOST_FS
-    fs::ifstream file(path);
-  #else
-    std::ifstream file(path);
-  #endif
-
-  file >> j;
-  file.close();
-}
-
-inline void write_json_to_disk(fs::path& path, nlohmann::json& j) {
-
-  #ifdef WITH_BOOST_FS
-    fs::ofstream file(path);
-  #else
-    std::ofstream file(path);
-  #endif
-
-  file << j;
-  file.close();
-}
+/* #include <z5/common.hxx> */
 
 /////////////////////////////////////////////////////////////////////////
 // json <-> list

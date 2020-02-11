@@ -31,6 +31,34 @@
 // shouldn't be inlined!
 
 /////////////////////////////////////////////////////////////////////////
+// json disk IO
+/////////////////////////////////////////////////////////////////////////
+
+inline void read_json_from_disk(fs::path &path, nlohmann::json &j) {
+
+#ifdef WITH_BOOST_FS
+  fs::ifstream file(path);
+#else
+  std::ifstream file(path);
+#endif
+
+  file >> j;
+  file.close();
+}
+
+inline void write_json_to_disk(fs::path &path, nlohmann::json &j) {
+
+#ifdef WITH_BOOST_FS
+  fs::ofstream file(path);
+#else
+  std::ofstream file(path);
+#endif
+
+  file << j;
+  file.close();
+}
+
+/////////////////////////////////////////////////////////////////////////
 // compressor
 /////////////////////////////////////////////////////////////////////////
 
