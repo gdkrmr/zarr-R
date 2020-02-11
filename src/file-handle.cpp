@@ -50,7 +50,7 @@ bool FileHandleIsZarr(Rcpp::XPtr<z5::filesystem::handle::File> f) {
 
 // [[Rcpp::export]]
 std::string FileHandlePath(Rcpp::XPtr<z5::filesystem::handle::File> f) {
-  return std::string(f->path());
+  return f->path().string();
 }
 
 // [[Rcpp::export]]

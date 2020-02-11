@@ -33,7 +33,7 @@ int DatasetSize(const Rcpp::XPtr<z5::Dataset> d) {
 
 // [[Rcpp::export]]
 std::string DatasetPath(const Rcpp::XPtr<z5::Dataset> d) {
-  return std::string(d->path());
+  return d->path().string();
 }
 
 // [[Rcpp::export]]

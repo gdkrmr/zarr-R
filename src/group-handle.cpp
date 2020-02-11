@@ -44,7 +44,7 @@ bool GroupHandleIsZarr(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
 
 // [[Rcpp::export]]
 std::string GroupHandlePath(Rcpp::XPtr<z5::filesystem::handle::Group> g) {
-  return std::string(g->path());
+  return g->path().string();
 }
 
 // [[Rcpp::export]]

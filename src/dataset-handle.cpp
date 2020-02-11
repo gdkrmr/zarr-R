@@ -43,7 +43,7 @@ bool DatasetHandleIsZarr(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
 
 // [[Rcpp::export]]
 std::string DatasetHandlePath(Rcpp::XPtr<z5::filesystem::handle::Dataset> d) {
-  return std::string(d->path());
+  return d->path().string();
 }
 
 // [[Rcpp::export]]
