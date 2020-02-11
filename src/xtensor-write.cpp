@@ -30,14 +30,15 @@ void check_bounds(const Rcpp::IntegerVector& offset,
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// transform_write
+////////////////////////////////////////////////////////////////////////////////
+
 template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
 void transform_write(z5::Dataset &out_data,
                      xt::rarray<FROM_T> &in_data,
                      z5::types::ShapeType &offset) {
-  std::vector<size_t> in_shape;
-  for (auto &s : in_data.shape()) {
-    in_shape.push_back(s);
-  }
+  std::vector<size_t> in_shape(in_data.shape().begin(), in_data.shape().end());
   xt::xarray<TO_T> middle_data(in_shape);
   std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
                  [](const INNER_FROM_T x) {
@@ -55,15 +56,10 @@ template <>
 void transform_write<double, double>(z5::Dataset &out_data,
                                      xt::rarray<double> &in_data,
                                      z5::types::ShapeType &offset) {
-  std::vector<size_t> in_shape;
-  for (auto & s : in_data.shape()) {
-    in_shape.push_back(s);
-  }
-
+  std::vector<size_t> in_shape(in_data.shape().begin(), in_data.shape().end());
   xt::xarray<double> middle_data(in_shape);
-  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
-                 [](const double x) { return x; });
 
+  std::copy(in_data.begin(), in_data.end(), middle_data.begin());
   z5::multiarray::writeSubarray<double>(out_data, middle_data, offset.begin());
 }
 
@@ -71,17 +67,16 @@ template <>
 void transform_write<int32_t, int32_t>(z5::Dataset &out_data,
                                        xt::rarray<int32_t> &in_data,
                                        z5::types::ShapeType &offset) {
-  std::vector<size_t> in_shape;
-  for (auto &s : in_data.shape()) {
-    in_shape.push_back(s);
-  }
-
+  std::vector<size_t> in_shape(in_data.shape().begin(), in_data.shape().end());
   xt::xarray<double> middle_data(in_shape);
-  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
-                 [](const int32_t x) { return x; });
 
+  std::copy(in_data.begin(), in_data.end(), middle_data.begin());
   z5::multiarray::writeSubarray<int32_t>(out_data, middle_data, offset.begin());
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// writeSubarray
+////////////////////////////////////////////////////////////////////////////////
 
 // [[Rcpp::export]]
 void writeSubarray(const Rcpp::XPtr<z5::Dataset> &ds,
