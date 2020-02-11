@@ -1,6 +1,14 @@
 CXX_STD=CXX14
 PKG_CPPFLAGS=-I"../inst/include"
+
 PKG_LIBS=-lstdc++fs
+
+# This fails under Ubuntu 16.04! Probably because it uses the R package BH for
+# the boost headers, but BH doesn't provide libboost_filesystem.so and therefore
+# the system version is being used, which probably is incompatible.
+
+# PKG_CPPFLAGS+=-DWITH_BOOST_FS
+# PKG_LIBS+=-lboost_filesystem
 
 PKG_CPPFLAGS+=-DWITH_BLOSC
 PKG_LIBS+=-lblosc
