@@ -17,14 +17,14 @@ test_that("single access", {
                              fill_value = fill_value, data_type = data_type)
 
   expect_equal(zarr:::readSubarray(dh, c(1, 1, 1), c(1, 1, 1)),
-               array(fill_value, dim = rep(1, length(shape))))
+               array(NA_real_, dim = rep(1, length(shape))))
   expect_equal(dim(get_dataset_metadata(dh)), shape)
   expect_equal(dim(dh), shape)
 
   for (i in 1:shape[1]) {
     for (j in 1:shape[2]) {
       for (k in 1:shape[3]) {
-        expect_identical(dh[i, j, k, drop = TRUE], fill_value)
+        expect_identical(dh[i, j, k, drop = TRUE], NA_real_)
       }
     }
   }
@@ -79,13 +79,13 @@ test_that("row access", {
   d <- zarr:::get_dataset_handle(f, "dataset1")
   dh <- zarr::create_dataset(d, shape = shape, chunk_shape = chunk_shape, fill_value = fill_value, data_type = data_type)
 
-  expect_equal(zarr:::readSubarray(dh, c(1, 1), c(1, 1)), array(fill_value, dim = rep(1, length(shape))))
+  expect_equal(zarr:::readSubarray(dh, c(1, 1), c(1, 1)), array(NA_real_, dim = rep(1, length(shape))))
   expect_equal(dim(get_dataset_metadata(dh)), shape)
   expect_equal(dim(dh), shape)
 
   for (j in 1:shape[2]) {
-    expect_identical(dh[, j, drop = TRUE], rep(fill_value, shape[2]))
-    expect_identical(dh[, j], array(fill_value, dim = c(shape[2], 1)))
+    expect_identical(dh[, j, drop = TRUE], rep(NA_real_, shape[2]))
+    expect_identical(dh[, j], array(NA_real_, dim = c(shape[2], 1)))
   }
 
   for (j in 1:shape[2]) {
@@ -116,13 +116,13 @@ test_that("column access", {
                              fill_value = fill_value, data_type = data_type)
 
   expect_equal(zarr:::readSubarray(dh, c(1, 1), c(1, 1)),
-               array(fill_value, dim = rep(1, length(shape))))
+               array(NA_real_, dim = rep(1, length(shape))))
   expect_equal(dim(get_dataset_metadata(dh)), shape)
   expect_equal(dim(dh), shape)
 
   for (j in 1:shape[2]) {
-    expect_identical(dh[j, , drop = TRUE], rep(fill_value, shape[2]))
-    expect_identical(dh[j, ], array(fill_value, dim = c(1, shape[2])))
+    expect_identical(dh[j, , drop = TRUE], rep(NA_real_, shape[2]))
+    expect_identical(dh[j, ], array(NA_real_, dim = c(1, shape[2])))
   }
 
   for (j in 1:shape[2]) {

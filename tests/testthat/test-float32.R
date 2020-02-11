@@ -16,14 +16,14 @@ test_that("single access", {
   dh <- zarr::create_dataset(d, shape = shape, chunk_shape = chunk_shape,
                              fill_value = fill_value, data_type = data_type)
 
-  expect_equal(zarr:::readSubarray(dh, c(1, 1), c(1, 1)),
-               array(fill_value, dim = rep(1, length(shape))), tolerance = 1e-5)
+  expect_identical(zarr:::readSubarray(dh, c(1, 1), c(1, 1)),
+                   array(NA_real_, dim = rep(1, length(shape))))
   expect_equal(dim(get_dataset_metadata(dh)), shape, tolerance = 1e-5)
   expect_equal(dim(dh), shape, tolerance = 1e-5)
 
   for (i in 1:shape[1]) {
     for (j in 1:shape[2]) {
-      expect_equal(dh[i, j, drop = TRUE], fill_value, tolerance = 1e-5)
+      expect_identical(dh[i, j, drop = TRUE], NA_real_)
     }
   }
 
@@ -56,13 +56,13 @@ test_that("row access", {
   d <- zarr:::get_dataset_handle(f, "dataset1")
   dh <- zarr::create_dataset(d, shape = shape, chunk_shape = chunk_shape, fill_value = fill_value, data_type = data_type)
 
-  expect_equal(zarr:::readSubarray(dh, c(1, 1), c(1, 1)), array(fill_value, dim = rep(1, length(shape))), tolerance = 1e-5)
+  expect_identical(zarr:::readSubarray(dh, c(1, 1), c(1, 1)), array(NA_real_, dim = rep(1, length(shape))))
   expect_equal(dim(get_dataset_metadata(dh)), shape, tolerance = 1e-5)
   expect_equal(dim(dh), shape, tolerance = 1e-5)
 
   for (j in 1:shape[2]) {
-    expect_equal(dh[, j, drop = TRUE], rep(fill_value, shape[2]), tolerance = 1e-5)
-    expect_equal(dh[, j], array(fill_value, dim = c(shape[2], 1)), tolerance = 1e-5)
+    expect_identical(dh[, j, drop = TRUE], rep(NA_real_, shape[2]))
+    expect_identical(dh[, j], array(NA_real_, dim = c(shape[2], 1)))
   }
 
   for (j in 1:shape[2]) {
@@ -92,14 +92,14 @@ test_that("column access", {
   dh <- zarr::create_dataset(d, shape = shape, chunk_shape = chunk_shape,
                              fill_value = fill_value, data_type = data_type)
 
-  expect_equal(zarr:::readSubarray(dh, c(1, 1), c(1, 1)),
-               array(fill_value, dim = rep(1, length(shape))), tolerance = 1e-5)
+  expect_identical(zarr:::readSubarray(dh, c(1, 1), c(1, 1)),
+                   array(NA_real_, dim = rep(1, length(shape))))
   expect_equal(dim(get_dataset_metadata(dh)), shape, tolerance = 1e-5)
   expect_equal(dim(dh), shape, tolerance = 1e-5)
 
   for (j in 1:shape[2]) {
-    expect_equal(dh[j, , drop = TRUE], rep(fill_value, shape[2]), tolerance = 1e-5)
-    expect_equal(dh[j, ], array(fill_value, dim = c(1, shape[2])), tolerance = 1e-5)
+    expect_identical(dh[j, , drop = TRUE], rep(NA_real_, shape[2]))
+    expect_identical(dh[j, ], array(NA_real_, dim = c(1, shape[2])))
   }
 
   for (j in 1:shape[2]) {

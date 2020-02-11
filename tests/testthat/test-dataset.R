@@ -19,14 +19,18 @@ test_that("dataset", {
   chunk_shape1 <- c(3, 3, 3)
   shape2 <- c(4, 4, 4)
   chunk_shape2 <- c(2, 2, 2)
+  shape3 <- c(8, 8, 8)
+  chunk_shape3 <- c(2, 2, 2)
 
   d0 <- zarr::create_dataset(f,  "dataset0", shape0, chunk_shape0)
   d1 <- zarr::create_dataset(g1, "dataset1", shape1, chunk_shape1)
   d2 <- zarr::create_dataset(g2, "dataset2", shape2, chunk_shape2)
+  d3 <- zarr::create_dataset(path, "dataset3", shape3, chunk_shape3)
 
   dd0 <- zarr::open_dataset(f, "dataset0")
   dd1 <- zarr::open_dataset(g1, "dataset1")
   dd2 <- zarr::open_dataset(g2, "dataset2")
+  dd3 <- zarr::open_dataset(path, "dataset3")
 
   ddd1 <- zarr::open_dataset(f, "group1/dataset1")
   ddd2 <- zarr::open_dataset(f, "group1/group2/dataset2")
@@ -40,7 +44,9 @@ test_that("dataset", {
   expect_equal(get_dataset_metadata(d2), get_dataset_metadata(ddd2))
   expect_equal(get_dataset_metadata(d2), get_dataset_metadata(dddd2))
 
-  d_list <- list(d0, d1, d2, dd0, dd1, dd2, ddd1, ddd2, dddd2)
+  expect_equal(get_dataset_metadata(d3), get_dataset_metadata(dd3))
+
+  d_list <- list(d0, d1, d2, dd0, dd1, dd2, ddd1, ddd2, dddd2, d3, dd3)
 
   lapply(d_list, function(x) expect_true(DatasetIsZarr(x)))
   lapply(d_list, function(x) expect_equal(DatasetGetDtype(x), "float64"))
@@ -54,6 +60,8 @@ test_that("dataset", {
   expect_equal(DatasetDimension(dd2), length(shape2))
   expect_equal(DatasetDimension(ddd2), length(shape2))
   expect_equal(DatasetDimension(dddd2), length(shape2))
+  expect_equal(DatasetDimension(d3), length(shape3))
+  expect_equal(DatasetDimension(dd3), length(shape3))
 
   expect_equal(DatasetShape(d0), shape0)
   expect_equal(DatasetShape(dd0), shape0)
@@ -64,6 +72,8 @@ test_that("dataset", {
   expect_equal(DatasetShape(dd2), shape2)
   expect_equal(DatasetShape(ddd2), shape2)
   expect_equal(DatasetShape(dddd2), shape2)
+  expect_equal(DatasetShape(d3), shape3)
+  expect_equal(DatasetShape(dd3), shape3)
 
   expect_equal(DatasetSize(d0), prod(shape0))
   expect_equal(DatasetSize(dd0), prod(shape0))
@@ -74,6 +84,8 @@ test_that("dataset", {
   expect_equal(DatasetSize(dd2), prod(shape2))
   expect_equal(DatasetSize(ddd2), prod(shape2))
   expect_equal(DatasetSize(dddd2), prod(shape2))
+  expect_equal(DatasetSize(d3), prod(shape3))
+  expect_equal(DatasetSize(dd3), prod(shape3))
 
   expect_equal(DatasetPath(d0), paste0(path, "/dataset0"))
   expect_equal(DatasetPath(dd0), paste0(path, "/dataset0"))
@@ -84,6 +96,8 @@ test_that("dataset", {
   expect_equal(DatasetPath(dd2), paste0(path, "/group1/group2/dataset2"))
   expect_equal(DatasetPath(ddd2), paste0(path, "/group1/group2/dataset2"))
   expect_equal(DatasetPath(dddd2), paste0(path, "/group1/group2/dataset2"))
+  expect_equal(DatasetPath(d3), paste0(path, "/dataset3"))
+  expect_equal(DatasetPath(dd3), paste0(path, "/dataset3"))
 
   lapply(d_list, function(x) expect_true(is.na(DatasetGetFillValue(x))))
   lapply(d_list, function(x) expect_equal(DatasetGetCompressor(x), "raw"))
@@ -98,6 +112,8 @@ test_that("dataset", {
   expect_equal(DatasetGetDefaultChunkShape(dd2), chunk_shape2)
   expect_equal(DatasetGetDefaultChunkShape(ddd2), chunk_shape2)
   expect_equal(DatasetGetDefaultChunkShape(dddd2), chunk_shape2)
+  expect_equal(DatasetGetDefaultChunkShape(d3), chunk_shape3)
+  expect_equal(DatasetGetDefaultChunkShape(dd3), chunk_shape3)
 
   expect_equal(DatasetGetDefaultChunkSize(d0), prod(chunk_shape0))
   expect_equal(DatasetGetDefaultChunkSize(dd0), prod(chunk_shape0))
@@ -108,14 +124,18 @@ test_that("dataset", {
   expect_equal(DatasetGetDefaultChunkSize(dd2), prod(chunk_shape2))
   expect_equal(DatasetGetDefaultChunkSize(ddd2), prod(chunk_shape2))
   expect_equal(DatasetGetDefaultChunkSize(dddd2), prod(chunk_shape2))
+  expect_equal(DatasetGetDefaultChunkSize(d3), prod(chunk_shape3))
+  expect_equal(DatasetGetDefaultChunkSize(dd3), prod(chunk_shape3))
 
   DatasetRemove(d0)
   DatasetRemove(d1)
   DatasetRemove(d2)
+  DatasetRemove(d3)
 
   expect_error(DatasetRemove(dd0))
   expect_error(DatasetRemove(dd1))
   expect_error(DatasetRemove(dd2))
+  expect_error(DatasetRemove(dd3))
   expect_error(DatasetRemove(ddd1))
   expect_error(DatasetRemove(ddd2))
   expect_error(DatasetRemove(dddd2))
