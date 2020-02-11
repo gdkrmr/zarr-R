@@ -100,6 +100,14 @@ complete_compression_options <- function (compressor = "raw", opts = list()) {
   opts
 }
 
+normalize_path <- function(path) {
+  path <- gsub("\\", "/", path, fixed = TRUE)
+  path <- sub("^/+", "", path)
+  path <- sub("/+$", "", path)
+  path <- gsub("/+", "/", path)
+  path
+}
+
 .onUnload <- function(libpath) {
   library.dynam.unload("zarr", libpath)
 }
