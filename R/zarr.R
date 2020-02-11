@@ -61,8 +61,14 @@ create_dataset <- function(x, key, shape, chunk_shape,
 
   if (missing_value == "auto") { missing_value <- fill_value }
 
-  ## TODO: allow creation from character
-  if (inherits(x, "group_handle")) {
+  if (inherits(x, "character")) {
+    file_handle <- get_file_handle(x, file_mode)
+    if (!FileHandleExists(file_handle))
+      FileHandleCreate(x, as_zarr)
+    res <- createDatasetFileHandle(file_handle, key, data_type, shape,
+                                   chunk_shape, compressor, compression_options,
+                                   as_zarr, fill_value)
+  } else if (inherits(x, "group_handle")) {
     if (!GroupHandleExists(x))
       GroupHandleCreate(x, as_zarr)
     res <- createDatasetGroupHandle(x, key, data_type, shape, chunk_shape,
