@@ -30,6 +30,7 @@ void check_bounds(const Rcpp::IntegerVector& offset,
   }
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////
 // transform_write
 ////////////////////////////////////////////////////////////////////////////////
@@ -38,41 +39,18 @@ template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
 void transform_write(z5::Dataset &out_data,
                      xt::rarray<FROM_T> &in_data,
                      z5::types::ShapeType &offset) {
+  TO_T fill_value = get_fill_value<TO_T, TO_T>(out_data);
   std::vector<size_t> in_shape(in_data.shape().begin(), in_data.shape().end());
   xt::xarray<TO_T> middle_data(in_shape);
-  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
-                 [](const INNER_FROM_T x) {
-                   if (std::numeric_limits<TO_T>::min() <= x &&
-                       x <= std::numeric_limits<TO_T>::max()) {
-                     return static_cast<TO_T>(x);
-                   }
 
-                   Rf_error("Cannot convert to target value, out of range.");
+  std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
+                 [fill_value](const INNER_FROM_T x) {
+                   return isna(x) ? fill_value : narrow<TO_T>(x);
                  });
+
   z5::multiarray::writeSubarray<TO_T>(out_data, middle_data, offset.begin());
 }
 
-template <>
-void transform_write<double, double>(z5::Dataset &out_data,
-                                     xt::rarray<double> &in_data,
-                                     z5::types::ShapeType &offset) {
-  std::vector<size_t> in_shape(in_data.shape().begin(), in_data.shape().end());
-  xt::xarray<double> middle_data(in_shape);
-
-  std::copy(in_data.begin(), in_data.end(), middle_data.begin());
-  z5::multiarray::writeSubarray<double>(out_data, middle_data, offset.begin());
-}
-
-template <>
-void transform_write<int32_t, int32_t>(z5::Dataset &out_data,
-                                       xt::rarray<int32_t> &in_data,
-                                       z5::types::ShapeType &offset) {
-  std::vector<size_t> in_shape(in_data.shape().begin(), in_data.shape().end());
-  xt::xarray<double> middle_data(in_shape);
-
-  std::copy(in_data.begin(), in_data.end(), middle_data.begin());
-  z5::multiarray::writeSubarray<int32_t>(out_data, middle_data, offset.begin());
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // writeSubarray

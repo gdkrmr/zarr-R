@@ -92,6 +92,7 @@ inline Rcpp::IntegerVector shapetype_to_intvec(const z5::types::ShapeType& shape
   return Rcpp::wrap(sizet_vec);
 }
 
+
 /////////////////////////////////////////////////////////////////////////
 // dtype
 /////////////////////////////////////////////////////////////////////////
@@ -104,37 +105,47 @@ inline std::string datatype_to_string(const z5::types::Datatype dtype) {
   return z5::types::Datatypes::dtypeToN5()[dtype];
 }
 
-/////////////////////////////////////////////////////////////////////////
-// bounds checking
-/////////////////////////////////////////////////////////////////////////
 
-
-/////////////////////////////////////////////////////////////////////////
-// conversions
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+// NAs and NaNs
+//
+// NA_real_ is actually a NaN value and therefore has to be treated separately
+////////////////////////////////////////////////////////////////////////////////
 
 template <typename T> inline T             na();
 template <>           inline double        na() { return NA_REAL;    };
 template <>           inline int           na() { return NA_INTEGER; };
+// This function is wrong but without it the thing won't compile.
+// TODO: figure out where it is being used!
 template <>           inline unsigned char na() { return NA_LOGICAL; };
+// template <>           inline int           na() { return NA_LOGICAL; };
 
-// template <typename FROM, typename TO>
-// auto cast_l = [](const FROM x) { return static_cast<TO>(x); };
-
-// template <typename FROM, typename TO>
-// auto cast_na_l =
-//   [](const FROM x) { return R_IsNA(x) ? na<TO>() : static_cast<TO>(x); };
+template <typename T> inline bool isna(T x)        { return x == na<T>(); };
+template <>           inline bool isna(float x)    { return std::isnan(x); };
+template <>           inline bool isna(double x)   { return std::isnan(x); };
+// template <>           inline bool isna(rlogical x) { return x == NA_LOGICAL; };
 
 
-// template <typename TO_T, typename INNER_FROM_T, typename FROM_T>
-// inline void subarray_transform_na(z5::Dataset &out_data,
-//                                         xt::rarray<FROM_T> &in_data,
-//                                         z5::types::ShapeType &offset) {
-//   xt::xarray<TO_T> middle_data(in_data.dimension());
-//   std::transform(in_data.begin(), in_data.end(), middle_data.begin(),
-//                  cast_na_l<INNER_FROM_T, TO_T>);
-//   /* z5::multiarray::writeSubarray<int8_t>(out_data, middle_data, offset.begin()); */
-// }
+////////////////////////////////////////////////////////////////////////////////
+// narrow:
+//
+// This is function is adapted from the Microsoft GSL library, MIT licensed.
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename T, typename U>
+inline T narrow(U u) {
+  T t = static_cast<T>(u);
+  if(static_cast<U>(t) != u)
+    Rf_error("Narrow: Conversion failed");
+  return t;
+}
+
+// We need to actually allow loss of precision when converting from double to
+// float
+template <>
+inline float narrow(double u) {
+  return static_cast<float>(u);
+}
 
 /////////////////////////////////////////////////////////////////////////
 // fill value
