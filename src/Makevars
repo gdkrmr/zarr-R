@@ -1,36 +1,5 @@
 CXX_STD=CXX14
-PKG_CPPFLAGS=-I"../inst/include"
-
-PKG_LIBS=-lstdc++fs
-
-# This fails under Ubuntu 16.04! Probably because it uses the R package BH for
-# the boost headers, but BH doesn't provide libboost_filesystem.so and therefore
-# the system version is being used, which probably is incompatible.
-
-# PKG_CPPFLAGS+=-DWITH_BOOST_FS
-# PKG_LIBS+=-lboost_filesystem
-
-PKG_CPPFLAGS+=-DWITH_BLOSC
-PKG_LIBS+=-lblosc
-
-PKG_CPPFLAGS+=-DWITH_ZLIB
-PKG_CPPFLAGS+=-lzlib
-
-PKG_CPPFLAGS+=-DWITH_BZIP2
-PKG_CPPFLAGS+=-lbzip2
-
-# PKG_CPPFLAGS+=-DWITH_LZ4
-# PKG_CPPFLAGS+=-llz4
-
-
-
-######### TODO for release everything below this line has to be removed!!
-
+PKG_CPPFLAGS=-I"../inst/include" -DWITH_BLOSC -DWITH_ZLIB -lzlib -DWITH_BZIP2 -lbzip2
+PKG_LIBS=-lstdc++fs -lblosc
 
 MAKEFLAGS=-j4
-
-##### this reduces the size of the executable down to 1.3 Mb:
-# strippedLib: $(SHLIB)
-# 	if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" ]] ; \
-#         then /usr/bin/strip --strip-debug $(SHLIB); fi
-# .phony: strippedLib
