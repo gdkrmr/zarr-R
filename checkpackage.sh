@@ -1,7 +1,7 @@
 #! /bin/sh
 
-RSCRIPT="/home/gkraemer/bin/Rscript-3.6.2"
-R="/home/gkraemer/bin/R-3.6.2"
+RSCRIPT="/home/gkraemer/bin/Rscript-4.0.3"
+R="/home/gkraemer/bin/R-4.0.3"
 
 echo "== Do Rcpp stuff ====================================="
 $RSCRIPT --vanilla \
