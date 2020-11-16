@@ -14,7 +14,7 @@ Depends: R (>= 3.0.0)
 Imports: Rcpp
 Suggests: testthat
 LinkingTo: Rcpp, xtensor, testthat, BH
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 Collate: 
     'RcppExports.R'
     'attributes.R'
