@@ -182,7 +182,7 @@ dim.zarr_dataset <- function(x) { DatasetShape(x) }
 `[<-.zarr_dataset` <- function(x, ..., value) {
 
   ellipsis_args <- as.list(match.call())[-1:-2]
-  ellipsis_args$value <- NULL
+ ellipsis_args$value <- NULL
   dim_x <- dim(x)
 
   for (i in seq_along(ellipsis_args)) {
