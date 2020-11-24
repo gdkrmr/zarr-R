@@ -3,7 +3,7 @@ Title: The Zarr File Format in R
 Version: 0.0.0.00000
 Authors@R: c(
     person("Guido", "Kraemer",
-           email = "gkraemer@bgc-jena.mpg.de",
+           email = "guido.kraemer@uni-leipzig.de",
            role = c("aut", "cre"))
     )
 Description: Wrapping the z5 headers for R.
