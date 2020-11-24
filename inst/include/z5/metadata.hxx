@@ -120,19 +120,19 @@ namespace z5 {
             shape = types::ShapeType(j["shape"].begin(), j["shape"].end());
             chunkShape = types::ShapeType(j["chunks"].begin(), j["chunks"].end());
 
-            const auto &fillValJson = j["fill_value"];
-            if (fillValJson.type() == nlohmann::json::value_t::string) {
-              if (fillValJson == "NaN") {
-                fillValue = std::numeric_limits<double>::quiet_NaN();
-              } else if (fillValJson == "Infinity") {
-                fillValue = std::numeric_limits<double>::infinity();
-              } else if (fillValJson == "-Infinity") {
-                fillValue = -std::numeric_limits<double>::infinity();
-              } else {
-                throw std::runtime_error("Invalid string value for fillValue");
-              }
+            const auto & fillValJson = j["fill_value"];
+            if(fillValJson.type() == nlohmann::json::value_t::string) {
+                if (fillValJson == "NaN") {
+                    fillValue = std::numeric_limits<double>::quiet_NaN();
+                } else if (fillValJson == "Infinity") {
+                    fillValue = std::numeric_limits<double>::infinity();
+                } else if (fillValJson == "-Infinity") {
+                    fillValue = -std::numeric_limits<double>::infinity();
+                } else {
+                    throw std::runtime_error("Invalid string value for fillValue");
+                }
             } else {
-              fillValue = static_cast<double>(fillValJson);
+                fillValue = static_cast<double>(fillValJson);
             }
 
             const auto & compressionOpts = j["compressor"];

@@ -5,7 +5,7 @@
 
 // TODO: for some reason this file must be included *after* helpers.h
 
-// #include "Rinternals.h"
+/* #include "Rinternals.h" */
 #include <Rcpp.h>
 #include <nlohmann/json.hpp>
 /* #include <z5/common.hxx> */

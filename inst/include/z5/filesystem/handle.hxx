@@ -83,6 +83,10 @@ namespace handle {
             : BaseType(group.mode()), HandleImpl(group.path() / key) {
         }
 
+        Group(const fs::path & path, const FileMode mode=FileMode())
+            : BaseType(mode), HandleImpl(path) {
+        }
+
         // Implement th handle API
         inline bool isS3() const {return false;}
         inline bool isGcs() const {return false;}
@@ -290,6 +294,29 @@ namespace handle {
         std::string dummy_;
     };
 
+
+    //
+    // additional handle factory functions for compatability with C
+    //
+
+    // TODO need to expose FileMode as well
+    // get z5::filesystem::handle::File from char pointer corresponding
+    // to the file on filesystem
+    inline File getFileHandle(const char * path) {
+        fs::path path_(std::string(path));
+        File ret(path);
+        return ret;
+    }
+
+    // get z5::filesystem::handle::File from char pointer corresponding
+    // to the file on filesystem and char pointer corresponding to key of the group
+    inline Group getGroupHandle(const char * path, const char * key) {
+        const auto file = getFileHandle(path);
+        Group ret(file, std::string(key));
+        return ret;
+    }
+
+
 } // namespace::handle
-} // namespace::fs
+} // namespace::filesystem
 } // namespace::z5

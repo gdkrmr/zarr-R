@@ -1,6 +1,5 @@
-CXX_STD=CXX14
+CXX_STD=CXX17
 PKG_CPPFLAGS=-I"../inst/include"
-
 PKG_LIBS=-lstdc++fs
 
 # This fails under Ubuntu 16.04! Probably because it uses the R package BH for
@@ -27,7 +26,7 @@ PKG_CPPFLAGS+=-lbzip2
 ######### TODO for release everything below this line has to be removed!!
 
 
-MAKEFLAGS=-j1
+MAKEFLAGS=-j16
 
 ##### this reduces the size of the executable down to 1.3 Mb:
 # strippedLib: $(SHLIB)

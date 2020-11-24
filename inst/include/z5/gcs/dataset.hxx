@@ -1,5 +1,4 @@
 #pragma once
-
 #include "z5/dataset.hxx"
 #include "z5/gcs/handle.hxx"
 #include <Rcpp.h>
