@@ -12,7 +12,7 @@ Wrapping the z5 headers for R.
 This package wraps C++ Code for Zarr Arrays and makes it available to R.
 }
 \author{
-\strong{Maintainer}: Guido Kraemer \email{gkraemer@bgc-jena.mpg.de}
+\strong{Maintainer}: Guido Kraemer \email{guido.kraemer@uni-leipzig.de}
 
 }
 \keyword{internal}
