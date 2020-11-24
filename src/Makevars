@@ -1,5 +1,5 @@
 CXX_STD=CXX17
-PKG_CPPFLAGS=-I"../inst/include"
+PKG_CPPFLAGS=-I"../inst/include" -DWITH_BLOSC -lblosc -DWITH_ZLIB -lzlib -DWITH_BZIP2 -lbzip2
 PKG_LIBS=-lstdc++fs
 
 # This fails under Ubuntu 16.04! Probably because it uses the R package BH for
@@ -8,15 +8,6 @@ PKG_LIBS=-lstdc++fs
 
 # PKG_CPPFLAGS+=-DWITH_BOOST_FS
 # PKG_LIBS+=-lboost_filesystem
-
-PKG_CPPFLAGS+=-DWITH_BLOSC
-PKG_LIBS+=-lblosc
-
-PKG_CPPFLAGS+=-DWITH_ZLIB
-PKG_CPPFLAGS+=-lzlib
-
-PKG_CPPFLAGS+=-DWITH_BZIP2
-PKG_CPPFLAGS+=-lbzip2
 
 # PKG_CPPFLAGS+=-DWITH_LZ4
 # PKG_CPPFLAGS+=-llz4
