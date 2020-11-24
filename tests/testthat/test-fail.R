@@ -52,7 +52,7 @@ zarr:::ListToMetadata(list(compressor = "raw"))
 
 is.null(list()[["sdf"]])
 
-  devtools::install_github("gdkrmr/zarr-R")
+  ## devtools::install_github("gdkrmr/zarr-R")
 
   ds <- zarr::open_dataset("/run/user/1001/gvfs/sftp:host=atacama/scratch/gkraemer/fftpca/results/cfft_pca.cube", "layer", mode = "r")
 
