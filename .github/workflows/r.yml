@@ -32,7 +32,7 @@ jobs:
 
       - name: Set up libraries macOS
         if: startsWith(matrix.os, 'macOS')
-        run: echo "macOS"
+        run: brew install c-blosc
         shell: sh {0}
 
       - name: Set up R ${{ matrix.r-version }}
