@@ -20,13 +20,15 @@ jobs:
     strategy:
       matrix:
         r-version: [3.5, 3.6, 4.0]
-        os: [ubuntu-20.04]
+        os: [ubuntu-18.04, ubuntu-20.04]
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Set up libraries
         run: sudo apt-get install libblosc-dev
         shell: sh {0}
+
       - name: Set up R ${{ matrix.r-version }}
         uses: r-lib/actions/setup-r@master
         with:
