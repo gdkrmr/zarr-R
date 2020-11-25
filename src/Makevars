@@ -1,11 +1,13 @@
 CXX_STD=CXX17
 
-ifeq "$(OSTYPE)" "darwin"*
-PKG_CPPFLAGS=-I"../inst/include" -DWITH_BLOSC -DWITH_ZLIB -DWITH_BZIP2 -DWITH_BOOST_FS
-PKG_LIBS=-lblosc -lz -lbz2 -lboost_filesystem
+####### TODO: This is not portable ######################
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	PKG_CPPFLAGS=-I"../inst/include" -DWITH_BLOSC -DWITH_ZLIB -DWITH_BZIP2
+	PKG_LIBS=-L/usr/lib -lstdc++fs -lblosc -lz -lbz2
 else
-PKG_CPPFLAGS=-I"../inst/include" -DWITH_BLOSC -DWITH_ZLIB -DWITH_BZIP2
-PKG_LIBS=-L/usr/lib -lstdc++fs -lblosc -lz -lbz2
+	PKG_CPPFLAGS=-I"../inst/include" -DWITH_BLOSC -DWITH_ZLIB -DWITH_BZIP2 -DWITH_BOOST_FS
+	PKG_LIBS=-lblosc -lz -lbz2 -lboost_filesystem
 endif
 
 # This fails under Ubuntu 16.04! Probably because it uses the R package BH for
