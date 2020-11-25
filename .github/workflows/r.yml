@@ -26,12 +26,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up libraries ubuntu
-        if: startsWith(matrix.os, "ubuntu")
+        if: startsWith(matrix.os, 'ubuntu')
         run: sudo apt-get install libblosc-dev
         shell: sh {0}
 
       - name: Set up libraries macOS
-        if: startsWith(matrix.os, "macOS")
+        if: startsWith(matrix.os, 'macOS')
         run: echo "macOS"
         shell: sh {0}
 
