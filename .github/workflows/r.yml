@@ -16,16 +16,16 @@ on:
 
 jobs:
   build:
-    runs-on: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         r-version: [3.5, 3.6, 4.0]
+        os: [ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
 
     steps:
       - uses: actions/checkout@v2
       - name: Set up libraries
-        run: |
-          sudo apt-get install libblosc-dev
+        run: sudo apt-get install libblosc-dev
         shell: sh {0}
       - name: Set up R ${{ matrix.r-version }}
         uses: r-lib/actions/setup-r@ffe45a39586f073cc2e9af79c4ba563b657dc6e3
