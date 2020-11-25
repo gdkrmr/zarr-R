@@ -4,6 +4,7 @@ README.md
 
 \.vscode
 \.gitignore
+\.github
 \.projectile
 \.dir-locals\.el
 \.cquery
